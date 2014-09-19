@@ -47,7 +47,7 @@
         broker.user = @"";
         broker.passwd = @"";
         broker.clientid = [[UIDevice currentDevice] name];
-        broker.base = @"owntracks/+";
+        broker.base = @"owntracks/+/+";
     }
     
     return broker;

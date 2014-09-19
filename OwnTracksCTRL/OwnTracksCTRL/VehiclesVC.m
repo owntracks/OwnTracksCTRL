@@ -184,8 +184,8 @@
 {
     Vehicle *vehicle = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.textLabel.text = vehicle.title;
-    cell.detailTextLabel.text = vehicle.subtitle;
+    cell.textLabel.text = vehicle.info ? vehicle.info : @"";
+    cell.detailTextLabel.text = [vehicle subtitle];
     
     AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     annotationView.annotation = vehicle;

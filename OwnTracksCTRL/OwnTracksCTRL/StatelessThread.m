@@ -8,10 +8,12 @@
 
 #import "StatelessThread.h"
 #import "AppDelegate.h"
+#import "Vehicle+Create.h"
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
 @property (nonatomic) BOOL sessionPresent;
+
 @end
 
 @implementation StatelessThread
@@ -31,19 +33,17 @@
                                           willRetainFlag:NO
                                            protocolLevel:4
                                                  runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
+                                                 forMode:NSDefaultRunLoopMode];
     
     self.mqttSession.delegate = self;
     if ([self.mqttSession connectAndWaitToHost:self.host
                                       port:self.port
                                   usingSSL:self.tls]) {
         
-        if (!self.sessionPresent) {
-            [self.mqttSession subscribeAndWaitToTopic:self.base atLevel:MQTTQoSLevelAtMostOnce];
-        }
+        [self.mqttSession subscribeAndWaitToTopic:self.base atLevel:MQTTQoSLevelAtMostOnce];
      
         while (!self.terminate) {
-            [NSThread sleepForTimeInterval:1];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         
         [self.mqttSession unsubscribeAndWaitTopic:self.base];
@@ -63,9 +63,8 @@
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     NSLog(@"PUBLISH %@ %@", topic, data);
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate performSelectorOnMainThread:@selector(processMessage:)
-                                  withObject:@{@"topic": topic, @"data": data}
-                               waitUntilDone:FALSE];
+    [appDelegate performSelector:@selector(processMessage:)
+                      withObject:@{@"topic": topic, @"data": data}];
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {

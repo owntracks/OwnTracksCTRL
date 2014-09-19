@@ -61,12 +61,15 @@
     return coordinate;
 }
 
-- (NSString *)title {
-    return self.info ? self.info : self.topic;
+- (NSString *)subtitle {
+    return self.tst ? [NSDateFormatter localizedStringFromDate:self.tst
+                                                     dateStyle:NSDateFormatterShortStyle
+                                                     timeStyle:NSDateFormatterShortStyle]
+    : @"<null>" ;
 }
 
-- (NSString *)subtitle {
-    return [NSString stringWithFormat:@"%@", self.tst];
+- (NSString *)title {
+    return self.info ? self.info : @"_";
 }
 
 @end

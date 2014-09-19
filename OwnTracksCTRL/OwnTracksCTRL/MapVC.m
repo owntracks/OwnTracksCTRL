@@ -39,14 +39,13 @@
         if ([annotation isKindOfClass:[Vehicle class]]) {
             Vehicle *vehicle = (Vehicle *)annotation;
             MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"View"];
-            AnnotationV *opAnnotationView;
             if (annotationView) {
-                opAnnotationView = (AnnotationV *)annotationView;
+                annotationView.annotation = vehicle;
             } else {
-                opAnnotationView  = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"View"];
+                annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"View"];
             }
             annotationView.canShowCallout = YES;
-            return opAnnotationView;
+            return annotationView;
         }
         return nil;
     }

@@ -18,6 +18,7 @@
 @property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
 @property (strong, nonatomic) StatelessThread *mqttThread;
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
+@property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @end
 
 
@@ -96,7 +97,7 @@ size_t isutf8(unsigned char *str, size_t len)
     self.Broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
     return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [self saveContext];
@@ -149,6 +150,15 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 
+- (NSManagedObjectContext *)queueManagedObjectContext
+{
+    if (!_queueManagedObjectContext) {
+        _queueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_queueManagedObjectContext setParentContext:self.managedObjectContext];
+    }
+    return _queueManagedObjectContext;
+}
+
 - (void)processMessage:(id)object {
     NSLog(@"processMessage %@", object);
     if ([object isKindOfClass:[NSDictionary class]]) {
@@ -170,72 +180,78 @@ size_t isutf8(unsigned char *str, size_t len)
             baseTopic = [baseTopic stringByAppendingString:topicComponents[i]];
         }
         
-        Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
-                          inManagedObjectContext:self.managedObjectContext];
+        NSString *subTopic = @"";
         
-        if ([topicComponents count] == [baseComponents count]) {
-            NSDictionary *dictionary = nil;
-            if (data.length) {
-                NSError *error;
-                dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        for (unsigned long i = [baseComponents count]; i < [topicComponents count]; i++) {
+            if (subTopic.length) {
+                subTopic = [subTopic stringByAppendingString:@"/"];
             }
-            
-            vehicle.acc = @([dictionary[@"acc"] doubleValue]);
-            vehicle.alt = dictionary[@"alt"];
-            vehicle.cog = dictionary[@"cog"];
-            vehicle.dist= dictionary[@"dist"];
-            vehicle.event= @"event";
-            vehicle.lat= @([dictionary[@"lat"] doubleValue]);
-            vehicle.lon= @([dictionary[@"lon"] doubleValue]);
-
-            if (dictionary[@"tid"]) {
-                vehicle.tid = dictionary[@"tid"];
-            } else {
-                vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
-            }
-            
-            vehicle.trigger= dictionary[@"t"];
-            vehicle.trip=dictionary[@"trip"];
-            vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-            vehicle.vacc=dictionary[@"vacc"];
-            vehicle.vel=dictionary[@"vel"];
-            
-        } else {
-            NSString *subTopic = @"";
-            
-            for (unsigned long i = [baseComponents count]; i < [topicComponents count]; i++) {
-                if (subTopic.length) {
-                    subTopic = [subTopic stringByAppendingString:@"/"];
-                }
-                subTopic = [subTopic stringByAppendingString:topicComponents[i]];
-            }
-            if ([subTopic isEqualToString:@"alarm"]) {
-                vehicle.alarm = @"Alarm";
-            } else if ([subTopic isEqualToString:@"status"]) {
-                NSString *status = [AppDelegate dataToString:data];
-                vehicle.status = @([status intValue]);
-            } else if ([subTopic isEqualToString:@"info"]) {
-                NSString *info = [AppDelegate dataToString:data];
-                vehicle.info= info;
-            } else if ([subTopic isEqualToString:@"start"]) {
-                vehicle.start = [NSDate dateWithTimeIntervalSince1970:0];
-                vehicle.version = @"version";
-                vehicle.imei = @"imei";
-            } else if ([subTopic isEqualToString:@"gpio"]) {
-                vehicle.gpio1= @(TRUE);
-                vehicle.gpio3= @(TRUE);
-                vehicle.gpio7= @(TRUE);
-            } else if ([subTopic isEqualToString:@"voltage"]) {
-                vehicle.vbatt= @(0);
-                vehicle.vext= @(0);
-            } else {
-                //
-            }
-            
+            subTopic = [subTopic stringByAppendingString:topicComponents[i]];
         }
-        
-        
-        [self saveContext];
+
+        [self.queueManagedObjectContext performBlock:^{
+            NSLog(@"processing %@", topic);
+
+            Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
+                              inManagedObjectContext:self.queueManagedObjectContext];
+            
+            if ([topicComponents count] == [baseComponents count]) {
+                NSDictionary *dictionary = nil;
+                if (data.length) {
+                    NSError *error;
+                    dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                }
+                
+                vehicle.acc = @([dictionary[@"acc"] doubleValue]);
+                vehicle.alt = dictionary[@"alt"];
+                vehicle.cog = dictionary[@"cog"];
+                vehicle.dist= dictionary[@"dist"];
+                vehicle.event= @"event";
+                vehicle.lat= @([dictionary[@"lat"] doubleValue]);
+                vehicle.lon= @([dictionary[@"lon"] doubleValue]);
+                
+                if (dictionary[@"tid"]) {
+                    vehicle.tid = dictionary[@"tid"];
+                } else {
+                    vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
+                }
+                
+                vehicle.trigger= dictionary[@"t"];
+                vehicle.trip=dictionary[@"trip"];
+                vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
+                vehicle.vacc=dictionary[@"vacc"];
+                vehicle.vel=dictionary[@"vel"];
+                
+            } else {
+                if ([subTopic isEqualToString:@"alarm"]) {
+                    vehicle.alarm = @"Alarm";
+                } else if ([subTopic isEqualToString:@"status"]) {
+                    NSString *status = [AppDelegate dataToString:data];
+                    vehicle.status = @([status intValue]);
+                } else if ([subTopic isEqualToString:@"info"]) {
+                    NSString *info = [AppDelegate dataToString:data];
+                    vehicle.info= info;
+                } else if ([subTopic isEqualToString:@"start"]) {
+                    vehicle.start = [NSDate dateWithTimeIntervalSince1970:0];
+                    vehicle.version = @"version";
+                    vehicle.imei = @"imei";
+                } else if ([subTopic isEqualToString:@"gpio"]) {
+                    vehicle.gpio1= @(TRUE);
+                    vehicle.gpio3= @(TRUE);
+                    vehicle.gpio7= @(TRUE);
+                } else if ([subTopic isEqualToString:@"voltage"]) {
+                    vehicle.vbatt= @(0);
+                    vehicle.vext= @(0);
+                } else {
+                    //
+                }
+            }
+            
+            if ([self.queueManagedObjectContext hasChanges] && ![self.queueManagedObjectContext save:NULL]) {
+                NSLog(@"Unresolved error");
+            }
+            NSLog(@"processing %@ finished", topic);
+        }];
     }
 }
 
@@ -261,10 +277,6 @@ size_t isutf8(unsigned char *str, size_t len)
     }
 }
 
-
-
-
-
 - (void)saveContext
 {
     NSError *error = nil;
@@ -273,7 +285,7 @@ size_t isutf8(unsigned char *str, size_t len)
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
 }
 
@@ -287,7 +299,7 @@ size_t isutf8(unsigned char *str, size_t len)
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return _managedObjectContext;
@@ -316,7 +328,7 @@ size_t isutf8(unsigned char *str, size_t len)
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
+    }
     
     return _persistentStoreCoordinator;
 }

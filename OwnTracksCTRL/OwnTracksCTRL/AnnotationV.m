@@ -115,6 +115,7 @@
                 [FENCE_ERROR_COLOR setStroke];
                 break;
         }
+        [circle setLineWidth:FENCE_WIDTH];
         [circle stroke];
     }
     // Course

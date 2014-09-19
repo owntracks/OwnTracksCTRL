@@ -8,10 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <MapKit/MapKit.h>
 
-
-@interface Vehicle : NSManagedObject <MKAnnotation>
+@interface Vehicle : NSManagedObject
 
 @property (nonatomic, retain) NSString * topic;
 @property (nonatomic, retain) NSString * tid;
