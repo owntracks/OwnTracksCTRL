@@ -38,11 +38,12 @@
     } else {
         if ([annotation isKindOfClass:[Vehicle class]]) {
             Vehicle *vehicle = (Vehicle *)annotation;
-            MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"View"];
+            MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"Vehicle"];
             if (annotationView) {
                 annotationView.annotation = vehicle;
+                [annotationView setNeedsDisplay];
             } else {
-                annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"View"];
+                annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"Vehicle"];
             }
             annotationView.canShowCallout = YES;
             return annotationView;
@@ -53,6 +54,7 @@
 
 - (void)centerOn:(Vehicle *)vehicle {
     [self.mapView setCenterCoordinate:[vehicle coordinate] animated:TRUE];
+    [self.mapView selectAnnotation:vehicle animated:TRUE];
 }
 
 
@@ -69,7 +71,7 @@
                                               inManagedObjectContext:appDelegate.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"tid" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -116,6 +118,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
+            NSLog(@"NSFetchedResultsChangeUpdate");
             [self.mapView removeAnnotation:anObject];
             [self.mapView addAnnotation:anObject];
             break;

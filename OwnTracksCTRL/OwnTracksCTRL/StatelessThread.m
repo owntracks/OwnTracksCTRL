@@ -12,7 +12,6 @@
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
-@property (nonatomic) BOOL sessionPresent;
 
 @end
 
@@ -20,55 +19,49 @@
 
 - (void)main {
     NSLog(@"StatelessThread");
-
+    
     self.mqttSession = [[MQTTSession alloc] initWithClientId:self.clientid
-                                                userName:self.user
-                                                password:self.passwd
-                                               keepAlive:60
-                                            cleanSession:TRUE
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:4
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSDefaultRunLoopMode];
+                                                    userName:self.user
+                                                    password:self.passwd
+                                                   keepAlive:60
+                                                cleanSession:TRUE
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSDefaultRunLoopMode];
     
     self.mqttSession.delegate = self;
     if ([self.mqttSession connectAndWaitToHost:self.host
-                                      port:self.port
-                                  usingSSL:self.tls]) {
+                                          port:self.port
+                                      usingSSL:self.tls]) {
+        NSMutableDictionary *subscriptions = [[NSMutableDictionary alloc] init];
+        NSArray *topicFilters = [self.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        for (NSString *topicFilter in topicFilters) {
+            if (topicFilter.length) {
+                [subscriptions setObject:@(MQTTQoSLevelAtMostOnce) forKey:topicFilter];
+            }
+        }
         
-        [self.mqttSession subscribeAndWaitToTopic:self.base atLevel:MQTTQoSLevelAtMostOnce];
-     
+        [self.mqttSession subscribeToTopics:subscriptions];
+        
         while (!self.terminate) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         
-        [self.mqttSession unsubscribeAndWaitTopic:self.base];
-        [self.mqttSession closeAndWait];
+        [self.mqttSession unsubscribeTopics:topicFilters];
+        [self.mqttSession close];
     }
-}
-
-- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
-    NSLog(@"CONNACK %d", sessionPresent);
-    self.sessionPresent = sessionPresent;
-}
-
-- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss {
-    NSLog(@"SUBACK %@", qoss);
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     NSLog(@"PUBLISH %@ %@", topic, data);
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate performSelector:@selector(processMessage:)
-                      withObject:@{@"topic": topic, @"data": data}];
-}
-
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    NSLog(@"Event %ld %@", (long)eventCode, error);
+                                  withObject:@{@"topic": topic, @"data": data}];
 }
 
 @end

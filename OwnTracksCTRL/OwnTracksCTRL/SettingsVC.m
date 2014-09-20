@@ -39,6 +39,8 @@
     [super viewWillDisappear:animated];
     
     [self updateValues];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate saveContext];
 }
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
@@ -48,7 +50,7 @@
                       delegate.broker.passwd];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://roo.jpmens.net/ctrl/conf.php"]]];
     [request setHTTPMethod:@"POST"];
@@ -78,29 +80,39 @@
         NSError *error;
         dictionary = [NSJSONSerialization JSONObjectWithData:self.receivedData options:0 error:&error];
     }
-    if (dictionary) {
-        if ([dictionary[@"_type"] isEqualToString:@"configuration"]) {
-            AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            
-            delegate.broker.host = dictionary[@"host"];
-            delegate.broker.port = dictionary[@"port"];
-            delegate.broker.auth = dictionary[@"auth"];
-            delegate.broker.tls = dictionary[@"tls"];
-            delegate.broker.user = dictionary[@"username"];
-            delegate.broker.passwd = dictionary[@"password"];
-            delegate.broker.base = dictionary[@"subTopic"];
-            delegate.broker.clientid = dictionary[@"clientid"];
-            [self updated];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"loaded" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-            [alertView show];
-        } else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"no configuration" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-            [alertView show];
-            
-        }
+    if (dictionary && [dictionary[@"_type"] isEqualToString:@"configuration"]) {
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         
+        delegate.broker.host = dictionary[@"host"];
+        delegate.broker.port = dictionary[@"port"];
+        delegate.broker.auth = dictionary[@"auth"];
+        delegate.broker.tls = dictionary[@"tls"];
+        delegate.broker.user = dictionary[@"username"];
+        delegate.broker.passwd = dictionary[@"password"];
+        
+        NSString *base = @"";
+        for (NSString *topic in dictionary[@"topicList"]) {
+            if (base.length) {
+                base = [base stringByAppendingString:@" "];
+            }
+            base = [base stringByAppendingString:topic];
+        }
+        delegate.broker.base = base;
+        
+        delegate.broker.clientid = dictionary[@"clientid"];
+        [self updated];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings loaded"
+                                                            message:[AppDelegate dataToString:self.receivedData]
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
     } else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"invalid" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
+                                                            message:[AppDelegate dataToString:self.receivedData]
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
         [alertView show];
     }
 }
@@ -120,7 +132,7 @@
 - (void)updateValues
 {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    
     if (self.UIHost) delegate.broker.host = self.UIHost.text;
     if (self.UIPort) delegate.broker.port = @([self.UIPort.text intValue]);
     if (self.UITLS) delegate.broker.tls = @(self.UITLS.on);
@@ -134,7 +146,7 @@
 - (void)updated
 {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    
     self.UIVersion.text =                           [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
     
     self.UIHost.text =                              delegate.broker.host;

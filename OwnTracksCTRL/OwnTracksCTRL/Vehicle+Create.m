@@ -69,7 +69,7 @@
 }
 
 - (NSString *)title {
-    return self.info ? self.info : @"_";
+    return self.info ? self.info : self.tid;
 }
 
 @end

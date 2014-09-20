@@ -11,7 +11,6 @@
 
 @interface StatefullThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
-@property (nonatomic) BOOL sessionPresent;
 @end
 
 @implementation StatefullThread
@@ -35,37 +34,32 @@
     
     self.mqttSession.delegate = self;
     if ([self.mqttSession connectAndWaitToHost:self.host
-                                          port:self.port
-                                      usingSSL:self.tls]) {
+                               port:self.port
+                           usingSSL:self.tls]) {
         
-        [self.mqttSession subscribeAndWaitToTopic:[NSString stringWithFormat:@"%@/+", self.base]
-                                          atLevel:MQTTQosLevelExactlyOnce];
+        NSMutableDictionary *subscriptions = [[NSMutableDictionary alloc] init];
+        NSArray *topicFilters = [self.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        for (NSString *topicFilter in topicFilters) {
+            if (topicFilter.length) {
+                [subscriptions setObject:@(MQTTQosLevelAtLeastOnce) forKey:[NSString stringWithFormat:@"%@/+", topicFilter]];
+            }
+        }
+        
+        [self.mqttSession subscribeAndWaitToTopics:subscriptions];
+        
         while (!self.terminate) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        
-        [self.mqttSession closeAndWait];
+    [self.mqttSession closeAndWait];
     }
-}
-
-- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
-    NSLog(@"CONNACK %d", sessionPresent);
-    self.sessionPresent = sessionPresent;
-}
-
-- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss {
-    NSLog(@"SUBACK %@", qoss);
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     NSLog(@"PUBLISH %@ %@", topic, data);
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate performSelector:@selector(processMessage:)
                       withObject:@{@"topic": topic, @"data": data}];
-}
-
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    NSLog(@"Event %ld %@", (long)eventCode, error);
 }
 
 
