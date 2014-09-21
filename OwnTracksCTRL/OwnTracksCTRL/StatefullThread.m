@@ -41,7 +41,8 @@
         NSArray *topicFilters = [self.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         for (NSString *topicFilter in topicFilters) {
             if (topicFilter.length) {
-                [subscriptions setObject:@(MQTTQosLevelAtLeastOnce) forKey:[NSString stringWithFormat:@"%@/+/#", topicFilter]];
+                [subscriptions setObject:@(MQTTQosLevelAtLeastOnce) forKey:[NSString stringWithFormat:@"%@/+", topicFilter]];
+                [subscriptions setObject:@(MQTTQosLevelAtLeastOnce) forKey:[NSString stringWithFormat:@"%@/+/+", topicFilter]];
             }
         }
         

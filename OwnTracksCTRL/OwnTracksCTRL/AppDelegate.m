@@ -273,7 +273,7 @@ size_t isutf8(unsigned char *str, size_t len)
                     vehicle.event= [NSString stringWithFormat:@"Event %@ %@ %@ @ %@",
                                     vehicle.tid,
                                     event,
-                                    dictionary[@"description"],
+                                    dictionary[@"desc"],
                                     [NSDateFormatter localizedStringFromDate:vehicle.tst
                                                                    dateStyle:NSDateFormatterShortStyle
                                                                    timeStyle:NSDateFormatterShortStyle]];
