@@ -14,6 +14,8 @@
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
 
 @end
 
@@ -25,10 +27,17 @@
     for (Vehicle *vehicle in self.fetchedResultsController.fetchedObjects) {
         [self.mapView addAnnotation:vehicle];
     }
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate addObserver:self forKeyPath:@"connectedTo"
+                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                     context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.fetchedResultsController = nil;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate removeObserver:self forKeyPath:@"connectedTo"
+                     context:nil];
     [super viewWillDisappear:animated];
 }
 
@@ -133,4 +142,158 @@
 {
     //
 }
+
+#define ACTION_MAP @"Map Modes"
+#define ACTION_MQTT @"MQTT Connection"
+- (IBAction)TrackingPressed:(UIBarButtonItem *)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MAP
+                                                             delegate:self
+                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:
+                                  @"Zoom to selected Vehicle",
+                                  @"Show all Vehicles",
+                                  @"Standard Map",
+                                  @"Satellite Map",
+                                  @"Hybrid Map",
+                                  nil];
+    [actionSheet showFromBarButtonItem:sender animated:YES];
+
+}
+- (IBAction)ConnectionPressed:(UIBarButtonItem *)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MQTT
+                                                             delegate:self
+                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:
+                                  @"(Re-)Connect",
+                                  @"Disconnect",
+                                  nil];
+    [actionSheet showFromBarButtonItem:sender animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    if ([actionSheet.title isEqualToString:ACTION_MAP]) {
+        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
+            case 0:
+            {
+                if ([[self.mapView selectedAnnotations] count]) {
+                    MKMapRect rect;
+                    BOOL first = TRUE;
+                    
+                    for (Vehicle *vehicle in [self.mapView selectedAnnotations])
+                    {
+                        CLLocationCoordinate2D coordinate = vehicle.coordinate;
+                        if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                            MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                            if (first) {
+                                rect.origin = point;
+                                rect.size.height = 0;
+                                rect.size.width = 0;
+                                first = false;
+                            }
+                            if (point.x < rect.origin.x) {
+                                rect.size.width += rect.origin.x - point.x;
+                                rect.origin.x = point.x;
+                            }
+                            if (point.x > rect.origin.x + rect.size.width) {
+                                rect.size.width += point.x - rect.origin.x;
+                            }
+                            if (point.y < rect.origin.y) {
+                                rect.size.height += rect.origin.y - point.y;
+                                rect.origin.y = point.y;
+                            }
+                            if (point.y > rect.origin.y + rect.size.height) {
+                                rect.size.height += point.y - rect.origin.y;
+                            }
+                        }
+                    }
+                    
+                    rect.origin.x -= rect.size.width/10.0;
+                    rect.origin.y -= rect.size.height/10.0;
+                    rect.size.width *= 1.2;
+                    rect.size.height *= 1.2;
+                    
+                    [self.mapView setVisibleMapRect:rect animated:YES];
+                }
+                break;
+            }
+                
+            case 1:
+            {
+                MKMapRect rect;
+                BOOL first = TRUE;
+                
+                for (Vehicle *vehicle in [self.mapView annotations])
+                {
+                    CLLocationCoordinate2D coordinate = vehicle.coordinate;
+                    if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                        MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                        if (first) {
+                            rect.origin = point;
+                            rect.size.height = 0;
+                            rect.size.width = 0;
+                            first = false;
+                        }
+
+                        if (point.x < rect.origin.x) {
+                            rect.size.width += rect.origin.x - point.x;
+                            rect.origin.x = point.x;
+                        }
+                        if (point.x > rect.origin.x + rect.size.width) {
+                            rect.size.width += point.x - rect.origin.x;
+                        }
+                        if (point.y < rect.origin.y) {
+                            rect.size.height += rect.origin.y - point.y;
+                            rect.origin.y = point.y;
+                        }
+                        if (point.y > rect.origin.y + rect.size.height) {
+                            rect.size.height += point.y - rect.origin.y;
+                        }
+                    }
+                }
+                
+                rect.origin.x -= rect.size.width/10.0;
+                rect.origin.y -= rect.size.height/10.0;
+                rect.size.width *= 1.2;
+                rect.size.height *= 1.2;
+                
+                [self.mapView setVisibleMapRect:rect animated:YES];
+                break;
+            }
+            case 2:
+                self.mapView.mapType = MKMapTypeStandard;
+                break;
+            case 3:
+                self.mapView.mapType = MKMapTypeSatellite;
+                break;
+            case 4:
+                self.mapView.mapType = MKMapTypeHybrid;
+                break;
+        }
+    } else if ([actionSheet.title isEqualToString:ACTION_MQTT]) {
+        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
+            case 0:
+                [delegate connect];
+                break;
+            case 1:
+                [delegate disconnect];
+                break;
+        }
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"connectedTo"]) {
+        if ([object valueForKey:keyPath]) {
+            self.UIConnection.tintColor = [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0];
+        } else {
+            self.UIConnection.tintColor = [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0];
+        }
+    }
+}
+
 @end

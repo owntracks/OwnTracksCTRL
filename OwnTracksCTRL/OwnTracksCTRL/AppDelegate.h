@@ -18,10 +18,13 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) NSString *connectedTo;
 
 - (void)saveContext;
 - (void)processMessage:(NSDictionary *)object;
 - (NSURL *)applicationDocumentsDirectory;
 + (NSString *)dataToString:(NSData *)data;
+- (void)connect;
+- (void)disconnect;
 
 @end

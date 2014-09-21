@@ -19,6 +19,9 @@
 @property (strong, nonatomic) StatelessThread *mqttThread;
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
+@property (readwrite, strong, nonatomic) NSString *connectedTo;
+@property (nonatomic) BOOL registered;
+
 @end
 
 
@@ -106,7 +109,7 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [self saveContext];
-    [self.mqttThread setTerminate:TRUE];
+    [self disconnect];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -126,6 +129,18 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self connect];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [self saveContext];
+    [self disconnect];
+}
+
+- (void)connect {
+    [self disconnect];
+    
     self.mqttThread = [[StatelessThread alloc] init];
     self.mqttThread.host = self.broker.host;
     self.mqttThread.port = [self.broker.port intValue];
@@ -134,6 +149,11 @@ size_t isutf8(unsigned char *str, size_t len)
     self.mqttThread.passwd = (self.broker.user != nil && self.broker.passwd.length > 0) ? self.broker.passwd : nil;
     self.mqttThread.base = self.broker.base;
     self.mqttThread.clientid = self.broker.clientid;
+    
+    [self.mqttThread addObserver:self forKeyPath:@"connectedTo"
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                         context:nil];
+    self.registered = true;
     [self.mqttThread start];
     
     self.mqttPlusThread = [[StatefullThread alloc] init];
@@ -147,11 +167,20 @@ size_t isutf8(unsigned char *str, size_t len)
     [self.mqttPlusThread start];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    [self saveContext];
+- (void)disconnect {
+    if (self.registered) {
+        [self.mqttThread removeObserver:self forKeyPath:@"connectedTo" context:nil];
+        self.registered = false;
+    }
     [self.mqttThread setTerminate:TRUE];
     [self.mqttPlusThread setTerminate:TRUE];
+    self.connectedTo = nil;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"connectedTo"]) {
+        self.connectedTo = (NSString *)[object valueForKey:keyPath];
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
@@ -178,50 +207,49 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)processMessage:(id)object {
     NSLog(@"processMessage %@", object);
-        if ([object isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *dictionary = (NSDictionary *)object;
-            NSData *data = dictionary[@"data"];
-            NSString *topic = dictionary[@"topic"];
-            
-            NSArray *topicComponents = [topic componentsSeparatedByCharactersInSet:
-                                        [NSCharacterSet characterSetWithCharactersInString:@"/"]];
-            
-            NSArray *topicFilters = [self.broker.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            NSArray *baseComponents = [topicFilters[0] componentsSeparatedByCharactersInSet:
-                                       [NSCharacterSet characterSetWithCharactersInString:@"/"]];
-            
-            NSString *baseTopic = @"";
-            
-            for (int i = 0; i < [baseComponents count]; i++) {
-                if (baseTopic.length) {
-                    baseTopic = [baseTopic stringByAppendingString:@"/"];
-                }
-                baseTopic = [baseTopic stringByAppendingString:topicComponents[i]];
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dictionary = (NSDictionary *)object;
+        NSData *data = dictionary[@"data"];
+        NSString *topic = dictionary[@"topic"];
+        
+        NSArray *topicComponents = [topic componentsSeparatedByCharactersInSet:
+                                    [NSCharacterSet characterSetWithCharactersInString:@"/"]];
+        
+        NSArray *topicFilters = [self.broker.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSArray *baseComponents = [topicFilters[0] componentsSeparatedByCharactersInSet:
+                                   [NSCharacterSet characterSetWithCharactersInString:@"/"]];
+        
+        NSString *baseTopic = @"";
+        
+        for (int i = 0; i < [baseComponents count]; i++) {
+            if (baseTopic.length) {
+                baseTopic = [baseTopic stringByAppendingString:@"/"];
             }
-            
-            NSString *subTopic = @"";
-            
-            for (unsigned long i = [baseComponents count]; i < [topicComponents count]; i++) {
-                if (subTopic.length) {
-                    subTopic = [subTopic stringByAppendingString:@"/"];
-                }
-                subTopic = [subTopic stringByAppendingString:topicComponents[i]];
+            baseTopic = [baseTopic stringByAppendingString:topicComponents[i]];
+        }
+        
+        NSString *subTopic = @"";
+        
+        for (unsigned long i = [baseComponents count]; i < [topicComponents count]; i++) {
+            if (subTopic.length) {
+                subTopic = [subTopic stringByAppendingString:@"/"];
             }
+            subTopic = [subTopic stringByAppendingString:topicComponents[i]];
+        }
+        
+        [self.queueManagedObjectContext performBlock:^{
             
-            [self.queueManagedObjectContext performBlock:^{
-
             NSLog(@"processing %@", topic);
             
             Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
                               inManagedObjectContext:self.queueManagedObjectContext];
+            NSDictionary *dictionary = nil;
+            if (data.length) {
+                NSError *error;
+                dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            }
             
             if ([topicComponents count] == [baseComponents count]) {
-                NSDictionary *dictionary = nil;
-                if (data.length) {
-                    NSError *error;
-                    dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-                }
-                
                 vehicle.acc = @([dictionary[@"acc"] doubleValue]);
                 vehicle.alt = dictionary[@"alt"];
                 vehicle.cog = dictionary[@"cog"];
@@ -242,8 +270,14 @@ size_t isutf8(unsigned char *str, size_t len)
                 vehicle.vel=dictionary[@"vel"];
                 NSString *event = dictionary[@"event"];
                 if (event) {
-                    vehicle.event= [NSString stringWithFormat:@"Event %@ %@ %@",
-                                    vehicle.tid, event, dictionary[@"description"]];
+                    vehicle.event= [NSString stringWithFormat:@"Event %@ %@ %@ @ %@",
+                                    vehicle.tid,
+                                    event,
+                                    dictionary[@"description"],
+                                    [NSDateFormatter localizedStringFromDate:vehicle.tst
+                                                                   dateStyle:NSDateFormatterShortStyle
+                                                                   timeStyle:NSDateFormatterShortStyle]];
+                    
                     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
                     localNotification.alertBody = vehicle.event;
                     localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Event"};
@@ -252,12 +286,14 @@ size_t isutf8(unsigned char *str, size_t len)
             } else {
                 if ([subTopic isEqualToString:@"alarm"]) {
                     NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-                    vehicle.alarm = [NSString stringWithFormat:@"sent @ %@",
+                    vehicle.alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
+                                     vehicle.tid,
                                      [NSDateFormatter localizedStringFromDate:alarmAt
                                                                     dateStyle:NSDateFormatterShortStyle
                                                                     timeStyle:NSDateFormatterShortStyle]];
+                    
                     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                    localNotification.alertBody = [NSString stringWithFormat:@"Alarm sent by %@", vehicle.tid];
+                    localNotification.alertBody = vehicle.alarm;
                     localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
                     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
                 } else if ([subTopic isEqualToString:@"status"]) {
@@ -269,9 +305,11 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"start"]) {
                     NSString *start = [AppDelegate dataToString:data];
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                    vehicle.start = [df dateFromString:fields[2]];
+                    
+                    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
+                    [dateFormatter setDateFormat:@"yyyyMMdd'T'hhmmss'Z'"];
+                    NSDate *startDate = [dateFormatter dateFromString:fields[2]];
+                    vehicle.start = startDate;
                     vehicle.version = fields[1];
                     vehicle.imei = fields[0];
                 } else if ([subTopic isEqualToString:@"gpio/1"]) {
@@ -298,9 +336,9 @@ size_t isutf8(unsigned char *str, size_t len)
                 NSLog(@"Unresolved error");
             }
             NSLog(@"processing %@ finished", topic);
-        
-    }];
-        }
+            
+        }];
+    }
 }
 
 + (NSString *)dataToString:(NSData *)data

@@ -108,8 +108,14 @@
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
     } else {
+        NSString *message = [AppDelegate dataToString:self.receivedData];
+        if (dictionary) {
+            if ([dictionary[@"result"] isKindOfClass:[NSString class]]) {
+                message = dictionary[@"result"];
+            }
+        }
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
-                                                            message:[AppDelegate dataToString:self.receivedData]
+                                                            message:message
                                                            delegate:nil
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"OK", nil];

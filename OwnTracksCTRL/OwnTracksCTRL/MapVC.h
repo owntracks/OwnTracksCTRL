@@ -11,6 +11,6 @@
 #import "Vehicle+Create.h"
 
 
-@interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate>
+@interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate>
 - (void)centerOn:(Vehicle *)vehicle;
 @end

@@ -11,6 +11,7 @@
 
 @interface StatelessThread : NSThread <MQTTSessionDelegate>
 @property (nonatomic) BOOL terminate;
+@property (nonatomic,readonly) BOOL connected;
 @property (strong, nonatomic) NSString *user;
 @property (strong, nonatomic) NSString *passwd;
 @property (strong, nonatomic) NSString *clientid;

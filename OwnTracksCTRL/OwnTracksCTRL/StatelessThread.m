@@ -12,6 +12,7 @@
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
+@property (nonatomic, strong, readwrite) NSString *connectedTo;
 
 @end
 
@@ -38,6 +39,8 @@
     if ([self.mqttSession connectAndWaitToHost:self.host
                                           port:self.port
                                       usingSSL:self.tls]) {
+        self.connectedTo = self.host;
+        
         NSMutableDictionary *subscriptions = [[NSMutableDictionary alloc] init];
         NSArray *topicFilters = [self.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         for (NSString *topicFilter in topicFilters) {
