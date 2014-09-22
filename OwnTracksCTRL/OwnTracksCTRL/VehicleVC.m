@@ -38,7 +38,7 @@
 @implementation VehicleVC
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = [self.vehicle tid];
+    self.title = [NSString stringWithFormat:@"Detail - %@", [self.vehicle tid]];
     
     self.UIEvent.text = self.vehicle.event;
     self.UIAlarm.text = self.vehicle.alarm;
@@ -59,13 +59,11 @@
     self.UIIMEI.text = self.vehicle.imei;
 
     
-    self.UIAltitude.text = [NSString stringWithFormat:@"%.0fm (±%.0fm)",
-                            [self.vehicle.alt doubleValue],
-                            [self.vehicle.vacc doubleValue]];
-    self.UICoordinate.text = [NSString stringWithFormat:@"%g,%g (±%.0fm)",
+    self.UIAltitude.text = [NSString stringWithFormat:@"%.0fm",
+                            [self.vehicle.alt doubleValue]];
+    self.UICoordinate.text = [NSString stringWithFormat:@"%g,%g",
                               [self.vehicle.lat doubleValue],
-                              [self.vehicle.lon doubleValue],
-                              [self.vehicle.acc doubleValue]];
+                              [self.vehicle.lon doubleValue]];
     self.UICourse.text = [NSString stringWithFormat:@"%.0f°", [self.vehicle.cog doubleValue]];
     self.UIInfo.text = self.vehicle.info;
     self.UISpeed.text = [NSString stringWithFormat:@"%.0f km/h", [self.vehicle.vel doubleValue]];

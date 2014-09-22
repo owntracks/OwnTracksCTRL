@@ -10,6 +10,7 @@
 #import "Vehicle+Create.h"
 #import "AnnotationV.h"
 #import "AppDelegate.h"
+#import "VehicleVC.h"
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -55,11 +56,33 @@
                 annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"Vehicle"];
             }
             annotationView.canShowCallout = YES;
+            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             return annotationView;
         }
         return nil;
     }
 }
+
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    [self performSegueWithIdentifier:@"showDetail:" sender:view];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"showDetail:"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+            if ([sender isKindOfClass:[MKAnnotationView class]]) {
+                MKAnnotationView *annotationView = (MKAnnotationView *)sender;
+            [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                  withObject:annotationView.annotation];
+            }
+        }
+    }
+}
+
+
 
 - (void)centerOn:(Vehicle *)vehicle {
     [self.mapView setCenterCoordinate:[vehicle coordinate] animated:TRUE];

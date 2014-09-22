@@ -123,8 +123,8 @@
     }
 }
 
+- (IBAction)trash:(UIBarButtonItem *)sender {
 
-- (IBAction)trash:(UIButton *)sender {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:delegate.managedObjectContext];
     for (Vehicle *vehicle in vehicles) {

@@ -16,9 +16,9 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Asq-I3-XLI" kind="relationship" relationship="viewControllers" id="y1y-iB-jzq"/>
+                        <segue destination="sty-Zc-rAg" kind="relationship" relationship="viewControllers" id="y1y-iB-jzq"/>
                         <segue destination="rS3-R9-Ivy" kind="relationship" relationship="viewControllers" id="eOs-y8-Gn7"/>
-                        <segue destination="GsP-8j-yUT" kind="relationship" relationship="viewControllers" id="wZ5-MI-Lnx"/>
+                        <segue destination="0gr-nZ-Z7J" kind="relationship" relationship="viewControllers" id="wZ5-MI-Lnx"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBP-s7-x6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -83,7 +83,7 @@
                             <outlet property="delegate" destination="pGg-6v-bdr" id="Y6K-Cp-Qkv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Vehicles" id="tQt-TN-PWz"/>
+                    <navigationItem key="navigationItem" title="OwnTracksCTRL - Vehicles" id="tQt-TN-PWz"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
@@ -94,7 +94,7 @@
             <objects>
                 <tableViewController id="paQ-xc-KlE" customClass="VehicleVC" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rzb-BH-BT6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -866,6 +866,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Details" id="n5p-9m-0pE"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="UIAlarm" destination="pZg-hK-v5a" id="tpx-qy-4Gz"/>
                         <outlet property="UIAltitude" destination="X9g-5r-ASM" id="5hp-6t-w8B"/>
@@ -893,9 +894,9 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1WJ-5o-KXC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="557" y="-581"/>
+            <point key="canvasLocation" x="973" y="-157"/>
         </scene>
-        <!--OwnTracksGW - Map-->
+        <!--OwnTracksCTRL - Map-->
         <scene sceneID="YQJ-O2-RU4">
             <objects>
                 <viewController id="Asq-I3-XLI" customClass="MapVC" sceneMemberID="viewController">
@@ -910,51 +911,39 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="jRS-Ea-b3R">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </mapView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEH-3y-Ywh">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="S3F-d3-5WM"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem image="Tracking" id="vNY-ww-zF0">
-                                        <connections>
-                                            <action selector="TrackingPressed:" destination="Asq-I3-XLI" id="bhh-4P-B4Q"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="y6U-ph-iwB"/>
-                                    <barButtonItem image="ConnectionOn" id="koC-D6-qFj">
-                                        <connections>
-                                            <action selector="ConnectionPressed:" destination="Asq-I3-XLI" id="hZn-6D-6jB"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="DEH-3y-Ywh" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="PRZ-cu-oae"/>
-                            <constraint firstItem="DEH-3y-Ywh" firstAttribute="top" secondItem="4L8-0V-gYG" secondAttribute="bottom" constant="8" id="oMH-fo-0yc"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="jRS-Ea-b3R" secondAttribute="trailing" constant="-16" id="qCW-Xu-XVe"/>
-                            <constraint firstItem="jRS-Ea-b3R" firstAttribute="bottom" secondItem="iXH-M9-Ndg" secondAttribute="bottomMargin" id="re9-vD-7uN"/>
-                            <constraint firstItem="jRS-Ea-b3R" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leadingMargin" constant="-16" id="tA7-g1-07b"/>
-                            <constraint firstAttribute="trailing" secondItem="DEH-3y-Ywh" secondAttribute="trailing" id="uoL-D5-VXE"/>
-                            <constraint firstItem="jRS-Ea-b3R" firstAttribute="top" secondItem="iXH-M9-Ndg" secondAttribute="topMargin" id="xTN-hr-Ffx"/>
+                            <constraint firstItem="jRS-Ea-b3R" firstAttribute="top" secondItem="iXH-M9-Ndg" secondAttribute="top" id="SW8-4Q-ChZ"/>
+                            <constraint firstAttribute="bottom" secondItem="jRS-Ea-b3R" secondAttribute="bottom" id="SYl-QU-eCQ"/>
+                            <constraint firstAttribute="trailing" secondItem="jRS-Ea-b3R" secondAttribute="trailing" id="dH5-6b-Pof"/>
+                            <constraint firstItem="jRS-Ea-b3R" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="hiD-aE-SHK"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="1" title="OwnTracks" image="OwnTracks" id="7PH-KO-tNj"/>
-                    <navigationItem key="navigationItem" title="OwnTracksGW - Map" id="epw-jS-02L"/>
+                    <navigationItem key="navigationItem" title="OwnTracksCTRL - Map" id="epw-jS-02L">
+                        <barButtonItem key="leftBarButtonItem" image="Tracking" id="vNY-ww-zF0">
+                            <connections>
+                                <action selector="TrackingPressed:" destination="Asq-I3-XLI" id="bhh-4P-B4Q"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="ConnectionOn" id="koC-D6-qFj">
+                            <connections>
+                                <action selector="ConnectionPressed:" destination="Asq-I3-XLI" id="hZn-6D-6jB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="UIConnection" destination="koC-D6-qFj" id="qzQ-W8-DOt"/>
                         <outlet property="UITracking" destination="vNY-ww-zF0" id="Ngb-BX-Ej1"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
+                        <segue destination="paQ-xc-KlE" kind="push" identifier="showDetail:" id="lgc-62-P7o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mWV-Tb-Tua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-387" y="200"/>
+            <point key="canvasLocation" x="131" y="201"/>
         </scene>
-        <!--Settings-->
+        <!--OwnTracksCTRL- Settings-->
         <scene sceneID="rm0-nB-eko">
             <objects>
                 <tableViewController id="GsP-8j-yUT" customClass="SettingsVC" sceneMemberID="viewController">
@@ -1256,35 +1245,6 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Kfx-1l-OyK">
-                                        <rect key="frame" x="0.0" y="978" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kfx-1l-OyK" id="9w5-gR-hai">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qg8-NZ-eaH">
-                                                    <rect key="frame" x="208" y="7" width="92" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="92" id="7Tw-rv-vlD"/>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="CVc-rJ-oT3"/>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="92" id="Lug-uE-ZXe"/>
-                                                        <constraint firstAttribute="height" constant="30" id="OBW-48-clk"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Trash all data">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="trash:" destination="GsP-8j-yUT" eventType="touchUpInside" id="nfR-ou-spe"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="centerY" secondItem="Qg8-NZ-eaH" secondAttribute="centerY" id="G6L-7y-lxF"/>
-                                                <constraint firstAttribute="trailing" secondItem="Qg8-NZ-eaH" secondAttribute="trailing" constant="20" symbolic="YES" id="ubJ-Vc-a2y"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="aK8-hz-Uj1">
                                         <rect key="frame" x="0.0" y="978" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1337,11 +1297,10 @@
                             <outletCollection property="gestureRecognizers" destination="x0p-bz-3cU" appends="YES" id="lV5-Ua-PNQ"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Settings" image="Settings" id="JXt-WI-CMg"/>
-                    <navigationItem key="navigationItem" title="Settings" id="1Ov-lz-wIy">
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="i6I-6c-aqU">
+                    <navigationItem key="navigationItem" title="OwnTracksCTRL- Settings" id="1Ov-lz-wIy">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="IpK-y0-VtI">
                             <connections>
-                                <action selector="trash:" destination="GsP-8j-yUT" id="xqc-xn-cQk"/>
+                                <action selector="trash:" destination="GsP-8j-yUT" id="WY5-Ev-P3r"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1364,7 +1323,45 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-393" y="796"/>
+            <point key="canvasLocation" x="131" y="928"/>
+        </scene>
+        <!--OwnTracks-->
+        <scene sceneID="Pc6-iw-7iF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sty-Zc-rAg" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="1" title="OwnTracks" image="OwnTracks" id="7PH-KO-tNj"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Om-0Q-pAx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Asq-I3-XLI" kind="relationship" relationship="rootViewController" id="G7d-BT-7Qg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VXC-u7-wMp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-393" y="201"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="2Ng-XK-0H0">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0gr-nZ-Z7J" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Settings" image="Settings" id="JXt-WI-CMg"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cG8-5N-Vdx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="GsP-8j-yUT" kind="relationship" relationship="rootViewController" id="F5i-xX-MKK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pex-KE-r09" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-393" y="928"/>
         </scene>
     </scenes>
     <resources>
@@ -1379,4 +1376,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="lgc-62-P7o"/>
+    </inferredMetricsTieBreakers>
 </document>

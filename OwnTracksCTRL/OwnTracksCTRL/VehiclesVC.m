@@ -83,8 +83,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Vehicle *vehicle = (Vehicle *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     for (UIViewController *viewController in [self.tabBarController viewControllers]) {
-        if ([viewController respondsToSelector:@selector(centerOn:)]) {
-            [viewController performSelector:@selector(centerOn:) withObject:vehicle];
+        UIViewController *vc;
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *nc = (UINavigationController *)viewController;
+            [nc popToRootViewControllerAnimated:false];
+            vc = nc.topViewController;
+        } else {
+            vc = viewController;
+        }
+        
+        if ([vc respondsToSelector:@selector(centerOn:)]) {
+            [vc performSelector:@selector(centerOn:) withObject:vehicle];
             [self.tabBarController setSelectedViewController:viewController];
         }
     }
