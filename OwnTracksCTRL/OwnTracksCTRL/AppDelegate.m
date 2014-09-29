@@ -190,10 +190,24 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:notification.userInfo[@"title"]
                                                         message:notification.alertBody
-                                                       delegate:nil
+                                                       delegate:self
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];
     [alertView show];
+}
+
+- (void)didPresentAlertView:(UIAlertView *)alertView {
+    [self performSelector:@selector(alertViewTimedOut:) withObject:alertView afterDelay:5];
+}
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(alertViewTimedOut:) object:alertView];
+}
+
+- (void)alertViewTimedOut:(id)object {
+    UIAlertView *alertView = (UIAlertView *)object;
+    [alertView dismissWithClickedButtonIndex:0 animated:true];
+    
 }
 
 - (NSManagedObjectContext *)queueManagedObjectContext
@@ -436,6 +450,7 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     self.completionHandler = completionHandler;
+    [self connect];
     [self startBackgroundTimer];
 }
 
@@ -460,8 +475,7 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)disconnectInBackground
 {
     self.disconnectTimer = nil;
-    [self.mqttThread setTerminate:TRUE];
-    [self.mqttPlusThread setTerminate:TRUE];
+    [self disconnect];
 }
 
 @end

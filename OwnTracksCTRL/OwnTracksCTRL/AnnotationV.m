@@ -65,7 +65,10 @@
         vehicle = (Vehicle *)self.annotation;
     }
     
-    if (vehicle) {
+    if (vehicle
+        && [vehicle.status intValue] == 1
+        && ![vehicle.trigger isEqualToString:@"L"]
+        && ![vehicle.trigger isEqualToString:@"T"]) {
         double speed = [vehicle.vel doubleValue];
         if (speed > 0) {
             UIBezierPath *tacho = [[UIBezierPath alloc] init];
@@ -118,9 +121,13 @@
         [circle setLineWidth:FENCE_WIDTH];
         [circle stroke];
     }
+    
     // Course
-    if (vehicle) {
-        double cog = [vehicle.cog doubleValue];
+    if (vehicle
+        && [vehicle.status intValue] == 1
+        && ![vehicle.trigger isEqualToString:@"L"]
+        && ![vehicle.trigger isEqualToString:@"T"]) {
+            double cog = [vehicle.cog doubleValue];
         if (cog >= 0) {
             UIBezierPath *course = [UIBezierPath bezierPathWithOvalInRect:
                                     CGRectMake(

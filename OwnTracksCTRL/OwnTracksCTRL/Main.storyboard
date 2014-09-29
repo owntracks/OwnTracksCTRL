@@ -518,31 +518,31 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LeA-q3-Tc8" id="4Ff-3F-V2s">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QR3-OH-BSe">
-                                                    <rect key="frame" x="20" y="11" width="50" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trigger" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xz4-7a-Fdv">
+                                                    <rect key="frame" x="20" y="11" width="53" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="Uel-bq-LMU"/>
-                                                        <constraint firstAttribute="width" constant="50" id="gMY-lR-gUf"/>
+                                                        <constraint firstAttribute="height" constant="21" id="0TK-iM-8bg"/>
+                                                        <constraint firstAttribute="width" constant="53" id="bBl-rq-Gdb"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UiM-3S-hQe">
-                                                    <rect key="frame" x="78" y="7" width="222" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b0E-lD-j6o">
+                                                    <rect key="frame" x="81" y="7" width="219" height="30"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="Jl5-58-zHd"/>
+                                                        <constraint firstAttribute="height" constant="30" id="0nU-bV-fLW"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="UiM-3S-hQe" firstAttribute="leading" secondItem="QR3-OH-BSe" secondAttribute="trailing" constant="8" symbolic="YES" id="0ZO-eJ-jxi"/>
-                                                <constraint firstAttribute="centerY" secondItem="UiM-3S-hQe" secondAttribute="centerY" id="1Ad-zy-KHm"/>
-                                                <constraint firstAttribute="centerY" secondItem="QR3-OH-BSe" secondAttribute="centerY" id="5zY-vL-UzG"/>
-                                                <constraint firstAttribute="trailing" secondItem="UiM-3S-hQe" secondAttribute="trailing" constant="20" symbolic="YES" id="PPd-sv-v4j"/>
-                                                <constraint firstItem="QR3-OH-BSe" firstAttribute="leading" secondItem="4Ff-3F-V2s" secondAttribute="leading" constant="20" symbolic="YES" id="PZn-el-ALb"/>
+                                                <constraint firstAttribute="trailing" secondItem="b0E-lD-j6o" secondAttribute="trailing" constant="20" symbolic="YES" id="JHi-TS-mkB"/>
+                                                <constraint firstItem="b0E-lD-j6o" firstAttribute="leading" secondItem="Xz4-7a-Fdv" secondAttribute="trailing" constant="8" symbolic="YES" id="QDu-Ky-7bB"/>
+                                                <constraint firstItem="Xz4-7a-Fdv" firstAttribute="leading" secondItem="4Ff-3F-V2s" secondAttribute="leading" constant="20" symbolic="YES" id="Srv-92-iqt"/>
+                                                <constraint firstAttribute="centerY" secondItem="b0E-lD-j6o" secondAttribute="centerY" id="be5-NE-60W"/>
+                                                <constraint firstAttribute="centerY" secondItem="Xz4-7a-Fdv" secondAttribute="centerY" id="gef-1v-POb"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -585,19 +585,19 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3aH-7S-gsB">
                                                     <rect key="frame" x="160" y="0.0" width="160" height="44"/>
                                                     <subviews>
-                                                        <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b0E-lD-j6o">
-                                                            <rect key="frame" x="81" y="7" width="59" height="30"/>
+                                                        <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UiM-3S-hQe">
+                                                            <rect key="frame" x="78" y="7" width="62" height="30"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="30" id="0nU-bV-fLW"/>
+                                                                <constraint firstAttribute="height" constant="30" id="Jl5-58-zHd"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                         </textField>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trigger" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xz4-7a-Fdv">
-                                                            <rect key="frame" x="20" y="11" width="53" height="21"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QR3-OH-BSe">
+                                                            <rect key="frame" x="20" y="12" width="50" height="21"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="21" id="0TK-iM-8bg"/>
-                                                                <constraint firstAttribute="width" constant="53" id="bBl-rq-Gdb"/>
+                                                                <constraint firstAttribute="height" constant="21" id="Uel-bq-LMU"/>
+                                                                <constraint firstAttribute="width" constant="50" id="gMY-lR-gUf"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -606,11 +606,11 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="centerY" secondItem="b0E-lD-j6o" secondAttribute="centerY" id="7jp-Rw-2qG"/>
-                                                        <constraint firstItem="Xz4-7a-Fdv" firstAttribute="leading" secondItem="3aH-7S-gsB" secondAttribute="leading" constant="20" symbolic="YES" id="WQW-v9-K8w"/>
-                                                        <constraint firstAttribute="centerY" secondItem="Xz4-7a-Fdv" secondAttribute="centerY" id="Xhv-Hq-isD"/>
-                                                        <constraint firstItem="b0E-lD-j6o" firstAttribute="leading" secondItem="Xz4-7a-Fdv" secondAttribute="trailing" constant="8" symbolic="YES" id="qKz-KI-xRw"/>
-                                                        <constraint firstAttribute="trailing" secondItem="b0E-lD-j6o" secondAttribute="trailing" constant="20" symbolic="YES" id="uIe-f4-ibB"/>
+                                                        <constraint firstItem="UiM-3S-hQe" firstAttribute="leading" secondItem="QR3-OH-BSe" secondAttribute="trailing" constant="8" symbolic="YES" id="95x-0m-bsX"/>
+                                                        <constraint firstAttribute="trailing" secondItem="UiM-3S-hQe" secondAttribute="trailing" constant="20" symbolic="YES" id="Rir-ef-jyq"/>
+                                                        <constraint firstAttribute="centerY" secondItem="QR3-OH-BSe" secondAttribute="centerY" id="TCd-mm-jL3"/>
+                                                        <constraint firstAttribute="centerY" secondItem="UiM-3S-hQe" secondAttribute="centerY" id="quH-SK-CP6"/>
+                                                        <constraint firstItem="QR3-OH-BSe" firstAttribute="leading" secondItem="3aH-7S-gsB" secondAttribute="leading" constant="20" symbolic="YES" id="uU8-cD-WBK"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -894,7 +894,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1WJ-5o-KXC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="973" y="-157"/>
+            <point key="canvasLocation" x="973" y="-160"/>
         </scene>
         <!--OwnTracksCTRL - Map-->
         <scene sceneID="YQJ-O2-RU4">

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>p</key>
+	<string>p (ing)</string>
+	<key>c</key>
+	<string>c (ircular region enter/leave event)</string>
+	<key>b</key>
+	<string>b (beacon region enter/leave event)</string>
+	<key>r</key>
+	<string>r (esponse to a reportLocation request)</string>
+	<key>u</key>
+	<string>u (ser request)</string>
+	<key>t</key>
+	<string>t (imer based event in move mode)</string>
+	<key>a</key>
+	<string>a (utomatic)</string>
+	<key>f</key>
+	<string>f (irst fix after device start)</string>
+	<key>m</key>
+	<string>m (anually triggered by cmd)</string>
+	<key>T</key>
+	<string>T (imer based event in park mode)</string>
+	<key>k</key>
+	<string>k (stops moving - parked)</string>
+	<key>v</key>
+	<string>v (starts moving)</string>
+	<key>l</key>
+	<string>l (ost GPS fix)</string>
+	<key>L</key>
+	<string>L (ast position, devices shutting down)</string>
+</dict>
+</plist>

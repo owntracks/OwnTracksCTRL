@@ -37,6 +37,7 @@
 
 @implementation VehicleVC
 - (void)viewWillAppear:(BOOL)animated {
+    
     [super viewWillAppear:animated];
     self.title = [NSString stringWithFormat:@"Detail - %@", [self.vehicle tid]];
     
@@ -50,7 +51,6 @@
     self.UIStatus.selectedSegmentIndex = [self.vehicle.status intValue] + 1;
     self.UIDist.text = [NSString stringWithFormat:@"%.0fm", [self.vehicle.dist doubleValue]];
     self.UITrip.text = [NSString stringWithFormat:@"%.0fm", [self.vehicle.trip doubleValue]];
-    self.UITrigger.text = self.vehicle.trigger;
     self.UITopic.text = self.vehicle.topic;
     self.UIStart.text = [NSDateFormatter localizedStringFromDate:self.vehicle.start
                                                        dateStyle:NSDateFormatterShortStyle
@@ -58,7 +58,6 @@
     self.UIVersion.text = self.vehicle.version;
     self.UIIMEI.text = self.vehicle.imei;
 
-    
     self.UIAltitude.text = [NSString stringWithFormat:@"%.0fm",
                             [self.vehicle.alt doubleValue]];
     self.UICoordinate.text = [NSString stringWithFormat:@"%g,%g",
@@ -70,7 +69,17 @@
     self.UITime.text = [NSDateFormatter localizedStringFromDate:self.vehicle.tst
                                                       dateStyle:NSDateFormatterShortStyle
                                                       timeStyle:NSDateFormatterShortStyle];
+    
+    // Trigger
+    NSURL *bundleURL = [[NSBundle mainBundle] bundleURL];
+    NSURL *plistURL = [bundleURL URLByAppendingPathComponent:@"Triggers.plist"];
+    
+    NSDictionary *triggers = [NSDictionary dictionaryWithContentsOfURL:plistURL];
+    NSString *triggerText = triggers[self.vehicle.trigger];
+    self.UITrigger.text = triggerText ? triggerText : self.vehicle.trigger;
 
+
+    // Location
     self.UILocation.text = @"reverse geocoding...";
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.vehicle.lat doubleValue] longitude:[self.vehicle.lon doubleValue]];

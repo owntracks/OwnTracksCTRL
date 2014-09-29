@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		841CE30919D1968A00096F37 /* Triggers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841CE30819D1968A00096F37 /* Triggers.plist */; };
 		843CF9B419CC0BD00045AC81 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9B319CC0BD00045AC81 /* main.m */; };
 		843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C119CC0BD40045AC81 /* Images.xcassets */; };
 		843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		841CE30819D1968A00096F37 /* Triggers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Triggers.plist; path = ../Triggers.plist; sourceTree = "<group>"; };
 		843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnTracksCTRL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		843CF9B219CC0BD00045AC81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		843CF9B319CC0BD00045AC81 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				843CFA8819CC11C60045AC81 /* Vehicle+Create.m */,
 				843CFA7D19CC11BC0045AC81 /* VehicleVC.h */,
 				843CFA7C19CC11BC0045AC81 /* VehicleVC.m */,
+				841CE30819D1968A00096F37 /* Triggers.plist */,
 				843CFA7919CC11BC0045AC81 /* VehiclesVC.h */,
 				843CFA7819CC11BC0045AC81 /* VehiclesVC.m */,
 				843CFA7419CC11A50045AC81 /* SettingsVC.h */,
@@ -284,6 +287,7 @@
 				843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */,
 				843CFA6819CC0D7B0045AC81 /* iTunesArtwork.png in Resources */,
 				843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */,
+				841CE30919D1968A00096F37 /* Triggers.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
