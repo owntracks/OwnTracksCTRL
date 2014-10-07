@@ -68,6 +68,7 @@
     
     if (vehicle
         && [vehicle.status intValue] == 1
+        && ![vehicle.trigger isEqualToString:@"k"]
         && ![vehicle.trigger isEqualToString:@"L"]
         && ![vehicle.trigger isEqualToString:@"T"]) {
         double speed = [vehicle.vel doubleValue];
@@ -126,9 +127,10 @@
     // Course
     if (vehicle
         && [vehicle.status intValue] == 1
+        && ![vehicle.trigger isEqualToString:@"k"]
         && ![vehicle.trigger isEqualToString:@"L"]
         && ![vehicle.trigger isEqualToString:@"T"]) {
-            double cog = [vehicle.cog doubleValue];
+        double cog = [vehicle.cog doubleValue];
         if (cog >= 0) {
             UIBezierPath *course = [UIBezierPath bezierPathWithOvalInRect:
                                     CGRectMake(
@@ -145,7 +147,7 @@
             [course stroke];
         }
     }
-    
+    [self.superview bringSubviewToFront:self];
     [UIView animateWithDuration:0.5
                           delay: 0.0
                         options: UIViewAnimationOptionCurveEaseIn

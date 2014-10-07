@@ -357,7 +357,8 @@ size_t isutf8(unsigned char *str, size_t len)
                                 vehicle.tid,
                                 event,
                                 dictionary[@"desc"],
-                                [NSDateFormatter localizedStringFromDate:vehicle.tst
+                                [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:
+                                                                          [dictionary[@"tst"] doubleValue]]
                                                                dateStyle:NSDateFormatterShortStyle
                                                                timeStyle:NSDateFormatterShortStyle]];
         if (!vehicle.event || ![eventString isEqualToString:vehicle.event]) {
