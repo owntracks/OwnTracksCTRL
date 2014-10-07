@@ -143,6 +143,7 @@
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.mapView addAnnotation:anObject];
+            [self.mapView selectAnnotation:anObject animated:NO];
             break;
             
         case NSFetchedResultsChangeDelete:
@@ -153,6 +154,7 @@
             NSLog(@"NSFetchedResultsChangeUpdate");
             [self.mapView removeAnnotation:anObject];
             [self.mapView addAnnotation:anObject];
+            [self.mapView selectAnnotation:anObject animated:NO];
             break;
             
         case NSFetchedResultsChangeMove:

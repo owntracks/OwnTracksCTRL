@@ -199,6 +199,19 @@
     AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     annotationView.annotation = vehicle;
     cell.imageView.image = [annotationView getImage];
+    [UIView animateWithDuration:0.2
+                          delay: 0.0
+                        options: UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         cell.contentView.backgroundColor = [UIColor greenColor] ;
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.2
+                                          animations:^{
+                                              cell.contentView.backgroundColor = [UIColor whiteColor];
+                                          }
+                                          completion:nil];
+                     }];
 }
 
 @end

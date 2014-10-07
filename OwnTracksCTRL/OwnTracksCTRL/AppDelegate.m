@@ -286,24 +286,29 @@ size_t isutf8(unsigned char *str, size_t len)
             } else {
                 if ([subTopic isEqualToString:@"alarm"]) {
                     NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-                    vehicle.alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
-                                     vehicle.tid,
-                                     [NSDateFormatter localizedStringFromDate:alarmAt
-                                                                    dateStyle:NSDateFormatterShortStyle
-                                                                    timeStyle:NSDateFormatterShortStyle]];
-                    
-                    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                    localNotification.alertBody = vehicle.alarm;
-                    localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
-                    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                    NSString *alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
+                                       vehicle.tid,
+                                       [NSDateFormatter localizedStringFromDate:alarmAt
+                                                                      dateStyle:NSDateFormatterShortStyle
+                                                                      timeStyle:NSDateFormatterShortStyle]];
+                    if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
+                        vehicle.alarm = alarm;
+                        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                        localNotification.alertBody = vehicle.alarm;
+                        localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
+                        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                    }
                 } else if ([subTopic isEqualToString:@"status"]) {
                     NSString *status = [AppDelegate dataToString:data];
                     vehicle.status = @([status intValue]);
+                    
                 } else if ([subTopic isEqualToString:@"event"]) {
                     [self processEventMessage:dictionary forVehicle:vehicle];
+                    
                 } else if ([subTopic isEqualToString:@"info"]) {
                     NSString *info = [AppDelegate dataToString:data];
                     vehicle.info= info;
+                    
                 } else if ([subTopic isEqualToString:@"start"]) {
                     NSString *start = [AppDelegate dataToString:data];
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -314,6 +319,7 @@ size_t isutf8(unsigned char *str, size_t len)
                     vehicle.start = startDate;
                     vehicle.version = fields[1];
                     vehicle.imei = fields[0];
+                    
                 } else if ([subTopic isEqualToString:@"gpio/1"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio1= @([gpio intValue]);
@@ -323,6 +329,7 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio7= @([gpio intValue]);
+                    
                 } else if ([subTopic isEqualToString:@"voltage/batt"]) {
                     NSString *voltage = [AppDelegate dataToString:data];
                     vehicle.vbatt = @([voltage doubleValue]);
@@ -346,18 +353,20 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)processEventMessage:(NSDictionary *)dictionary forVehicle:(Vehicle *)vehicle {
     NSString *event = dictionary[@"event"];
     if (event) {
-        vehicle.event= [NSString stringWithFormat:@"Event %@ %@ %@ @ %@",
-                        vehicle.tid,
-                        event,
-                        dictionary[@"desc"],
-                        [NSDateFormatter localizedStringFromDate:vehicle.tst
-                                                       dateStyle:NSDateFormatterShortStyle
-                                                       timeStyle:NSDateFormatterShortStyle]];
-        
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.alertBody = vehicle.event;
-        localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Event"};
-        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+        NSString *eventString= [NSString stringWithFormat:@"Event %@ %@ %@ @ %@",
+                                vehicle.tid,
+                                event,
+                                dictionary[@"desc"],
+                                [NSDateFormatter localizedStringFromDate:vehicle.tst
+                                                               dateStyle:NSDateFormatterShortStyle
+                                                               timeStyle:NSDateFormatterShortStyle]];
+        if (!vehicle.event || ![eventString isEqualToString:vehicle.event]) {
+            vehicle.event = eventString;
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.alertBody = vehicle.event;
+            localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Event"};
+            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+        }
     }
 
 }

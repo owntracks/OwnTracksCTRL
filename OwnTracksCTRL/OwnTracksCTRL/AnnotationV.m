@@ -15,12 +15,12 @@
 #define CIRCLE_COLOR [UIColor yellowColor]
 
 #define FENCE_ON_COLOR [UIColor greenColor]
-#define FENCE_OFF_COLOR [UIColor orangeColor]
+#define FENCE_OFF_COLOR [UIColor blueColor]
 #define FENCE_ERROR_COLOR [UIColor redColor]
-#define FENCE_WIDTH 5.0
+#define FENCE_FACTOR 0.125
 
 #define ID_COLOR [UIColor blackColor]
-#define ID_FONTSIZE 20.0
+#define ID_FONTFACTOR 0.5
 #define ID_INSET 3.0
 
 #define COURSE_COLOR [UIColor blueColor]
@@ -54,6 +54,7 @@
     UIBezierPath *circle = [UIBezierPath bezierPathWithOvalInRect:rect];
     [circle addClip];
     
+    
     // Yellow or Photo background
     [CIRCLE_COLOR setFill];
     [circle fill];
@@ -75,7 +76,7 @@
             [tacho moveToPoint:CGPointMake(rect.origin.x + rect.size.width / 2, rect.origin.y + rect.size.height / 2)];
             [tacho addLineToPoint:CGPointMake(rect.origin.x + rect.size.width / 2, rect.origin.y + rect.size.height)];
             [tacho appendPath:[UIBezierPath bezierPathWithArcCenter:CGPointMake(rect.size.width / 2, rect.size.height / 2)
-                                                             radius:CIRCLE_SIZE / 2
+                                                             radius:rect.size.width / 2
                                                          startAngle:M_PI_2
                                                            endAngle:M_PI_2 +
                                2 * M_PI *log(1 + speed / TACHO_SCALE) / log (1 + TACHO_MAX / TACHO_SCALE)
@@ -94,7 +95,7 @@
     // ID
     if (vehicle) {
         NSString *tid = vehicle.tid;
-        UIFont *font = [UIFont boldSystemFontOfSize:ID_FONTSIZE];
+        UIFont *font = [UIFont boldSystemFontOfSize:rect.size.width * ID_FONTFACTOR];
         NSDictionary *attributes = @{NSFontAttributeName: font,
                                      NSForegroundColorAttributeName: ID_COLOR};
         CGRect boundingRect = [tid boundingRectWithSize:rect.size options:0 attributes:attributes context:nil];
@@ -118,7 +119,7 @@
                 [FENCE_ERROR_COLOR setStroke];
                 break;
         }
-        [circle setLineWidth:FENCE_WIDTH];
+        [circle setLineWidth:rect.size.width * FENCE_FACTOR];
         [circle stroke];
     }
     
@@ -131,8 +132,8 @@
         if (cog >= 0) {
             UIBezierPath *course = [UIBezierPath bezierPathWithOvalInRect:
                                     CGRectMake(
-                                               rect.origin.x + rect.size.width / 2 + CIRCLE_SIZE / 2 * cos((cog -90 )/ 360 * 2 * M_PI) - COURSE_WIDTH / 2,
-                                               rect.origin.y + rect.size.height / 2 + CIRCLE_SIZE / 2 * sin((cog -90 )/ 360 * 2 * M_PI) - COURSE_WIDTH / 2,
+                                               rect.origin.x + rect.size.width / 2 + rect.size.width / 2 * cos((cog -90 )/ 360 * 2 * M_PI) - COURSE_WIDTH / 2,
+                                               rect.origin.y + rect.size.height / 2 + rect.size.width / 2 * sin((cog -90 )/ 360 * 2 * M_PI) - COURSE_WIDTH / 2,
                                                COURSE_WIDTH,
                                                COURSE_WIDTH
                                                )
@@ -144,6 +145,20 @@
             [course stroke];
         }
     }
+    
+    [UIView animateWithDuration:0.5
+                          delay: 0.0
+                        options: UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.bounds = CGRectMake(0, 0, CIRCLE_SIZE * 2, CIRCLE_SIZE * 2);
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.5
+                                          animations:^{
+                                              self.bounds = CGRectMake(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
+                                          }
+                                          completion:nil];
+                     }];
 }
 
 
