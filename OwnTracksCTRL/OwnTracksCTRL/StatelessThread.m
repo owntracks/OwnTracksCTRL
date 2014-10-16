@@ -67,4 +67,15 @@
                                   withObject:@{@"topic": topic, @"data": data}];
 }
 
+- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
+    switch (eventCode) {
+        case MQTTSessionEventConnectionClosed:
+        case MQTTSessionEventConnectionClosedByBroker:
+            self.connectedTo = nil;
+            break;
+        default:
+            break;
+    }
+}
+
 @end

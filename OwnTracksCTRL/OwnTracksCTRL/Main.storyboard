@@ -941,7 +941,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mWV-Tb-Tua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131" y="201"/>
+            <point key="canvasLocation" x="131" y="204"/>
         </scene>
         <!--OwnTracksCTRL- Settings-->
         <scene sceneID="rm0-nB-eko">

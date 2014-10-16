@@ -82,7 +82,9 @@
     }
 }
 
-
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
+}
 
 - (void)centerOn:(Vehicle *)vehicle {
     [self.mapView setCenterCoordinate:[vehicle coordinate] animated:TRUE];
@@ -140,6 +142,13 @@
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
+    id <MKAnnotation> annotation = (id <MKAnnotation>)anObject;
+    id <MKAnnotation> selectedAnnotation = nil;
+    NSArray *selectedAnnotations = self.mapView.selectedAnnotations;
+    if ([selectedAnnotations count] > 0) {
+        selectedAnnotation = (id <MKAnnotation>)selectedAnnotations[0];
+    }
+    
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.mapView addAnnotation:anObject];
@@ -150,9 +159,11 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            NSLog(@"NSFetchedResultsChangeUpdate");
             [self.mapView removeAnnotation:anObject];
             [self.mapView addAnnotation:anObject];
+            if (annotation == selectedAnnotation) {
+                [self.mapView selectAnnotation:annotation animated:true];
+            }
             break;
             
         case NSFetchedResultsChangeMove:
@@ -320,3 +331,4 @@
 }
 
 @end
+

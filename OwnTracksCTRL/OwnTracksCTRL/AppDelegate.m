@@ -257,6 +257,10 @@ size_t isutf8(unsigned char *str, size_t len)
             
             Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
                               inManagedObjectContext:self.queueManagedObjectContext];
+            if (!vehicle.tid) {
+                vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
+            }
+            
             NSDictionary *dictionary = nil;
             if (data.length) {
                 NSError *error;

@@ -149,15 +149,15 @@
     }
     [self.superview bringSubviewToFront:self];
     [UIView animateWithDuration:0.5
-                          delay: 0.0
-                        options: UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         self.bounds = CGRectMake(0, 0, CIRCLE_SIZE * 2, CIRCLE_SIZE * 2);
+                         self.alpha = 0.1;
+                         //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE * 2, CIRCLE_SIZE * 2);
                      }
                      completion:^(BOOL finished){
                          [UIView animateWithDuration:0.5
                                           animations:^{
-                                              self.bounds = CGRectMake(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
+                                              self.alpha = 1.0;
+                                              //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
                                           }
                                           completion:nil];
                      }];
