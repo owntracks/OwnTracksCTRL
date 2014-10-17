@@ -318,7 +318,7 @@ size_t isutf8(unsigned char *str, size_t len)
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                     
                     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
-                    [dateFormatter setDateFormat:@"yyyyMMdd'T'hhmmss'Z'"];
+                    [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
                     NSDate *startDate = [dateFormatter dateFromString:fields[2]];
                     vehicle.start = startDate;
                     vehicle.version = fields[1];
@@ -330,6 +330,12 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"gpio/3"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio3= @([gpio intValue]);
+                } else if ([subTopic isEqualToString:@"gpio/4"]) {
+                    NSString *gpio = [AppDelegate dataToString:data];
+                    vehicle.gpio4= @([gpio intValue]);
+                } else if ([subTopic isEqualToString:@"gpio/5"]) {
+                    NSString *gpio = [AppDelegate dataToString:data];
+                    vehicle.gpio5= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio7= @([gpio intValue]);

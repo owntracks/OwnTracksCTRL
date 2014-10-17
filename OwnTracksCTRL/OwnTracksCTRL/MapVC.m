@@ -11,6 +11,7 @@
 #import "AnnotationV.h"
 #import "AppDelegate.h"
 #import "VehicleVC.h"
+#import "MapPopOverSegue.h"
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -66,17 +67,35 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
-    [self performSegueWithIdentifier:@"showDetail:" sender:view];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [self performSegueWithIdentifier:@"showDetail:" sender:view];
+    } else {
+        [self performSegueWithIdentifier:@"showDetailPush:" sender:view];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showDetail:"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+        if ([segue isKindOfClass:[MapPopOverSegue class]]) {
+            MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
+            mapPopOverSegue.view = self.mapView;
             if ([sender isKindOfClass:[MKAnnotationView class]]) {
                 MKAnnotationView *annotationView = (MKAnnotationView *)sender;
-            [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                  withObject:annotationView.annotation];
+                mapPopOverSegue.rect = annotationView.frame;
+                if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+                    [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                          withObject:annotationView.annotation];
+                }
+            }
+        }
+    }
+    if ([segue.identifier isEqualToString:@"showDetailPush:"]) {
+        if ([sender isKindOfClass:[MKAnnotationView class]]) {
+            MKAnnotationView *annotationView = (MKAnnotationView *)sender;
+            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+                [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                      withObject:annotationView.annotation];
             }
         }
     }
