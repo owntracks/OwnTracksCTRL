@@ -64,7 +64,7 @@
                           options:NSKeyValueObservingOptionNew
                           context:nil];
     }
-    [self observeValueForKeyPath:nil ofObject:nil change:nil context:nil];
+    [self observeValueForKeyPath:nil ofObject:nil change:nil context:nil]; // to set values initially
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

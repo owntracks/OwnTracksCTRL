@@ -16,7 +16,6 @@
 @interface VehiclesVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation VehiclesVC
@@ -37,7 +36,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"vehicle" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell:cell atIndexPath:indexPath highlight:false];
     return cell;
 }
 
@@ -174,7 +173,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath highlight:true];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -189,7 +188,7 @@
     [self.tableView endUpdates];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath highlight:(BOOL)highlight
 {
     Vehicle *vehicle = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
@@ -199,19 +198,22 @@
     AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     annotationView.annotation = vehicle;
     cell.imageView.image = [annotationView getImage];
-    [UIView animateWithDuration:0.2
-                          delay: 0.0
-                        options: UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-                         cell.contentView.backgroundColor = [UIColor greenColor] ;
-                     }
-                     completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.2
-                                          animations:^{
-                                              cell.contentView.backgroundColor = [UIColor whiteColor];
-                                          }
-                                          completion:nil];
-                     }];
+    
+    if (highlight) {
+        [UIView animateWithDuration:0.2
+                              delay: 0.0
+                            options: UIViewAnimationOptionCurveEaseIn
+                         animations:^{
+                             cell.contentView.backgroundColor = [UIColor greenColor] ;
+                         }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.2
+                                              animations:^{
+                                                  cell.contentView.backgroundColor = [UIColor whiteColor];
+                                              }
+                                              completion:nil];
+                         }];
+    }
 }
 
 @end
