@@ -265,49 +265,93 @@ size_t isutf8(unsigned char *str, size_t len)
             if (data.length) {
                 NSError *error;
                 dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                
+                if (!dictionary) {
+                    NSString *payload = [AppDelegate dataToString:data];
+                    NSArray *values = [payload componentsSeparatedByString:@","];
+                    if ([values count] == 10) {
+                        dictionary = [[NSMutableDictionary alloc] initWithCapacity:9];
+                        [dictionary setValue:values[0] forKey:@"tid"];
+                        
+                        NSScanner *scanner = [NSScanner scannerWithString:values[1]];
+                        unsigned int tst = 0;
+                        [scanner scanHexInt:&tst];
+                        [dictionary setValue:[NSString stringWithFormat:@"%u", tst] forKey:@"tst"];
+                        
+                        [dictionary setValue:values[2] forKey:@"t"];
+
+                        double lat = [values[3] doubleValue] / 1000000.0;
+                        [dictionary setValue:[NSString stringWithFormat:@"%.6f", lat] forKey:@"lat"];
+                        
+                        double lon = [values[4] doubleValue] / 1000000.0;
+                        [dictionary setValue:[NSString stringWithFormat:@"%.6f", lon] forKey:@"lon"];
+                        
+                        int cog = [values[5] intValue] * 10;
+                        [dictionary setValue:@(cog) forKey:@"cog"];
+                        
+                        int vel = [values[6] intValue];
+                        [dictionary setValue:@(vel) forKey:@"vel"];
+                        
+                        int alt = [values[7] intValue] * 10;
+                        [dictionary setValue:@(alt) forKey:@"alt"];
+                        
+                        int dist = [values[8] intValue];
+                        [dictionary setValue:@(dist) forKey:@"dist"];
+                        
+                        int trip = [values[9] intValue] * 1000;
+                        [dictionary setValue:@(trip) forKey:@"trip"];
+                    }
+                }
             }
             
             if ([topicComponents count] == [baseComponents count]) {
-                vehicle.acc = @([dictionary[@"acc"] doubleValue]);
-                vehicle.alt = dictionary[@"alt"];
-                vehicle.cog = dictionary[@"cog"];
-                vehicle.dist= dictionary[@"dist"];
-                vehicle.lat= @([dictionary[@"lat"] doubleValue]);
-                vehicle.lon= @([dictionary[@"lon"] doubleValue]);
-                
-                if (dictionary[@"tid"]) {
-                    vehicle.tid = dictionary[@"tid"];
-                } else {
-                    vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
+                if (dictionary) {
+                    vehicle.acc = @([dictionary[@"acc"] doubleValue]);
+                    vehicle.alt = dictionary[@"alt"];
+                    vehicle.cog = dictionary[@"cog"];
+                    vehicle.dist= dictionary[@"dist"];
+                    vehicle.lat= @([dictionary[@"lat"] doubleValue]);
+                    vehicle.lon= @([dictionary[@"lon"] doubleValue]);
+                    
+                    if (dictionary[@"tid"]) {
+                        vehicle.tid = dictionary[@"tid"];
+                    } else {
+                        vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
+                    }
+                    
+                    vehicle.trigger= dictionary[@"t"];
+                    vehicle.trip=dictionary[@"trip"];
+                    vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
+                    vehicle.vacc=dictionary[@"vacc"];
+                    vehicle.vel=dictionary[@"vel"];
+                    [self processEventMessage:dictionary forVehicle:vehicle];
                 }
-                
-                vehicle.trigger= dictionary[@"t"];
-                vehicle.trip=dictionary[@"trip"];
-                vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-                vehicle.vacc=dictionary[@"vacc"];
-                vehicle.vel=dictionary[@"vel"];
-                [self processEventMessage:dictionary forVehicle:vehicle];
             } else {
                 if ([subTopic isEqualToString:@"alarm"]) {
-                    NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-                    NSString *alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
-                                       vehicle.tid,
-                                       [NSDateFormatter localizedStringFromDate:alarmAt
-                                                                      dateStyle:NSDateFormatterShortStyle
-                                                                      timeStyle:NSDateFormatterShortStyle]];
-                    if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
-                        vehicle.alarm = alarm;
-                        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                        localNotification.alertBody = vehicle.alarm;
-                        localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
-                        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                    if (dictionary) {
+                        NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
+                        NSString *alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
+                                           vehicle.tid,
+                                           [NSDateFormatter localizedStringFromDate:alarmAt
+                                                                          dateStyle:NSDateFormatterShortStyle
+                                                                          timeStyle:NSDateFormatterShortStyle]];
+                        NSLog(@"new alarm %@, existing alarm %@", alarm, vehicle.alarm);
+                        if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
+                            vehicle.alarm = alarm;
+                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                            localNotification.alertBody = vehicle.alarm;
+                            localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
+                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                        }
                     }
                 } else if ([subTopic isEqualToString:@"status"]) {
                     NSString *status = [AppDelegate dataToString:data];
                     vehicle.status = @([status intValue]);
                     
                 } else if ([subTopic isEqualToString:@"event"]) {
-                    [self processEventMessage:dictionary forVehicle:vehicle];
+                    if (dictionary) {
+                        [self processEventMessage:dictionary forVehicle:vehicle];
+                    }
                     
                 } else if ([subTopic isEqualToString:@"info"]) {
                     NSString *info = [AppDelegate dataToString:data];
@@ -319,6 +363,7 @@ size_t isutf8(unsigned char *str, size_t len)
                     
                     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
                     [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
+                    [dateFormatter setTimeZone:[[NSTimeZone alloc] initWithName:@"UTC"]];
                     NSDate *startDate = [dateFormatter dateFromString:fields[2]];
                     vehicle.start = startDate;
                     vehicle.version = fields[1];

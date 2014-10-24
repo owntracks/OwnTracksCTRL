@@ -42,6 +42,7 @@
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate saveContext];
 }
+
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -174,5 +175,39 @@
     [self.UIClientID resignFirstResponder];
     [self.UISubscription resignFirstResponder];
 }
+
+- (IBAction)clientIDChanged:(UITextField *)sender {
+    
+    if (sender.text.length < 1 || sender.text.length > 23) {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"ClientID invalid"
+                                  message:@"ClientID may not be empty and can be up to 23 characters long"
+                                  delegate:self
+                                  cancelButtonTitle:nil
+                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+    } else {
+        for (int i = 0; i < sender.text.length; i++) {
+            if (![[NSCharacterSet alphanumericCharacterSet] characterIsMember:[sender.text characterAtIndex:i]]) {
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"ClientID invalid"
+                                          message:@"ClientID may contain alphanumeric characters only"
+                                          delegate:self
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"OK", nil];
+                [alertView show];
+                return;
+            }
+        }
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        delegate.broker.clientid = self.UIClientID.text;
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.UIClientID.text = delegate.broker.clientid;
+}
+
 
 @end

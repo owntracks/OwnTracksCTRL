@@ -116,7 +116,7 @@
     
     self.UIAltitude.text = [NSString stringWithFormat:@"%.0f m",
                             [self.vehicle.alt doubleValue]];
-    self.UICoordinate.text = [NSString stringWithFormat:@"%g,%g",
+    self.UICoordinate.text = [NSString stringWithFormat:@"%.6f,%.6f",
                               [self.vehicle.lat doubleValue],
                               [self.vehicle.lon doubleValue]];
     self.UICourse.text = [NSString stringWithFormat:@"%.0f°", [self.vehicle.cog doubleValue]];

@@ -46,7 +46,22 @@
         broker.auth = @NO;
         broker.user = @"";
         broker.passwd = @"";
-        broker.clientid = [[UIDevice currentDevice] name];
+        
+        NSString *deviceName = [[UIDevice currentDevice] name];
+        NSString *defaultClientID = @"";
+        for (int i = 0; i < deviceName.length; i++) {
+            unichar ch = [deviceName characterAtIndex:i];
+            if ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:ch]) {
+                defaultClientID = [defaultClientID stringByAppendingString:[NSString stringWithCharacters:&ch length:1]];
+            }
+        }
+        if (defaultClientID.length < 1) {
+            defaultClientID = @"ClientID";
+        }
+        if (defaultClientID.length > 23) {
+            defaultClientID = [defaultClientID substringToIndex:23];
+        }
+        broker.clientid = defaultClientID;
         broker.base = @"owntracks/+/+";
     }
     
