@@ -93,8 +93,8 @@
     if ([overlay isKindOfClass:[Vehicle class]]) {
         Vehicle *vehicle = (Vehicle *)overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:[vehicle polyLine]];
-        [renderer setLineWidth:3];
-        [renderer setStrokeColor:[UIColor blueColor]];
+        [renderer setLineWidth:5];
+        [renderer setStrokeColor:[UIColor redColor]];
         return renderer;
     } else {
         return nil;
@@ -385,20 +385,20 @@
     }
     self.vehicleToGet = vehicle;
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@",
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@&nrecs=%d",
                       delegate.broker.user,
                       delegate.broker.passwd,
-                      vehicle.tid];
+                      vehicle.tid,
+                      500];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:delegate.broker.trackurl]];
-    //[request setHTTPMethod:@"POST"];
-    [request setHTTPMethod:@"GET"];
-    //[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    //[request setHTTPBody:postData];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
     self.dataToGet = [[NSMutableData alloc] init];
     self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
