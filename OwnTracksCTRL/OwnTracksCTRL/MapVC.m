@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
 
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) Vehicle *vehicleToGet;
@@ -36,13 +37,18 @@
     [appDelegate addObserver:self forKeyPath:@"connectedTo"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
+    [appDelegate addObserver:self forKeyPath:@"kiosk"
+                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                     context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.fetchedResultsController = nil;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate removeObserver:self forKeyPath:@"kiosk"
+                        context:nil];
     [appDelegate removeObserver:self forKeyPath:@"connectedTo"
-                     context:nil];
+                        context:nil];
     [super viewWillDisappear:animated];
 }
 
@@ -93,7 +99,7 @@
     if ([overlay isKindOfClass:[Vehicle class]]) {
         Vehicle *vehicle = (Vehicle *)overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:[vehicle polyLine]];
-        [renderer setLineWidth:5];
+        [renderer setLineWidth:3];
         [renderer setStrokeColor:[UIColor redColor]];
         return renderer;
     } else {
@@ -228,6 +234,7 @@
 
 #define ACTION_MAP @"Map Modes"
 #define ACTION_MQTT @"MQTT Connection"
+#define ACTION_KIOSK @"Kiosk Mode"
 - (IBAction)TrackingPressed:(UIBarButtonItem *)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MAP
                                                              delegate:self
@@ -251,6 +258,18 @@
                                                     otherButtonTitles:
                                   @"(Re-)Connect",
                                   @"Disconnect",
+                                  nil];
+    [actionSheet showFromBarButtonItem:sender animated:YES];
+}
+
+- (IBAction)KioskPressed:(UIBarButtonItem *)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_KIOSK
+                                                             delegate:self
+                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:
+                                  @"ON",
+                                  @"OFF",
                                   nil];
     [actionSheet showFromBarButtonItem:sender animated:YES];
 }
@@ -366,15 +385,36 @@
                 [delegate disconnect];
                 break;
         }
+    } else if ([actionSheet.title isEqualToString:ACTION_KIOSK]) {
+        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
+            case 0:
+                delegate.kiosk = @(true);
+                break;
+            case 1:
+                delegate.kiosk = @(false);
+                break;
+        }
     }
 }
+
+#define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
+#define COLOR_ON  [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0]
+#define COLOR_OFF [UIColor colorWithRed:64.0/255.0 green:64.0/255.0 blue:64.0/255.0 alpha:1.0]
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"connectedTo"]) {
         if ([object valueForKey:keyPath]) {
-            self.UIConnection.tintColor = [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0];
+            self.UIConnection.tintColor = COLOR_ON;
         } else {
-            self.UIConnection.tintColor = [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0];
+            self.UIConnection.tintColor = COLOR_ERR;
+        }
+    } else if ([keyPath isEqualToString:@"kiosk"]) {
+        if ([[object valueForKey:keyPath] boolValue]) {
+            self.UIKiosk.tintColor = COLOR_ON;
+            [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
+        } else {
+            self.UIKiosk.tintColor = COLOR_OFF;
+            [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
         }
     }
 }
@@ -404,7 +444,24 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSLog(@"NSURLResponse %@", response);
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse *)response;
+        if (httpURLResponse.statusCode != 200) {
+            NSString *message = [NSString stringWithFormat:@"%ld %@\n%@",
+                                 (long)httpURLResponse.statusCode,
+                                 [NSHTTPURLResponse localizedStringForStatusCode:httpURLResponse.statusCode],
+                                 httpURLResponse.URL];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"HTTP Response"
+                                                                message:message
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"OK", nil];
+            [alertView show];
+            self.dataToGet = nil;
+            self.vehicleToGet = nil;
+            self.urlConnection = nil;
+        }
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -412,8 +469,8 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading"
-                                                        message:@"failed"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
+                                                        message:[AppDelegate dataToString:self.dataToGet]
                                                        delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];

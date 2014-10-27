@@ -575,6 +575,12 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="B2y-ew-ML8"/>
+                                    <barButtonItem systemItem="play" id="Mcd-8r-Cxc">
+                                        <connections>
+                                            <action selector="KioskPressed:" destination="Asq-I3-XLI" id="lPI-yK-qza"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="trX-kT-q5z"/>
                                     <barButtonItem image="ConnectionOn" id="XNf-qh-9hf">
                                         <connections>
                                             <action selector="ConnectionPressed:" destination="Asq-I3-XLI" id="Wmf-ol-lqE"/>
@@ -601,6 +607,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="UIConnection" destination="XNf-qh-9hf" id="gJG-sF-nJm"/>
+                        <outlet property="UIKiosk" destination="Mcd-8r-Cxc" id="amx-ar-6t6"/>
                         <outlet property="UITracking" destination="nq6-iC-Vl4" id="nRb-ef-bMU"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>

@@ -20,6 +20,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSString *connectedTo;
 
+@property (strong, nonatomic) NSNumber *kiosk;
+
 - (void)saveContext;
 - (void)processMessage:(NSDictionary *)object;
 - (NSURL *)applicationDocumentsDirectory;

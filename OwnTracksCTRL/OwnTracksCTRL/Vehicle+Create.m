@@ -97,12 +97,12 @@
                     if (mapPoint.x < rect.origin.x) {
                         rect.size.width += rect.origin.x - mapPoint.x;
                         rect.origin.x = mapPoint.x;
-                    } else if (mapPoint.x > rect.origin.x + rect.size.width) {
+                    } else if (mapPoint.x + 3 > rect.origin.x + rect.size.width) {
                         rect.size.width = mapPoint.x - rect.origin.x;
                     }
                     if (mapPoint.y < rect.origin.y) {
                         rect.size.height += rect.origin.y - mapPoint.y;
-                        rect.origin.x = mapPoint.x;
+                        rect.origin.y = mapPoint.y;
                     } else if (mapPoint.y > rect.origin.y + rect.size.height) {
                         rect.size.height = mapPoint.y - rect.origin.y;
                     }

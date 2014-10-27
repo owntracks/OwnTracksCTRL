@@ -88,6 +88,7 @@ size_t isutf8(unsigned char *str, size_t len)
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.completionHandler = nil;
+    self.kiosk = @(false);
     
     return YES;
 }

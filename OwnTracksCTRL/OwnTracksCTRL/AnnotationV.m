@@ -8,6 +8,7 @@
 
 #import "AnnotationV.h"
 #import "Vehicle+Create.h"
+#import "AppDelegate.h"
 
 @implementation AnnotationV
 
@@ -148,19 +149,23 @@
         }
     }
     [self.superview bringSubviewToFront:self];
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.alpha = 0.1;
-                         //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE * 2, CIRCLE_SIZE * 2);
-                     }
-                     completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.5
-                                          animations:^{
-                                              self.alpha = 1.0;
-                                              //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
-                                          }
-                                          completion:nil];
-                     }];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if ([appDelegate.kiosk boolValue]) {
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.alpha = 0.1;
+                             //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE * 2, CIRCLE_SIZE * 2);
+                         }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.5
+                                              animations:^{
+                                                  self.alpha = 1.0;
+                                                  //self.bounds = CGRectMake(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
+                                              }
+                                              completion:nil];
+                         }];
+    }
 }
 
 
