@@ -2,7 +2,7 @@
 //  Vehicle.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 25.10.14.
+//  Created by Christoph Krey on 27.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -40,5 +40,6 @@
 @property (nonatomic, retain) NSNumber * vel;
 @property (nonatomic, retain) NSString * version;
 @property (nonatomic, retain) NSNumber * vext;
+@property (nonatomic, retain) NSNumber * showtrack;
 
 @end

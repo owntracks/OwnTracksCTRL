@@ -67,7 +67,14 @@
             }
             annotationView.canShowCallout = YES;
             annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            annotationView.leftCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+            if ([vehicle.showtrack boolValue]) {
+                mapButton.highlighted = true;
+            } else {
+                mapButton.highlighted = false;
+            }
+            annotationView.leftCalloutAccessoryView = mapButton;
+
             return annotationView;
         }
         return nil;
@@ -77,19 +84,21 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     if (control == view.rightCalloutAccessoryView) {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self performSegueWithIdentifier:@"showDetail:" sender:view];
-    } else {
-        [self performSegueWithIdentifier:@"showDetailPush:" sender:view];
-    }
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self performSegueWithIdentifier:@"showDetail:" sender:view];
+        } else {
+            [self performSegueWithIdentifier:@"showDetailPush:" sender:view];
+        }
     } else {
         if ([view.annotation isKindOfClass:[Vehicle class]]) {
             Vehicle *vehicle = (Vehicle *)view.annotation;
             if ([[self.mapView overlays] containsObject:vehicle]) {
                 [self.mapView removeOverlay:vehicle];
+                vehicle.showtrack = @(false);
             } else {
                 [self getTrack:vehicle];
                 [self.mapView addOverlay:vehicle];
+                vehicle.showtrack = @(true);
             }
         }
     }
@@ -211,13 +220,21 @@
             
         case NSFetchedResultsChangeDelete:
             [self.mapView removeAnnotation:anObject];
+            [self.mapView removeOverlay:anObject];
             break;
             
         case NSFetchedResultsChangeUpdate:
             [self.mapView removeAnnotation:anObject];
+            [self.mapView removeOverlay:anObject];
             [self.mapView addAnnotation:anObject];
             if (annotation == selectedAnnotation) {
                 [self.mapView selectAnnotation:annotation animated:true];
+            }
+            if ([annotation isKindOfClass:[Vehicle class]]) {
+                Vehicle *vehicle = (Vehicle *)annotation;
+                if ([vehicle.showtrack boolValue]) {
+                    [self.mapView addOverlay:vehicle];
+                }
             }
             break;
             
@@ -441,12 +458,14 @@
     [request setHTTPBody:postData];
     self.dataToGet = [[NSMutableData alloc] init];
     self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse *)response;
         if (httpURLResponse.statusCode != 200) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
             NSString *message = [NSString stringWithFormat:@"%ld %@\n%@",
                                  (long)httpURLResponse.statusCode,
                                  [NSHTTPURLResponse localizedStringForStatusCode:httpURLResponse.statusCode],
@@ -469,6 +488,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
                                                         message:[AppDelegate dataToString:self.dataToGet]
                                                        delegate:nil
@@ -481,6 +501,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     self.vehicleToGet.track = self.dataToGet;
     self.dataToGet = nil;
     self.vehicleToGet = nil;

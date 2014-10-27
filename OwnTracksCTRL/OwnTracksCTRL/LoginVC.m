@@ -76,10 +76,12 @@
     [request setHTTPBody:postData];
     self.receivedData = [[NSMutableData alloc] init];
     self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     NSLog(@"NSURLResponse %@", response);
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -87,11 +89,13 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading" message:@"failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alertView show];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     NSDictionary *dictionary = nil;
     if (self.receivedData.length) {
         NSError *error;

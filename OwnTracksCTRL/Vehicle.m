@@ -2,7 +2,7 @@
 //  Vehicle.m
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 25.10.14.
+//  Created by Christoph Krey on 27.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -39,5 +39,6 @@
 @dynamic vel;
 @dynamic version;
 @dynamic vext;
+@dynamic showtrack;
 
 @end
