@@ -9,10 +9,11 @@
 #import "Vehicle.h"
 #import <MapKit/MapKit.h>
 
-@interface Vehicle (Create) <MKAnnotation>
+@interface Vehicle (Create) <MKAnnotation, MKOverlay>
 + (Vehicle *)vehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
 + (Vehicle *)existsVehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allVehiclesInManagedObjectContext:(NSManagedObjectContext *)context;
 - (CLLocationCoordinate2D)coordinate;
+- (MKPolyline *)polyLine;
 
 @end

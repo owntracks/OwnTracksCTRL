@@ -2,7 +2,7 @@
 //  Vehicle.m
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 17.10.14.
+//  Created by Christoph Krey on 25.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -30,6 +30,7 @@
 @dynamic status;
 @dynamic tid;
 @dynamic topic;
+@dynamic track;
 @dynamic trigger;
 @dynamic trip;
 @dynamic tst;

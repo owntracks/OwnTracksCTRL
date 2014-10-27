@@ -20,6 +20,11 @@
 
 @implementation VehiclesVC
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.title = @"OwnTracksCTRL - Vehicles";
+}
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -81,21 +86,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Vehicle *vehicle = (Vehicle *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    for (UIViewController *viewController in [self.tabBarController viewControllers]) {
-        UIViewController *vc;
-        if ([viewController isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *nc = (UINavigationController *)viewController;
-            [nc popToRootViewControllerAnimated:false];
-            vc = nc.topViewController;
-        } else {
-            vc = viewController;
-        }
-        
-        if ([vc respondsToSelector:@selector(centerOn:)]) {
-            [vc performSelector:@selector(centerOn:) withObject:vehicle];
-            [self.tabBarController setSelectedViewController:viewController];
-        }
+    
+    UIViewController *vc = self.navigationController.viewControllers[[self.navigationController.viewControllers count] - 2];
+    if ([vc respondsToSelector:@selector(centerOn:)]) {
+        [vc performSelector:@selector(centerOn:) withObject:vehicle];
     }
+    [self.navigationController popViewControllerAnimated:true];
 }
 
 #pragma mark - Fetched results controller

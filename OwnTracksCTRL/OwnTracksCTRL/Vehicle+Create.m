@@ -7,6 +7,7 @@
 //
 
 #import "Vehicle+Create.h"
+#import "AppDelegate.h"
 
 @implementation Vehicle (Create)
 
@@ -71,5 +72,80 @@
 - (NSString *)title {
     return self.info ? self.info : self.tid;
 }
+
+- (MKMapRect)boundingMapRect {
+    MKMapPoint point = MKMapPointForCoordinate([self coordinate]);
+    MKMapRect rect = MKMapRectMake(
+                                   point.x,
+                                   point.y,
+                                   1.0,
+                                   1.0
+                                   );
+    NSDictionary *dictionary = nil;
+    if (self.track) {
+        NSError *error;
+        dictionary = [NSJSONSerialization JSONObjectWithData:self.track options:0 error:&error];
+        if (dictionary) {
+            NSArray *track = dictionary[@"track"];
+            if (track) {
+                for (NSDictionary *trackpoint in track) {
+                    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(
+                                                                                   [trackpoint[@"lat"] doubleValue],
+                                                                                   [trackpoint[@"lon"] doubleValue]
+                                                                                   );
+                    MKMapPoint mapPoint = MKMapPointForCoordinate(coordinate);
+                    if (mapPoint.x < rect.origin.x) {
+                        rect.size.width += rect.origin.x - mapPoint.x;
+                        rect.origin.x = mapPoint.x;
+                    } else if (mapPoint.x > rect.origin.x + rect.size.width) {
+                        rect.size.width = mapPoint.x - rect.origin.x;
+                    }
+                    if (mapPoint.y < rect.origin.y) {
+                        rect.size.height += rect.origin.y - mapPoint.y;
+                        rect.origin.x = mapPoint.x;
+                    } else if (mapPoint.y > rect.origin.y + rect.size.height) {
+                        rect.size.height = mapPoint.y - rect.origin.y;
+                    }
+                }
+            }
+        }
+    }
+    return rect;
+}
+
+- (MKPolyline *)polyLine {
+    CLLocationCoordinate2D *coordinates = (CLLocationCoordinate2D *)malloc(sizeof(CLLocationCoordinate2D));
+    coordinates[0] = [self coordinate];
+    int count = 1;
+    
+    NSDictionary *dictionary = nil;
+    if (self.track) {
+        NSError *error;
+        dictionary = [NSJSONSerialization JSONObjectWithData:self.track options:0 error:&error];
+        if (dictionary) {
+            NSArray *track = dictionary[@"track"];
+            if (track && [track count] > 0) {
+                coordinates = (CLLocationCoordinate2D *)realloc(coordinates,
+                                                                [track count] * sizeof(CLLocationCoordinate2D));
+                count = 0;
+                if (coordinates) {
+                    for (NSDictionary *trackpoint in track) {
+                        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(
+                                                                                       [trackpoint[@"lat"] doubleValue],
+                                                                                       [trackpoint[@"lon"] doubleValue]
+                                                                                       );
+                        coordinates[count++] = coordinate;
+                    }
+                }
+            }
+        }
+    }
+    
+    MKPolyline *polyLine = [MKPolyline polylineWithCoordinates:coordinates count:count];
+    free(coordinates);
+    return polyLine;
+}
+
+
 
 @end

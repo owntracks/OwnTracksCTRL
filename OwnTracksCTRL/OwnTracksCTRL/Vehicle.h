@@ -2,7 +2,7 @@
 //  Vehicle.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 17.10.14.
+//  Created by Christoph Krey on 25.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -31,6 +31,7 @@
 @property (nonatomic, retain) NSNumber * status;
 @property (nonatomic, retain) NSString * tid;
 @property (nonatomic, retain) NSString * topic;
+@property (nonatomic, retain) NSData * track;
 @property (nonatomic, retain) NSString * trigger;
 @property (nonatomic, retain) NSNumber * trip;
 @property (nonatomic, retain) NSDate * tst;

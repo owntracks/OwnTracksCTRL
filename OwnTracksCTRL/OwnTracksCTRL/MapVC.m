@@ -19,6 +19,9 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
 
+@property (strong, nonatomic) NSURLConnection *urlConnection;
+@property (strong, nonatomic) Vehicle *vehicleToGet;
+@property (strong, nonatomic) NSMutableData *dataToGet;
 @end
 
 @implementation MapVC
@@ -58,19 +61,43 @@
             }
             annotationView.canShowCallout = YES;
             annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            annotationView.leftCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             return annotationView;
         }
         return nil;
     }
 }
 
-
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
+    if (control == view.rightCalloutAccessoryView) {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self performSegueWithIdentifier:@"showDetail:" sender:view];
     } else {
         [self performSegueWithIdentifier:@"showDetailPush:" sender:view];
+    }
+    } else {
+        if ([view.annotation isKindOfClass:[Vehicle class]]) {
+            Vehicle *vehicle = (Vehicle *)view.annotation;
+            if ([[self.mapView overlays] containsObject:vehicle]) {
+                [self.mapView removeOverlay:vehicle];
+            } else {
+                [self getTrack:vehicle];
+                [self.mapView addOverlay:vehicle];
+            }
+        }
+    }
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
+    if ([overlay isKindOfClass:[Vehicle class]]) {
+        Vehicle *vehicle = (Vehicle *)overlay;
+        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:[vehicle polyLine]];
+        [renderer setLineWidth:3];
+        [renderer setStrokeColor:[UIColor blueColor]];
+        return renderer;
+    } else {
+        return nil;
     }
 }
 
@@ -103,6 +130,9 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
 }
 
 - (void)centerOn:(Vehicle *)vehicle {
@@ -348,6 +378,59 @@
         }
     }
 }
+
+- (void)getTrack:(Vehicle *)vehicle {
+    if (self.urlConnection) {
+        [self.urlConnection cancel];
+    }
+    self.vehicleToGet = vehicle;
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@",
+                      delegate.broker.user,
+                      delegate.broker.passwd,
+                      vehicle.tid];
+    
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:delegate.broker.trackurl]];
+    //[request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:@"GET"];
+    //[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    //[request setHTTPBody:postData];
+    self.dataToGet = [[NSMutableData alloc] init];
+    self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSLog(@"NSURLResponse %@", response);
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [self.dataToGet appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading"
+                                                        message:@"failed"
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+    [alertView show];
+    self.dataToGet = nil;
+    self.vehicleToGet = nil;
+    self.urlConnection = nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    self.vehicleToGet.track = self.dataToGet;
+    self.dataToGet = nil;
+    self.vehicleToGet = nil;
+    self.urlConnection = nil;
+}
+
+
 
 @end
 
