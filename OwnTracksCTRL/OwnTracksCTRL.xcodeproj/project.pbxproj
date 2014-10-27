@@ -32,7 +32,7 @@
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
 		848E0FE619FE407B0058DA5D /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E0FE519FE407B0058DA5D /* Broker.m */; };
-		848E0FEA19FE8B2B0058DA5D /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E0FE919FE8B2B0058DA5D /* Vehicle.m */; };
+		848E0FEE19FEA10E0058DA5D /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E0FED19FEA10E0058DA5D /* Vehicle.m */; };
 		84E335B119FA752D009093E9 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E335B019FA752D009093E9 /* LoginVC.m */; };
 /* End PBXBuildFile section */
 
@@ -90,8 +90,9 @@
 		848E0FE419FE407B0058DA5D /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Broker.h; sourceTree = "<group>"; };
 		848E0FE519FE407B0058DA5D /* Broker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Broker.m; sourceTree = "<group>"; };
 		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
-		848E0FE819FE8B2B0058DA5D /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
-		848E0FE919FE8B2B0058DA5D /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
+		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
+		848E0FEC19FEA10E0058DA5D /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
+		848E0FED19FEA10E0058DA5D /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		848FBE4119F191200048E3CF /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		84E335AF19FA752D009093E9 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		84E335B019FA752D009093E9 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
@@ -123,8 +124,6 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
-				848E0FE819FE8B2B0058DA5D /* Vehicle.h */,
-				848E0FE919FE8B2B0058DA5D /* Vehicle.m */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CFA6119CC0CE00045AC81 /* MQTTClient.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
@@ -179,6 +178,8 @@
 				843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */,
 				843CF9B119CC0BD00045AC81 /* Supporting Files */,
 				843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */,
+				848E0FEC19FEA10E0058DA5D /* Vehicle.h */,
+				848E0FED19FEA10E0058DA5D /* Vehicle.m */,
 				848E0FE419FE407B0058DA5D /* Broker.h */,
 				848E0FE519FE407B0058DA5D /* Broker.m */,
 			);
@@ -323,7 +324,7 @@
 				843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */,
 				843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */,
 				843CFA8419CC11BC0045AC81 /* MapVC.m in Sources */,
-				848E0FEA19FE8B2B0058DA5D /* Vehicle.m in Sources */,
+				848E0FEE19FEA10E0058DA5D /* Vehicle.m in Sources */,
 				843CFA8519CC11BC0045AC81 /* VehicleVC.m in Sources */,
 				843CFA8619CC11BC0045AC81 /* AppDelegate.m in Sources */,
 				843CFA8319CC11BC0045AC81 /* VehiclesVC.m in Sources */,
@@ -545,12 +546,13 @@
 			isa = XCVersionGroup;
 			children = (
 				848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */,
+				848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */,
 				848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */,
 				84E335B219FC0968009093E9 /* Model 3.xcdatamodel */,
 				848FBE4119F191200048E3CF /* Model 2.xcdatamodel */,
 				843CFA6419CC0D390045AC81 /* Model.xcdatamodel */,
 			);
-			currentVersion = 848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */;
+			currentVersion = 848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

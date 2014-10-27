@@ -26,6 +26,7 @@
 @dynamic info;
 @dynamic lat;
 @dynamic lon;
+@dynamic showtrack;
 @dynamic start;
 @dynamic status;
 @dynamic tid;
@@ -39,6 +40,5 @@
 @dynamic vel;
 @dynamic version;
 @dynamic vext;
-@dynamic showtrack;
 
 @end

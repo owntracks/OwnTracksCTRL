@@ -12,6 +12,7 @@
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
 @property (weak, nonatomic) IBOutlet UITextField *UIpassword;
+@property (weak, nonatomic) IBOutlet UIButton *UILookup;
 
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) NSMutableData *receivedData;
@@ -41,6 +42,12 @@
     
     if (self.UIuser) delegate.broker.user = self.UIuser.text;
     if (self.UIpassword) delegate.broker.passwd = self.UIpassword.text;
+    if ([delegate.broker.user isEqualToString:@"dt27"] ||
+        [delegate.broker.user isEqualToString:@"jpm"]) {
+        self.UILookup.enabled = true;
+    } else {
+        self.UILookup.enabled = false;
+    }
 }
 
 - (void)updated
@@ -51,8 +58,12 @@
     self.UIpassword.text = delegate.broker.passwd;
 }
 
+- (IBAction)changedUserID:(UITextField *)sender {
+    [self updateValues];
+}
 
 - (IBAction)touchedOutsideText:(UITapGestureRecognizer *)sender {
+    [self updateValues];
     [self.UIuser resignFirstResponder];
     [self.UIpassword resignFirstResponder];
 }

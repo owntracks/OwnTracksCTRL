@@ -27,6 +27,7 @@
 @property (nonatomic, retain) NSString * info;
 @property (nonatomic, retain) NSNumber * lat;
 @property (nonatomic, retain) NSNumber * lon;
+@property (nonatomic, retain) NSNumber * showtrack;
 @property (nonatomic, retain) NSDate * start;
 @property (nonatomic, retain) NSNumber * status;
 @property (nonatomic, retain) NSString * tid;
@@ -40,6 +41,5 @@
 @property (nonatomic, retain) NSNumber * vel;
 @property (nonatomic, retain) NSString * version;
 @property (nonatomic, retain) NSNumber * vext;
-@property (nonatomic, retain) NSNumber * showtrack;
 
 @end
