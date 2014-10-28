@@ -31,22 +31,37 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updated];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate addObserver:self forKeyPath:@"token"
+                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                     context:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (self.firststart) {
-        self.firststart = false;
-        [self lookup:nil];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [self updateValues];
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate saveContext];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate removeObserver:self forKeyPath:@"token"
+                        context:nil];
+    [appDelegate saveContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"token"]) {
+        if ([object valueForKey:keyPath]) {
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+                if (self.firststart) {
+                    self.firststart = false;
+                    [self lookup:nil];
+                }
+            }
+        }
+    }
 }
 
 - (void)updateValues {
@@ -77,10 +92,16 @@
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&token=%@",
+    
+    NSString *tokenPost = @"";
+    if (delegate.token && delegate.token.length > 0) {
+        tokenPost = [NSString stringWithFormat:@"&token=%@", delegate.token];
+    }
+    
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@",
                       delegate.broker.user,
                       delegate.broker.passwd,
-                      delegate.token];
+                      tokenPost];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];

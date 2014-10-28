@@ -101,7 +101,10 @@ size_t isutf8(unsigned char *str, size_t len)
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings
-                                                            settingsForTypes: UIUserNotificationTypeAlert | UIUserNotificationTypeSound
+                                                            settingsForTypes:
+                                                            UIUserNotificationTypeAlert |
+                                                            UIUserNotificationTypeSound |
+                                                            UIUserNotificationTypeBadge
                                                             categories:nil];
     [application registerUserNotificationSettings:userNotificationSettings];
     
@@ -133,7 +136,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // [self connect];
+    //
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -221,24 +224,25 @@ size_t isutf8(unsigned char *str, size_t len)
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];
     [alertView show];
+    self.token = @"";
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    self.token = [deviceToken description];
-    self.token = [self.token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    self.token = [self.token substringFromIndex:1];
-    self.token = [self.token substringToIndex:self.token.length - 1];
+    NSString *token = [deviceToken description];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    token = [token substringFromIndex:1];
+    token = [token substringToIndex:token.length - 1];
     
-    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken %@", self.token);
+    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken %@", token);
+    self.token = token;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"didReceiveRemoteNotification"
-                                                        message:[userInfo description]
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-    [alertView show];
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    localNotification.alertBody = userInfo[@"alert"];
+    localNotification.userInfo = userInfo;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 
@@ -580,6 +584,10 @@ size_t isutf8(unsigned char *str, size_t len)
 {
     self.disconnectTimer = nil;
     [self disconnect];
+    if (self.completionHandler) {
+        self.completionHandler(UIBackgroundFetchResultNewData);
+        self.completionHandler = nil;
+    }
 }
 
 - (void)trash {
