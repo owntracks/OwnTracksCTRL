@@ -86,6 +86,29 @@
     self.UITrackURL.text =                          delegate.broker.trackurl;
 }
 
+- (IBAction)versionChanged:(UITextField *)sender {
+    if ([sender.text isEqualToString:[NSBundle mainBundle].infoDictionary[@"CFBundleVersion"]]) {
+        self.UIHost.enabled = false;
+        self.UIPort.enabled = false;
+        self.UIUserID.enabled = false;
+        self.UIPassword.enabled = false;
+        self.UIClientID.enabled = false;
+        self.UISubscription.enabled = false;
+        self.UITrackURL.enabled = false;
+        self.UITLS.enabled = false;
+        self.UIAuth.enabled = false;
+    } else {
+        self.UIHost.enabled = true;
+        self.UIPort.enabled = true;
+        self.UIUserID.enabled = true;
+        self.UIPassword.enabled = true;
+        self.UIClientID.enabled = true;
+        self.UISubscription.enabled = true;
+        self.UITrackURL.enabled = true;
+        self.UITLS.enabled = true;
+        self.UIAuth.enabled = true;
+    }
+}
 
 - (IBAction)touchedOutsideText:(UITapGestureRecognizer *)sender {
     [self.UIHost resignFirstResponder];

@@ -17,18 +17,31 @@
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) NSMutableData *receivedData;
 
+@property (nonatomic) BOOL firststart;
+
 @end
 
 @implementation LoginVC
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)loadView {
+    [super loadView];
+    self.firststart = true;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.firststart) {
+        self.firststart = false;
+        [self lookup:nil];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [self updateValues];
@@ -36,30 +49,18 @@
     [delegate saveContext];
 }
 
-- (void)updateValues
-{
+- (void)updateValues {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     if (self.UIuser) delegate.broker.user = self.UIuser.text;
     if (self.UIpassword) delegate.broker.passwd = self.UIpassword.text;
-    if ([delegate.broker.user isEqualToString:@"dt27"] ||
-        [delegate.broker.user isEqualToString:@"jpm"]) {
-        self.UILookup.enabled = true;
-    } else {
-        self.UILookup.enabled = false;
-    }
 }
 
-- (void)updated
-{
+- (void)updated {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     self.UIuser.text = delegate.broker.user;
     self.UIpassword.text = delegate.broker.passwd;
-}
-
-- (IBAction)changedUserID:(UITextField *)sender {
-    [self updateValues];
 }
 
 - (IBAction)touchedOutsideText:(UITapGestureRecognizer *)sender {
@@ -67,8 +68,6 @@
     [self.UIuser resignFirstResponder];
     [self.UIpassword resignFirstResponder];
 }
-
-
 
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
@@ -80,7 +79,7 @@
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://roo.jpmens.net/ctrl/conf.php"]]];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://demo.owntracks.de/ext/conf"]]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -101,7 +100,11 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading" message:@"failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
+                                                        message:[error description]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
     [alertView show];
 }
 
@@ -116,9 +119,9 @@
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         
         delegate.broker.host = dictionary[@"host"];
-        delegate.broker.port = dictionary[@"port"];
+        delegate.broker.port = @(1883); // dictionary[@"port"];
         delegate.broker.auth = dictionary[@"auth"];
-        delegate.broker.tls = dictionary[@"tls"];
+        delegate.broker.tls = @(NO); // dictionary[@"tls"];
         delegate.broker.user = dictionary[@"username"];
         delegate.broker.passwd = dictionary[@"password"];
         delegate.broker.trackurl = dictionary[@"trackurl"];
@@ -134,12 +137,7 @@
         
         delegate.broker.clientid = dictionary[@"clientid"];
         [self updated];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings loaded"
-                                                            message:[AppDelegate dataToString:self.receivedData]
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
+        [self performSegueWithIdentifier:@"Login" sender:nil];
     } else {
         NSString *message = [AppDelegate dataToString:self.receivedData];
         if (dictionary) {
@@ -153,6 +151,12 @@
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
+    }
+}
+
+- (IBAction)direct:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self performSegueWithIdentifier:@"Login" sender:nil];
     }
 }
 
