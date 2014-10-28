@@ -33,6 +33,15 @@
     return vehicle;
 }
 
++ (void)trash {
+AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:delegate.managedObjectContext];
+for (Vehicle *vehicle in vehicles) {
+    [delegate.managedObjectContext deleteObject:vehicle];
+}
+[delegate saveContext];
+}
+
 + (Vehicle *)vehicleNamed:(NSString *)name
     inManagedObjectContext:(NSManagedObjectContext *)context
 {

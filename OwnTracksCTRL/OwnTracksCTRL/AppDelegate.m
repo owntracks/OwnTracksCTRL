@@ -130,7 +130,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [self connect];
+    // [self connect];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -551,4 +551,11 @@ size_t isutf8(unsigned char *str, size_t len)
     [self disconnect];
 }
 
+- (void)trash {
+    NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:self.managedObjectContext];
+    for (Vehicle *vehicle in vehicles) {
+        [self.managedObjectContext deleteObject:vehicle];
+    }
+    [self saveContext];
+}
 @end

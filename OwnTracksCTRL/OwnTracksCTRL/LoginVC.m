@@ -69,6 +69,11 @@
     [self.UIpassword resignFirstResponder];
 }
 
+- (IBAction)changedUser:(UITextField *)sender {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate trash];
+}
+
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -119,9 +124,9 @@
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         
         delegate.broker.host = dictionary[@"host"];
-        delegate.broker.port = @(1883); // dictionary[@"port"];
+        delegate.broker.port = dictionary[@"port"];
         delegate.broker.auth = dictionary[@"auth"];
-        delegate.broker.tls = @(NO); // dictionary[@"tls"];
+        delegate.broker.tls = dictionary[@"tls"];
         delegate.broker.user = dictionary[@"username"];
         delegate.broker.passwd = dictionary[@"password"];
         delegate.broker.trackurl = dictionary[@"trackurl"];

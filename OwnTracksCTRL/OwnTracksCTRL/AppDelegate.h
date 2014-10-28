@@ -28,5 +28,6 @@
 + (NSString *)dataToString:(NSData *)data;
 - (void)connect;
 - (void)disconnect;
+- (void)trash;
 
 @end

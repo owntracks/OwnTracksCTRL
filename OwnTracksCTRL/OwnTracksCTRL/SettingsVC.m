@@ -43,13 +43,8 @@
 }
 
 - (IBAction)trash:(UIBarButtonItem *)sender {
-
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:delegate.managedObjectContext];
-    for (Vehicle *vehicle in vehicles) {
-        [delegate.managedObjectContext deleteObject:vehicle];
-    }
-    [delegate saveContext];
+    [delegate trash];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Trash" message:@"successfull" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alertView show];
 }
