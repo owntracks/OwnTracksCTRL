@@ -19,6 +19,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSString *connectedTo;
+@property (readonly, strong, nonatomic) NSString *token;
 
 @property (strong, nonatomic) NSNumber *kiosk;
 

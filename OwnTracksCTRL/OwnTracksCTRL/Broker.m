@@ -2,7 +2,7 @@
 //  Broker.m
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 27.10.14.
+//  Created by Christoph Krey on 28.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -18,7 +18,8 @@
 @dynamic passwd;
 @dynamic port;
 @dynamic tls;
-@dynamic user;
 @dynamic trackurl;
+@dynamic user;
+@dynamic certurl;
 
 @end

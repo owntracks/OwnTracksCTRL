@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <MQTTClient/MQTTClient.h>
 
-@interface StatelessThread : NSThread <MQTTSessionDelegate>
+@interface StatelessThread : NSThread <MQTTSessionDelegate, UIAlertViewDelegate>
 @property (nonatomic) BOOL terminate;
 @property (nonatomic,readonly) BOOL connected;
 @property (strong, nonatomic) NSString *user;

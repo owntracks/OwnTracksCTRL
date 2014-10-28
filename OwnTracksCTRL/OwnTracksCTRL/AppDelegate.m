@@ -20,6 +20,7 @@
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (readwrite, strong, nonatomic) NSString *connectedTo;
+@property (readwrite, strong, nonatomic) NSString *token;
 @property (nonatomic) BOOL registered;
 
 @end
@@ -103,6 +104,8 @@ size_t isutf8(unsigned char *str, size_t len)
                                                             settingsForTypes: UIUserNotificationTypeAlert | UIUserNotificationTypeSound
                                                             categories:nil];
     [application registerUserNotificationSettings:userNotificationSettings];
+    
+    [application registerForRemoteNotifications];
     
     return YES;
 }
@@ -191,7 +194,7 @@ size_t isutf8(unsigned char *str, size_t len)
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:notification.userInfo[@"title"]
                                                         message:notification.alertBody
-                                                       delegate:self
+                                                       delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];
     [alertView show];
@@ -210,6 +213,34 @@ size_t isutf8(unsigned char *str, size_t len)
     [alertView dismissWithClickedButtonIndex:0 animated:true];
     
 }
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"didFailToRegisterForRemoteNotificationsWithError"
+                                                        message:[error description]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+    [alertView show];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    self.token = [deviceToken description];
+    self.token = [self.token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    self.token = [self.token substringFromIndex:1];
+    self.token = [self.token substringToIndex:self.token.length - 1];
+    
+    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken %@", self.token);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"didReceiveRemoteNotification"
+                                                        message:[userInfo description]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+    [alertView show];
+}
+
 
 - (NSManagedObjectContext *)queueManagedObjectContext
 {

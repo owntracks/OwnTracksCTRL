@@ -67,6 +67,9 @@
             }
             annotationView.canShowCallout = YES;
             annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            if (appDelegate.broker.trackurl && appDelegate.broker.trackurl.length > 0) {
             UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
             if ([vehicle.showtrack boolValue]) {
                 mapButton.highlighted = true;
@@ -74,6 +77,9 @@
                 mapButton.highlighted = false;
             }
             annotationView.leftCalloutAccessoryView = mapButton;
+            } else {
+                annotationView.leftCalloutAccessoryView = nil;
+            }
 
             return annotationView;
         }
@@ -442,11 +448,12 @@
     }
     self.vehicleToGet = vehicle;
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@&nrecs=%d",
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@&nrecs=%d&topic=%@",
                       delegate.broker.user,
                       delegate.broker.passwd,
                       vehicle.tid,
-                      500];
+                      500,
+                      vehicle.topic];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];

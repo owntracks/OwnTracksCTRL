@@ -2,7 +2,7 @@
 //  Broker.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 27.10.14.
+//  Created by Christoph Krey on 28.10.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -19,7 +19,8 @@
 @property (nonatomic, retain) NSString * passwd;
 @property (nonatomic, retain) NSNumber * port;
 @property (nonatomic, retain) NSNumber * tls;
-@property (nonatomic, retain) NSString * user;
 @property (nonatomic, retain) NSString * trackurl;
+@property (nonatomic, retain) NSString * user;
+@property (nonatomic, retain) NSString * certurl;
 
 @end

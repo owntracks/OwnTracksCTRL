@@ -77,9 +77,10 @@
 - (IBAction)lookup:(UIButton *)sender {
     [self updateValues];
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@",
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&token=%@",
                       delegate.broker.user,
-                      delegate.broker.passwd];
+                      delegate.broker.passwd,
+                      delegate.token];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
@@ -121,18 +122,20 @@
         dictionary = [NSJSONSerialization JSONObjectWithData:self.receivedData options:0 error:&error];
     }
     if (dictionary && [dictionary[@"_type"] isEqualToString:@"configuration"]) {
+        NSLog(@"configuration %@", dictionary);
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         
-        delegate.broker.host = dictionary[@"host"];
-        delegate.broker.port = dictionary[@"port"];
-        delegate.broker.auth = dictionary[@"auth"];
-        delegate.broker.tls = dictionary[@"tls"];
-        delegate.broker.user = dictionary[@"username"];
-        delegate.broker.passwd = dictionary[@"password"];
-        delegate.broker.trackurl = dictionary[@"trackurl"];
+        delegate.broker.host = [self stringFromJSON:dictionary key:@"host"];
+        delegate.broker.port = [self numberFromJSON:dictionary key:@"port"];
+        delegate.broker.auth = [self numberFromJSON:dictionary key:@"auth"];
+        delegate.broker.tls = [self numberFromJSON:dictionary key:@"tls"];
+        delegate.broker.user = [self stringFromJSON:dictionary key:@"username"];
+        delegate.broker.passwd = [self stringFromJSON:dictionary key:@"password"];
+        delegate.broker.trackurl = [self stringFromJSON:dictionary key:@"trackurl"];
+        delegate.broker.certurl = [self stringFromJSON:dictionary key:@"certurl"];
         
         NSString *base = @"";
-        for (NSString *topic in dictionary[@"topicList"]) {
+        for (NSString *topic in [self arrayFromJSON:dictionary key:@"topicList"]) {
             if (base.length) {
                 base = [base stringByAppendingString:@" "];
             }
@@ -140,14 +143,14 @@
         }
         delegate.broker.base = base;
         
-        delegate.broker.clientid = dictionary[@"clientid"];
+        delegate.broker.clientid = [self stringFromJSON:dictionary key:@"clientid"];
         [self updated];
         [self performSegueWithIdentifier:@"Login" sender:nil];
     } else {
         NSString *message = [AppDelegate dataToString:self.receivedData];
         if (dictionary) {
-            if ([dictionary[@"result"] isKindOfClass:[NSString class]]) {
-                message = dictionary[@"result"];
+            if ([dictionary[@"message"] isKindOfClass:[NSString class]]) {
+                message = dictionary[@"message"];
             }
         }
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
@@ -168,6 +171,42 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate connect];
+}
+
+- (NSString *)stringFromJSON:(NSDictionary *)dictionary key:(NSString *)key {
+    NSString *string = nil;
+    
+    id object = [dictionary objectForKey:key];
+    if (object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            string = (NSString *)object;
+        }
+    }
+    return string;
+}
+
+- (NSNumber *)numberFromJSON:(NSDictionary *)dictionary key:(NSString *)key {
+    NSNumber *number = nil;
+    
+    id object = [dictionary objectForKey:key];
+    if (object) {
+        if ([object isKindOfClass:[NSNumber class]]) {
+            number = (NSNumber *)object;
+        }
+    }
+    return number;
+}
+
+- (NSArray *)arrayFromJSON:(NSDictionary *)dictionary key:(NSString *)key {
+    NSArray *array = nil;
+    
+    id object = [dictionary objectForKey:key];
+    if (object) {
+        if ([object isKindOfClass:[NSArray class]]) {
+            array = (NSArray *)object;
+        }
+    }
+    return array;
 }
 
 @end

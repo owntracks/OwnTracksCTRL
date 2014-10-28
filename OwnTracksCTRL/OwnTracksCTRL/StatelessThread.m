@@ -13,6 +13,7 @@
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
 @property (nonatomic, strong, readwrite) NSString *connectedTo;
+@property (nonatomic, strong, readwrite) NSError *error;
 
 @end
 
@@ -57,6 +58,25 @@
         
         [self.mqttSession unsubscribeTopics:topicFilters];
         [self.mqttSession close];
+    } else {
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        NSString *loadButtonTitle = ([self.error.domain isEqualToString:NSOSStatusErrorDomain] &&
+                                     self.error.code == errSSLXCertChainInvalid &&
+                                     self.tls &&
+                                     delegate.broker.certurl
+                                     && delegate.broker.certurl.length) > 0 ? @"Load Certificate" : nil;
+
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MQTT connection failed"
+                                                            message:[NSString stringWithFormat:@"%@://%@@%@:%d\n%@",
+                                                                     self.tls ? @"mqtts" : @"mqtt",
+                                                                     self.user,
+                                                                     self.host,
+                                                                     self.port,
+                                                                     [self.error description]]
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", loadButtonTitle, nil];
+        [alertView show];
     }
 }
 
@@ -73,9 +93,20 @@
         case MQTTSessionEventConnectionClosedByBroker:
             self.connectedTo = nil;
             break;
+        case MQTTSessionEventConnected:
+            break;
         default:
+            self.error = error;
             break;
     }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (buttonIndex > 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:delegate.broker.certurl]];
+    }
+}
+
 
 @end
