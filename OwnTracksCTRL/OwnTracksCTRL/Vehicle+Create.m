@@ -12,7 +12,7 @@
 @implementation Vehicle (Create)
 
 + (Vehicle *)existsVehicleNamed:(NSString *)name
-     inManagedObjectContext:(NSManagedObjectContext *)context
+         inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Vehicle *vehicle = nil;
     
@@ -33,13 +33,35 @@
     return vehicle;
 }
 
-+ (void)trash {
-AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:delegate.managedObjectContext];
-for (Vehicle *vehicle in vehicles) {
-    [delegate.managedObjectContext deleteObject:vehicle];
++ (Vehicle *)existsVehicleWithTid:(NSString *)tid
+         inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    Vehicle *vehicle = nil;
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Vehicle"];
+    request.predicate = [NSPredicate predicateWithFormat:@"tid = %@", tid];
+    
+    NSError *error = nil;
+    
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    if (!matches) {
+        // handle error
+    } else {
+        if ([matches count]) {
+            vehicle = [matches lastObject];
+        }
+    }
+    return vehicle;
 }
-[delegate saveContext];
+
++ (void)trash {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:delegate.managedObjectContext];
+    for (Vehicle *vehicle in vehicles) {
+        [delegate.managedObjectContext deleteObject:vehicle];
+    }
+    [delegate saveContext];
 }
 
 + (Vehicle *)vehicleNamed:(NSString *)name

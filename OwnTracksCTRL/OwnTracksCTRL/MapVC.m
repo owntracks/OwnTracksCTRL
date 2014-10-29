@@ -25,7 +25,18 @@
 @property (strong, nonatomic) NSMutableData *dataToGet;
 @end
 
+static MapVC *theMapVC;
+
 @implementation MapVC
+
+- (void)loadView {
+    [super loadView];
+    theMapVC = self;
+}
+
++ (void)centerOn:(Vehicle *)vehicle {
+    [theMapVC centerOn:vehicle];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

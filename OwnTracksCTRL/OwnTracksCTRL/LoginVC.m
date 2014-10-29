@@ -8,6 +8,7 @@
 
 #import "LoginVC.h"
 #import "AppDelegate.h"
+#import "Vehicle+Create.h"
 
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
@@ -43,10 +44,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     [self updateValues];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate removeObserver:self forKeyPath:@"token"
+    [appDelegate removeObserver:self
+                     forKeyPath:@"token"
                         context:nil];
     [appDelegate saveContext];
 }
@@ -85,11 +86,14 @@
 }
 
 - (IBAction)changedUser:(UITextField *)sender {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate trash];
+    [Vehicle trash];
 }
 
 - (IBAction)lookup:(UIButton *)sender {
+    if (self.urlConnection) {
+        [self.urlConnection cancel];
+    }
+
     [self updateValues];
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
@@ -126,6 +130,8 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    self.urlConnection = nil;
+    self.receivedData = nil;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
                                                         message:[error description]
@@ -136,6 +142,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    self.urlConnection = nil;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     NSDictionary *dictionary = nil;
     if (self.receivedData.length) {
@@ -181,6 +188,7 @@
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
     }
+    self.receivedData = nil;
 }
 
 - (IBAction)direct:(UILongPressGestureRecognizer *)sender {
@@ -190,8 +198,10 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate connect];
+    if ([segue.identifier isEqualToString:@"Login"]) {
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [delegate connect];
+    }
 }
 
 - (NSString *)stringFromJSON:(NSDictionary *)dictionary key:(NSString *)key {

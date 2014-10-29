@@ -11,8 +11,10 @@
 
 @interface Vehicle (Create) <MKAnnotation, MKOverlay>
 + (Vehicle *)vehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
++ (Vehicle *)existsVehicleWithTid:(NSString *)tid inManagedObjectContext:(NSManagedObjectContext *)context;
 + (Vehicle *)existsVehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allVehiclesInManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)trash;
 - (CLLocationCoordinate2D)coordinate;
 - (MKPolyline *)polyLine;
 

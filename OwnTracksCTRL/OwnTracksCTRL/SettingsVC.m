@@ -42,9 +42,8 @@
     [delegate saveContext];
 }
 
-- (IBAction)trash:(UIBarButtonItem *)sender {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate trash];
+- (IBAction)trash:(UIBarButtonItem *)sender {    
+    [Vehicle trash];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Trash" message:@"successfull" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alertView show];
 }

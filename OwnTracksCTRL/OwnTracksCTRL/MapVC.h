@@ -12,5 +12,6 @@
 
 
 @interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate>
++ (void)centerOn:(Vehicle *)vehicle;
 - (void)centerOn:(Vehicle *)vehicle;
 @end

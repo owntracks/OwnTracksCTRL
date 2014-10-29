@@ -7,10 +7,10 @@
 //
 
 #import "AppDelegate.h"
-#import "VehiclesVC.h"
 #import "StatelessThread.h"
 #import "StatefullThread.h"
 #import "Vehicle+Create.h"
+#import "MapVC.h"
 
 @interface AppDelegate()
 @property (strong, nonatomic) NSTimer *disconnectTimer;
@@ -195,20 +195,29 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSString *loadButtonTitle = notification.userInfo[@"tid"] ? notification.userInfo[@"tid"] : nil;
+
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:notification.userInfo[@"title"]
                                                         message:notification.alertBody
-                                                       delegate:nil
+                                                       delegate:self
                                               cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
+                                              otherButtonTitles:@"OK", loadButtonTitle, nil];
     [alertView show];
 }
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
-    [self performSelector:@selector(alertViewTimedOut:) withObject:alertView afterDelay:5];
+    if (alertView.numberOfButtons == 1) {
+        [self performSelector:@selector(alertViewTimedOut:) withObject:alertView afterDelay:5];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(alertViewTimedOut:) object:alertView];
+    if (buttonIndex > 0) {
+        NSString *tid = [alertView buttonTitleAtIndex:buttonIndex];
+        Vehicle *vehicle = [Vehicle existsVehicleWithTid:tid inManagedObjectContext:self.managedObjectContext];
+        [MapVC centerOn:vehicle];
+    }
 }
 
 - (void)alertViewTimedOut:(id)object {
@@ -239,9 +248,11 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.alertBody = userInfo[@"alert"];
+    NSDictionary *aps = userInfo[@"aps"];
+    localNotification.alertBody = aps[@"alert"];
     localNotification.userInfo = userInfo;
     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    [UIApplication sharedApplication].applicationIconBadgeNumber--;
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -376,7 +387,7 @@ size_t isutf8(unsigned char *str, size_t len)
                             vehicle.alarm = alarm;
                             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
                             localNotification.alertBody = vehicle.alarm;
-                            localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Alarm"};
+                            localNotification.userInfo = @{@"tid": vehicle.tid, @"title": @"Alarm"};
                             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
                         }
                     }
@@ -456,7 +467,7 @@ size_t isutf8(unsigned char *str, size_t len)
             vehicle.event = eventString;
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.alertBody = vehicle.event;
-            localNotification.userInfo = @{@"topic": vehicle.topic, @"title": @"Event"};
+            localNotification.userInfo = @{@"tid": vehicle.tid, @"title": @"Event"};
             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
         }
     }
@@ -588,13 +599,5 @@ size_t isutf8(unsigned char *str, size_t len)
         self.completionHandler(UIBackgroundFetchResultNewData);
         self.completionHandler = nil;
     }
-}
-
-- (void)trash {
-    NSArray *vehicles = [Vehicle allVehiclesInManagedObjectContext:self.managedObjectContext];
-    for (Vehicle *vehicle in vehicles) {
-        [self.managedObjectContext deleteObject:vehicle];
-    }
-    [self saveContext];
 }
 @end
