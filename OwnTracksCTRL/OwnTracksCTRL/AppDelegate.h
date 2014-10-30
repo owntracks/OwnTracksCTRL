@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "Broker+Create.h"
+#import "ConfD+Create.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) Broker *broker;
+@property (strong, nonatomic) ConfD *confD;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

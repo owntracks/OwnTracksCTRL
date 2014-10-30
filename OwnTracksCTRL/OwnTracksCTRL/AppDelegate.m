@@ -87,6 +87,9 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+                                                              @"confdurl": @"https://demo.owntracks.de/ext/conf"
+                                                              }];
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.completionHandler = nil;
     self.kiosk = @(false);
@@ -97,6 +100,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
     self.Broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -277,6 +281,18 @@ size_t isutf8(unsigned char *str, size_t len)
         NSArray *topicFilters = [self.broker.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSArray *baseComponents = [topicFilters[0] componentsSeparatedByCharactersInSet:
                                    [NSCharacterSet characterSetWithCharactersInString:@"/"]];
+        
+        if (topicComponents.count < baseComponents.count) {
+            NSString *message = [NSString stringWithFormat:@"topic=%@, baseTopic=%@", topic, topicFilters[0]];
+
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"unexpected message received"
+                                                                message:message
+                                                               delegate:self
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"OK", nil];
+            [alertView show];
+            return;
+        }
         
         NSString *baseTopic = @"";
         

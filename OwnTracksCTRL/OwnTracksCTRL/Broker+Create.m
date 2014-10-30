@@ -40,7 +40,7 @@
         
         broker = [NSEntityDescription insertNewObjectForEntityForName:@"Broker" inManagedObjectContext:context];
         
-        broker.host = @"localhost";
+        broker.host = @"test.mosquitto.org";
         broker.port = @1883;
         broker.tls = @NO;
         broker.auth = @NO;

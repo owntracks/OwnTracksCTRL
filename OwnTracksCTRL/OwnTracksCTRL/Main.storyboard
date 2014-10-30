@@ -23,9 +23,13 @@
                                     <outletCollection property="gestureRecognizers" destination="und-lI-2eA" appends="YES" id="vFn-ZB-gBl"/>
                                 </connections>
                             </imageView>
-                            <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rYN-ju-1bJ">
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rYN-ju-1bJ">
                                 <rect key="frame" x="131" y="269" width="59" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="59" id="9S4-3W-H7t"/>
+                                    <constraint firstAttribute="height" constant="30" id="m1m-kp-RtS"/>
+                                </constraints>
                                 <state key="normal" title="Login">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -33,51 +37,83 @@
                                     <action selector="lookup:" destination="oUC-a2-bTk" eventType="touchUpInside" id="FMH-fL-gwS"/>
                                 </connections>
                             </button>
-                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H0N-IQ-S2Y">
-                                <rect key="frame" x="36" y="235" width="93" height="21"/>
+                            <textField clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTk-bn-HUK">
+                                <rect key="frame" x="131" y="231" width="173" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTk-bn-HUK">
-                                <rect key="frame" x="137" y="231" width="167" height="30"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="jKq-0S-9a8"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                             </textField>
-                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="User" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oDZ-bp-NDO">
-                                <rect key="frame" x="71" y="197" width="58" height="21"/>
+                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oDZ-bp-NDO">
+                                <rect key="frame" x="65" y="197" width="58" height="21"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                 <rect key="contentStretch" x="1.3877787807814457e-17" y="0.0" width="1" height="1"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="nVy-gY-lHr"/>
+                                    <constraint firstAttribute="width" constant="58" id="tMf-lO-lQS"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="user" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZQy-00-ved">
-                                <rect key="frame" x="137" y="193" width="167" height="30"/>
+                            <textField clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="user" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZQy-00-ved">
+                                <rect key="frame" x="131" y="193" width="173" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="vgf-Ad-9ao"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="changedUser:" destination="oUC-a2-bTk" eventType="editingChanged" id="SSe-b9-G5f"/>
                                 </connections>
                             </textField>
-                            <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9V3-BE-T6S">
-                                <rect key="frame" x="212" y="268" width="92" height="32"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9V3-BE-T6S">
+                                <rect key="frame" x="223" y="269" width="81" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                <state key="normal" title="Parameters"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="HWm-3r-RPo"/>
+                                    <constraint firstAttribute="width" constant="81" id="eZD-L4-IXo"/>
+                                </constraints>
+                                <state key="normal" title="Settings"/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Tpq-jz-11E" appends="YES" id="zHf-wh-6kU"/>
                                     <segue destination="GsP-8j-yUT" kind="push" id="7gp-v1-Vpe"/>
                                 </connections>
                             </button>
+                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H0N-IQ-S2Y">
+                                <rect key="frame" x="30" y="235" width="93" height="21"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="93" id="G9J-AM-B4x"/>
+                                    <constraint firstAttribute="height" constant="21" id="cZp-Z3-6YJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="rYN-ju-1bJ" firstAttribute="top" secondItem="fTk-bn-HUK" secondAttribute="bottom" constant="8" id="385-Yr-a66"/>
+                            <constraint firstItem="ZQy-00-ved" firstAttribute="trailing" secondItem="M7k-np-hHa" secondAttribute="trailingMargin" id="5zE-sP-HEc"/>
+                            <constraint firstItem="ZQy-00-ved" firstAttribute="leading" secondItem="rYN-ju-1bJ" secondAttribute="leading" id="A5b-th-zCa"/>
                             <constraint firstItem="4aK-SB-AT8" firstAttribute="leading" secondItem="M7k-np-hHa" secondAttribute="leading" id="B7y-5l-irj"/>
                             <constraint firstAttribute="bottom" secondItem="4aK-SB-AT8" secondAttribute="bottom" id="GqO-Jw-EQE"/>
+                            <constraint firstAttribute="centerX" secondItem="rYN-ju-1bJ" secondAttribute="centerX" id="M91-Fa-exc"/>
+                            <constraint firstItem="9V3-BE-T6S" firstAttribute="centerY" secondItem="rYN-ju-1bJ" secondAttribute="centerY" id="PFP-9I-fAb"/>
+                            <constraint firstItem="rYN-ju-1bJ" firstAttribute="leading" secondItem="fTk-bn-HUK" secondAttribute="leading" id="QpI-Xj-esZ"/>
+                            <constraint firstItem="fTk-bn-HUK" firstAttribute="top" secondItem="ZQy-00-ved" secondAttribute="bottom" constant="8" id="Zc3-BI-SYS"/>
+                            <constraint firstItem="fTk-bn-HUK" firstAttribute="leading" secondItem="H0N-IQ-S2Y" secondAttribute="trailing" constant="8" symbolic="YES" id="aTg-1H-uOf"/>
                             <constraint firstItem="4aK-SB-AT8" firstAttribute="top" secondItem="M7k-np-hHa" secondAttribute="topMargin" id="bqc-Ye-1lG"/>
                             <constraint firstAttribute="trailing" secondItem="4aK-SB-AT8" secondAttribute="trailing" id="flM-6T-1gB"/>
+                            <constraint firstItem="ZQy-00-ved" firstAttribute="centerY" secondItem="oDZ-bp-NDO" secondAttribute="centerY" id="j8X-TP-uRc"/>
+                            <constraint firstItem="H0N-IQ-S2Y" firstAttribute="centerY" secondItem="fTk-bn-HUK" secondAttribute="centerY" id="jpw-Wr-ZSq"/>
+                            <constraint firstItem="9V3-BE-T6S" firstAttribute="trailing" secondItem="M7k-np-hHa" secondAttribute="trailingMargin" id="rXc-Ro-Ny3"/>
+                            <constraint firstItem="ZQy-00-ved" firstAttribute="leading" secondItem="oDZ-bp-NDO" secondAttribute="trailing" constant="8" symbolic="YES" id="uGE-5e-Atc"/>
+                            <constraint firstItem="fTk-bn-HUK" firstAttribute="trailing" secondItem="M7k-np-hHa" secondAttribute="trailingMargin" id="wJu-4z-LIc"/>
+                            <constraint firstAttribute="centerY" secondItem="rYN-ju-1bJ" secondAttribute="centerY" id="xkh-ns-zid"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="OwnTracksCTRL - Login" id="9uy-dm-K5y"/>
@@ -579,25 +615,31 @@
                                     <constraint firstAttribute="height" constant="44" id="SGJ-0d-yGe"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="❮ Back" id="6Uc-R7-Pje">
+                                    <barButtonItem title="Logout" id="6Uc-R7-Pje">
                                         <connections>
                                             <action selector="exitPressed:" destination="Asq-I3-XLI" id="ktb-Yo-r2G"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="wHo-i5-5NJ"/>
-                                    <barButtonItem image="Tracking" id="nq6-iC-Vl4">
+                                    <barButtonItem title="Zoom" id="MdL-Em-U6M">
                                         <connections>
-                                            <action selector="TrackingPressed:" destination="Asq-I3-XLI" id="Uga-2j-Njy"/>
+                                            <action selector="zoomPressed:" destination="Asq-I3-XLI" id="6VM-oE-NSU"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="x06-Ba-W7F"/>
+                                    <barButtonItem title="Map" id="nq6-iC-Vl4">
+                                        <connections>
+                                            <action selector="mapPressed:" destination="Asq-I3-XLI" id="red-tj-U6O"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="enE-hZ-pLa"/>
-                                    <barButtonItem image="Friends" id="QVR-Rg-5Wl">
+                                    <barButtonItem title="List" id="QVR-Rg-5Wl">
                                         <connections>
                                             <segue destination="pGg-6v-bdr" kind="push" id="pm7-Ug-nfm"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="B2y-ew-ML8"/>
-                                    <barButtonItem systemItem="play" id="Mcd-8r-Cxc">
+                                    <barButtonItem title="Kiosk" id="Mcd-8r-Cxc">
                                         <connections>
                                             <action selector="KioskPressed:" destination="Asq-I3-XLI" id="lPI-yK-qza"/>
                                         </connections>
@@ -1135,7 +1177,6 @@
         <image name="ConnectionOn" width="32" height="32"/>
         <image name="Friends" width="32" height="32"/>
         <image name="OwnTracks" width="32" height="32"/>
-        <image name="Tracking" width="32" height="32"/>
         <image name="iTunesArtwork.png" width="1024" height="1024"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

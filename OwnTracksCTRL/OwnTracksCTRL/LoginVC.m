@@ -27,6 +27,7 @@
 - (void)loadView {
     [super loadView];
     self.firststart = true;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -66,15 +67,15 @@
 - (void)updateValues {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    if (self.UIuser) delegate.broker.user = self.UIuser.text;
-    if (self.UIpassword) delegate.broker.passwd = self.UIpassword.text;
+    if (self.UIuser) delegate.confD.user = self.UIuser.text;
+    if (self.UIpassword) delegate.confD.passwd = self.UIpassword.text;
 }
 
 - (void)updated {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    self.UIuser.text = delegate.broker.user;
-    self.UIpassword.text = delegate.broker.passwd;
+    self.UIuser.text = delegate.confD.user;
+    self.UIpassword.text = delegate.confD.passwd;
 }
 
 - (IBAction)touchedOutsideText:(UITapGestureRecognizer *)sender {
@@ -85,6 +86,10 @@
 
 - (IBAction)changedUser:(UITextField *)sender {
     [Vehicle trash];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.managedObjectContext deleteObject:delegate.broker];
+    delegate.broker = [Broker brokerInManagedObjectContext:delegate.managedObjectContext];
+    [delegate saveContext];
 }
 
 - (IBAction)lookup:(UIButton *)sender {
@@ -101,14 +106,17 @@
     }
     
     NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@",
-                      delegate.broker.user,
-                      delegate.broker.passwd,
+                      delegate.confD.user,
+                      delegate.confD.passwd,
                       tokenPost];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://demo.owntracks.de/ext/conf"]]];
+    
+    NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"confdurl"];
+    
+    [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];

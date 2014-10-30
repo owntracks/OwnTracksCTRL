@@ -292,33 +292,40 @@ static MapVC *theMapVC;
 }
 
 #define ACTION_MAP @"Map Modes"
-#define ACTION_MQTT @"MQTT Connection"
-#define ACTION_KIOSK @"Kiosk Mode"
-- (IBAction)TrackingPressed:(UIBarButtonItem *)sender {
+#define ACTION_ZOOM @"Zoom"
+
+- (IBAction)mapPressed:(UIBarButtonItem *)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MAP
+                                                             delegate:self
+                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:
+                                  @"Standard Map",
+                                  @"Satellite Map",
+                                  @"Hybrid Map",
+                                  nil];
+    [actionSheet showFromBarButtonItem:sender animated:YES];
+}
+
+- (IBAction)zoomPressed:(UIBarButtonItem *)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_ZOOM
                                                              delegate:self
                                                     cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
                                                destructiveButtonTitle:nil
                                                     otherButtonTitles:
                                   @"Zoom to selected Vehicle",
                                   @"Show all Vehicles",
-                                  @"Standard Map",
-                                  @"Satellite Map",
-                                  @"Hybrid Map",
                                   nil];
     [actionSheet showFromBarButtonItem:sender animated:YES];
-
 }
+
 - (IBAction)ConnectionPressed:(UIBarButtonItem *)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MQTT
-                                                             delegate:self
-                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:
-                                  @"(Re-)Connect",
-                                  @"Disconnect",
-                                  nil];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (delegate.connectedTo) {
+        [delegate disconnect];
+    } else {
+        [delegate connect];
+    }
 }
 
 - (IBAction)exitPressed:(UIBarButtonItem *)sender {
@@ -351,22 +358,30 @@ static MapVC *theMapVC;
 }
 
 - (IBAction)KioskPressed:(UIBarButtonItem *)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_KIOSK
-                                                             delegate:self
-                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:
-                                  @"ON",
-                                  @"OFF",
-                                  nil];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if ([delegate.kiosk boolValue]) {
+        delegate.kiosk = @(false);
+    } else {
+        delegate.kiosk = @(true);
+    }
+
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
     if ([actionSheet.title isEqualToString:ACTION_MAP]) {
+        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
+            case 0:
+                self.mapView.mapType = MKMapTypeStandard;
+                break;
+            case 1:
+                self.mapView.mapType = MKMapTypeSatellite;
+                break;
+            case 2:
+                self.mapView.mapType = MKMapTypeHybrid;
+                break;
+        }
+    } else if ([actionSheet.title isEqualToString:ACTION_ZOOM]) {
         switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
             case 0:
             {
@@ -428,7 +443,7 @@ static MapVC *theMapVC;
                             rect.size.width = 0;
                             first = false;
                         }
-
+                        
                         if (point.x < rect.origin.x) {
                             rect.size.width += rect.origin.x - point.x;
                             rect.origin.x = point.x;
@@ -454,33 +469,6 @@ static MapVC *theMapVC;
                 [self.mapView setVisibleMapRect:rect animated:YES];
                 break;
             }
-            case 2:
-                self.mapView.mapType = MKMapTypeStandard;
-                break;
-            case 3:
-                self.mapView.mapType = MKMapTypeSatellite;
-                break;
-            case 4:
-                self.mapView.mapType = MKMapTypeHybrid;
-                break;
-        }
-    } else if ([actionSheet.title isEqualToString:ACTION_MQTT]) {
-        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
-            case 0:
-                [delegate connect];
-                break;
-            case 1:
-                [delegate disconnect];
-                break;
-        }
-    } else if ([actionSheet.title isEqualToString:ACTION_KIOSK]) {
-        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
-            case 0:
-                delegate.kiosk = @(true);
-                break;
-            case 1:
-                delegate.kiosk = @(false);
-                break;
         }
     }
 }
