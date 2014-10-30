@@ -136,7 +136,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    //
+    [self connect];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -206,9 +206,7 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
-    if (alertView.numberOfButtons == 1) {
-        [self performSelector:@selector(alertViewTimedOut:) withObject:alertView afterDelay:5];
-    }
+    [self performSelector:@selector(alertViewTimedOut:) withObject:alertView afterDelay:5];
 }
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {

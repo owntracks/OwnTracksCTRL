@@ -36,10 +36,8 @@
     [appDelegate addObserver:self forKeyPath:@"token"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+    [self.navigationController.navigationBar setHidden:TRUE];
+    [appDelegate disconnect];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

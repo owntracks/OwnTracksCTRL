@@ -144,6 +144,22 @@
     return rect;
 }
 
+- (NSUInteger)trackCount {
+    NSUInteger count = 0;
+    NSDictionary *dictionary = nil;
+    if (self.track) {
+        NSError *error;
+        dictionary = [NSJSONSerialization JSONObjectWithData:self.track options:0 error:&error];
+        if (dictionary) {
+            NSArray *track = dictionary[@"track"];
+            if (track) {
+                count = track.count;
+            }
+        }
+    }
+    return count;
+}
+
 - (MKPolyline *)polyLine {
     CLLocationCoordinate2D *coordinates = (CLLocationCoordinate2D *)malloc(sizeof(CLLocationCoordinate2D));
     coordinates[0] = [self coordinate];

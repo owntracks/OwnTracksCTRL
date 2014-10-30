@@ -29,8 +29,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [self updated];
+    [self.navigationController.navigationBar setHidden:false];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

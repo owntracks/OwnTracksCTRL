@@ -24,7 +24,7 @@
                                     }];
     [self.popoverController presentPopoverFromRect:self.rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionLeft
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
                                           animated:true];
 }
 

@@ -106,7 +106,7 @@
             
     }
     self.UIDist.text = [NSString stringWithFormat:@"%.0f m", [self.vehicle.dist doubleValue]];
-    self.UITrip.text = [NSString stringWithFormat:@"%.0f m", [self.vehicle.trip doubleValue]];
+    self.UITrip.text = [NSString stringWithFormat:@"%.0f km", [self.vehicle.trip doubleValue] / 1000];
     self.UITopic.text = self.vehicle.topic;
     self.UIStart.text = [NSDateFormatter localizedStringFromDate:self.vehicle.start
                                                        dateStyle:NSDateFormatterShortStyle

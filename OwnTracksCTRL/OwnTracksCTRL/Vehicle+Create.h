@@ -17,5 +17,6 @@
 + (void)trash;
 - (CLLocationCoordinate2D)coordinate;
 - (MKPolyline *)polyLine;
+- (NSUInteger)trackCount;
 
 @end

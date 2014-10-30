@@ -19,11 +19,24 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
+@property (weak, nonatomic) IBOutlet UIButton *UIInfo;
+@property (weak, nonatomic) IBOutlet UIButton *UITrack;
+@property (weak, nonatomic) IBOutlet UILabel *UILabel1;
+@property (weak, nonatomic) IBOutlet UILabel *UILabel2;
+@property (weak, nonatomic) IBOutlet UIImageView *UIImage;
+@property (weak, nonatomic) IBOutlet UIView *UIDetailView;
 
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) Vehicle *vehicleToGet;
 @property (strong, nonatomic) NSMutableData *dataToGet;
+@property (strong, nonatomic) NSTimer *timer;
 @end
+
+#define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
+#define COLOR_ON  [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0]
+#define COLOR_TRANSITION  [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:0.0 alpha:1.0]
+#define COLOR_NEUTRAL [UIColor grayColor]
+#define COLOR_TRACK [UIColor redColor]
 
 static MapVC *theMapVC;
 
@@ -51,6 +64,13 @@ static MapVC *theMapVC;
     [appDelegate addObserver:self forKeyPath:@"kiosk"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
+    [self.navigationController.navigationBar setHidden:TRUE];
+
+     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                  target:self
+                                                selector:@selector(updateDetailView)
+                                                userInfo:nil
+                                                 repeats:true];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -60,6 +80,8 @@ static MapVC *theMapVC;
                         context:nil];
     [appDelegate removeObserver:self forKeyPath:@"connectedTo"
                         context:nil];
+    [self.navigationController.navigationBar setHidden:FALSE];
+    [self.timer invalidate];
     [super viewWillDisappear:animated];
 }
 
@@ -76,48 +98,9 @@ static MapVC *theMapVC;
             } else {
                 annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"Vehicle"];
             }
-            annotationView.canShowCallout = YES;
-            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            if (appDelegate.broker.trackurl && appDelegate.broker.trackurl.length > 0) {
-            UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-            if ([vehicle.showtrack boolValue]) {
-                mapButton.highlighted = true;
-            } else {
-                mapButton.highlighted = false;
-            }
-            annotationView.leftCalloutAccessoryView = mapButton;
-            } else {
-                annotationView.leftCalloutAccessoryView = nil;
-            }
-
             return annotationView;
         }
         return nil;
-    }
-}
-
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
-{
-    if (control == view.rightCalloutAccessoryView) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            [self performSegueWithIdentifier:@"showDetail:" sender:view];
-        } else {
-            [self performSegueWithIdentifier:@"showDetailPush:" sender:view];
-        }
-    } else {
-        if ([view.annotation isKindOfClass:[Vehicle class]]) {
-            Vehicle *vehicle = (Vehicle *)view.annotation;
-            if ([[self.mapView overlays] containsObject:vehicle]) {
-                [self.mapView removeOverlay:vehicle];
-                vehicle.showtrack = @(false);
-            } else {
-                [self getTrack:vehicle];
-                [self.mapView addOverlay:vehicle];
-                vehicle.showtrack = @(true);
-            }
-        }
     }
 }
 
@@ -126,7 +109,7 @@ static MapVC *theMapVC;
         Vehicle *vehicle = (Vehicle *)overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:[vehicle polyLine]];
         [renderer setLineWidth:3];
-        [renderer setStrokeColor:[UIColor redColor]];
+        [renderer setStrokeColor:COLOR_TRACK];
         return renderer;
     } else {
         return nil;
@@ -139,32 +122,66 @@ static MapVC *theMapVC;
         if ([segue isKindOfClass:[MapPopOverSegue class]]) {
             MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
             mapPopOverSegue.view = self.mapView;
-            if ([sender isKindOfClass:[MKAnnotationView class]]) {
-                MKAnnotationView *annotationView = (MKAnnotationView *)sender;
-                mapPopOverSegue.rect = annotationView.frame;
-                if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
-                    [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                          withObject:annotationView.annotation];
-                }
+            mapPopOverSegue.rect = self.UIInfo.frame;
+            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+                [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                      withObject:sender];
             }
         }
     }
     if ([segue.identifier isEqualToString:@"showDetailPush:"]) {
-        if ([sender isKindOfClass:[MKAnnotationView class]]) {
-            MKAnnotationView *annotationView = (MKAnnotationView *)sender;
-            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
-                [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                      withObject:annotationView.annotation];
-            }
+        if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+            [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                  withObject:sender];
         }
     }
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
+    if ([view isKindOfClass:[AnnotationV class]]) {
+        AnnotationV *annotationV = (AnnotationV *)view;
+        self.UIImage.image = [annotationV getImage];
+        [self updateDetailView];
+    }
+    self.UIDetailView.hidden = false;
+}
+
+- (void)updateDetailView {
+    if ([self.mapView.selectedAnnotations count] > 0) {
+        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
+        
+        NSTimeInterval age = -[vehicle.tst timeIntervalSinceNow];
+        self.UILabel1.text = [NSString stringWithFormat:@"T=%.0fkm, A=%@%@%@%@",
+                              [vehicle.trip doubleValue] / 1000,
+                              age > 24*60*60 ? [NSString stringWithFormat:@"%0.f:", age / (24*60*60)]: @"",
+                              age > 60*60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / (60*60), 24)]: @"",
+                              age > 60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / 60, 60)]: @"",
+                              [NSString stringWithFormat:@"%0.fs", fmod(age, 60)]
+                              ];
+        self.UILabel2.text = [NSString stringWithFormat:@"n=%ld, I=%@",
+                              (long)[vehicle trackCount],
+                              vehicle.info ? vehicle.info : @"-"];
+        
+        if ([vehicle.showtrack boolValue]) {
+            if (vehicle.track) {
+                if (vehicle.track.length > 0) {
+                    self.UITrack.tintColor = COLOR_ON;
+                } else {
+                    self.UITrack.tintColor = COLOR_TRANSITION;
+                }
+            } else {
+                self.UITrack.tintColor = COLOR_ERR;
+            }
+        } else {
+            self.UITrack.tintColor = COLOR_NEUTRAL;
+        }
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    self.UIImage.image = nil;
+    self.UIDetailView.hidden = true;
 }
 
 - (void)centerOn:(Vehicle *)vehicle {
@@ -243,9 +260,17 @@ static MapVC *theMapVC;
         case NSFetchedResultsChangeUpdate:
             [self.mapView removeAnnotation:anObject];
             [self.mapView removeOverlay:anObject];
+            
             [self.mapView addAnnotation:anObject];
             if (annotation == selectedAnnotation) {
                 [self.mapView selectAnnotation:annotation animated:true];
+                if ([annotation isKindOfClass:[Vehicle class]]) {
+                    Vehicle *vehicle = (Vehicle *)annotation;
+                    [self updateDetailView];
+                    AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+                    annotationView.annotation = vehicle;
+                    self.UIImage.image = [annotationView getImage];
+                }
             }
             if ([annotation isKindOfClass:[Vehicle class]]) {
                 Vehicle *vehicle = (Vehicle *)annotation;
@@ -294,6 +319,35 @@ static MapVC *theMapVC;
                                   @"Disconnect",
                                   nil];
     [actionSheet showFromBarButtonItem:sender animated:YES];
+}
+
+- (IBAction)exitPressed:(UIBarButtonItem *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)InfoPressed:(UIButton *)sender {
+    if ([self.mapView.selectedAnnotations count] > 0) {
+        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self performSegueWithIdentifier:@"showDetail:" sender:vehicle];
+        } else {
+            [self performSegueWithIdentifier:@"showDetailPush:" sender:vehicle];
+        }
+    }
+}
+
+- (IBAction)TrackPressed:(UIButton *)sender {
+    if ([self.mapView.selectedAnnotations count] > 0) {
+        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
+        if ([vehicle.showtrack boolValue]) {
+            [self.mapView removeOverlay:vehicle];
+            vehicle.showtrack = @(false);
+        } else {
+            [self getTrack:vehicle];
+            [self.mapView addOverlay:vehicle];
+            vehicle.showtrack = @(true);
+        }
+    }
 }
 
 - (IBAction)KioskPressed:(UIBarButtonItem *)sender {
@@ -431,10 +485,6 @@ static MapVC *theMapVC;
     }
 }
 
-#define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
-#define COLOR_ON  [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0]
-#define COLOR_OFF [UIColor colorWithRed:64.0/255.0 green:64.0/255.0 blue:64.0/255.0 alpha:1.0]
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"connectedTo"]) {
         if ([object valueForKey:keyPath]) {
@@ -447,8 +497,8 @@ static MapVC *theMapVC;
             self.UIKiosk.tintColor = COLOR_ON;
             [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
         } else {
-            self.UIKiosk.tintColor = COLOR_OFF;
-            [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
+            self.UIKiosk.tintColor = COLOR_NEUTRAL;
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
         }
     }
 }
@@ -494,6 +544,7 @@ static MapVC *theMapVC;
                                                       cancelButtonTitle:nil
                                                       otherButtonTitles:@"OK", nil];
             [alertView show];
+            self.vehicleToGet.track = nil;
             self.dataToGet = nil;
             self.vehicleToGet = nil;
             self.urlConnection = nil;
@@ -513,6 +564,7 @@ static MapVC *theMapVC;
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];
     [alertView show];
+    self.vehicleToGet.track = nil;
     self.dataToGet = nil;
     self.vehicleToGet = nil;
     self.urlConnection = nil;
