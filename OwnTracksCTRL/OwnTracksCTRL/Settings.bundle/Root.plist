@@ -16,11 +16,11 @@
 			<key>AutocorrectionType</key>
 			<string>No</string>
 			<key>DefaultValue</key>
-			<string>https://demo.owntracks.de/ext/conf</string>
+			<string>https://demo.owntracks.de/ctrld/conf</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>Key</key>
-			<string>confdurl</string>
+			<string>ctrldurl</string>
 			<key>KeyboardType</key>
 			<string>URL</string>
 			<key>Title</key>
@@ -33,7 +33,5 @@
 	<string>Root</string>
 	<key>Title</key>
 	<string>Settings</string>
-	<key>New item</key>
-	<string></string>
 </dict>
 </plist>

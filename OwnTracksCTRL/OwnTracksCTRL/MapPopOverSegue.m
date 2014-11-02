@@ -22,10 +22,9 @@
                                     usingBlock:^(NSNotification *note) {
                                         [self.popoverController dismissPopoverAnimated:true];
                                     }];
-    [self.popoverController presentPopoverFromRect:self.rect
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
-                                          animated:true];
+    [self.popoverController presentPopoverFromBarButtonItem:self.item
+                                   permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                   animated:true];
 }
 
 - (void)dealloc {

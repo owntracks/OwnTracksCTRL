@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -615,127 +615,79 @@
                                     <constraint firstAttribute="height" constant="44" id="SGJ-0d-yGe"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="Logout" id="6Uc-R7-Pje">
+                                    <barButtonItem image="Logout" id="6Uc-R7-Pje">
                                         <connections>
                                             <action selector="exitPressed:" destination="Asq-I3-XLI" id="ktb-Yo-r2G"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="wHo-i5-5NJ"/>
-                                    <barButtonItem title="Zoom" id="MdL-Em-U6M">
+                                    <barButtonItem image="Zoom" id="MdL-Em-U6M">
                                         <connections>
                                             <action selector="zoomPressed:" destination="Asq-I3-XLI" id="6VM-oE-NSU"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="x06-Ba-W7F"/>
-                                    <barButtonItem title="Map" id="nq6-iC-Vl4">
+                                    <barButtonItem image="Map" id="nq6-iC-Vl4">
                                         <connections>
                                             <action selector="mapPressed:" destination="Asq-I3-XLI" id="red-tj-U6O"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="enE-hZ-pLa"/>
-                                    <barButtonItem title="List" id="QVR-Rg-5Wl">
+                                    <barButtonItem image="Vehicles" id="QVR-Rg-5Wl">
                                         <connections>
                                             <segue destination="pGg-6v-bdr" kind="push" id="pm7-Ug-nfm"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="B2y-ew-ML8"/>
-                                    <barButtonItem title="Kiosk" id="Mcd-8r-Cxc">
+                                    <barButtonItem image="Kiosk" id="Mcd-8r-Cxc">
                                         <connections>
                                             <action selector="KioskPressed:" destination="Asq-I3-XLI" id="lPI-yK-qza"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="trX-kT-q5z"/>
-                                    <barButtonItem image="ConnectionOn" id="XNf-qh-9hf">
+                                    <barButtonItem image="Connection" id="XNf-qh-9hf">
                                         <connections>
                                             <action selector="ConnectionPressed:" destination="Asq-I3-XLI" id="Wmf-ol-lqE"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <view hidden="YES" alpha="0.74999999999999978" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wnh-z8-xNk">
-                                <rect key="frame" x="0.0" y="20" width="320" height="45"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nGd-vV-8vd">
-                                        <rect key="frame" x="8" y="3" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="2c8-gE-zuH"/>
-                                            <constraint firstAttribute="height" constant="40" id="yLL-kd-qIc"/>
-                                        </constraints>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGo-Wi-6HR">
-                                        <rect key="frame" x="56" y="8" width="37" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="37" id="IA9-i5-rz6"/>
-                                            <constraint firstAttribute="height" constant="30" id="Pua-bI-akZ"/>
-                                        </constraints>
-                                        <state key="normal" title="Track">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="TrackPressed:" destination="Asq-I3-XLI" eventType="touchUpInside" id="5De-Kf-Rsj"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="70r-sX-aDV">
-                                        <rect key="frame" x="282" y="8" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="hMc-KP-FNf"/>
-                                            <constraint firstAttribute="width" constant="30" id="rJr-o0-WSf"/>
-                                        </constraints>
-                                        <state key="normal" title="Info">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="InfoPressed:" destination="Asq-I3-XLI" eventType="touchUpInside" id="avu-4M-MTM"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dd7-ep-iuX">
-                                        <rect key="frame" x="101" y="2" width="173" height="20"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="Lqb-wV-QSf"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DaI-00-7bn">
-                                        <rect key="frame" x="101" y="23" width="173" height="20"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="rjy-bD-Hmh"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3k-P9-WMO">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="3b3-0v-jkC"/>
-                                    <constraint firstItem="Dd7-ep-iuX" firstAttribute="top" secondItem="Wnh-z8-xNk" secondAttribute="top" constant="2" id="3cS-iL-jlg"/>
-                                    <constraint firstItem="nGd-vV-8vd" firstAttribute="leading" secondItem="Wnh-z8-xNk" secondAttribute="leading" constant="8" id="3ft-Lp-BXQ"/>
-                                    <constraint firstItem="Dd7-ep-iuX" firstAttribute="leading" secondItem="sGo-Wi-6HR" secondAttribute="trailing" constant="8" id="8NC-hM-6n3"/>
-                                    <constraint firstAttribute="trailing" secondItem="70r-sX-aDV" secondAttribute="trailing" constant="8" id="H7B-sy-qdN"/>
-                                    <constraint firstItem="70r-sX-aDV" firstAttribute="leading" secondItem="Dd7-ep-iuX" secondAttribute="trailing" constant="8" id="IA5-zR-Xmo"/>
-                                    <constraint firstItem="70r-sX-aDV" firstAttribute="leading" secondItem="DaI-00-7bn" secondAttribute="trailing" constant="8" id="IQF-Gn-Sfb"/>
-                                    <constraint firstItem="sGo-Wi-6HR" firstAttribute="leading" secondItem="nGd-vV-8vd" secondAttribute="trailing" constant="8" id="MBK-dW-ltG"/>
-                                    <constraint firstAttribute="centerY" secondItem="sGo-Wi-6HR" secondAttribute="centerY" id="PXa-nL-BoU"/>
-                                    <constraint firstAttribute="bottom" secondItem="DaI-00-7bn" secondAttribute="bottom" constant="2" id="VQm-VO-Hxj"/>
-                                    <constraint firstAttribute="centerY" secondItem="nGd-vV-8vd" secondAttribute="centerY" id="YlK-m2-Thu"/>
-                                    <constraint firstAttribute="centerY" secondItem="70r-sX-aDV" secondAttribute="centerY" id="dNt-3p-vuu"/>
-                                    <constraint firstItem="DaI-00-7bn" firstAttribute="leading" secondItem="sGo-Wi-6HR" secondAttribute="trailing" constant="8" id="kek-hd-Yyu"/>
+                                    <constraint firstAttribute="height" constant="44" id="zUj-QT-VTG"/>
                                 </constraints>
-                            </view>
+                                <items>
+                                    <barButtonItem title="TID" id="KED-uY-BIa">
+                                        <connections>
+                                            <action selector="TidPressed:" destination="Asq-I3-XLI" id="RXB-T9-jiU"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="Track" id="hUc-Jd-Pc9">
+                                        <connections>
+                                            <action selector="TrackPressed:" destination="Asq-I3-XLI" id="wfc-Sr-C5O"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="Info" id="we3-c9-Mn5">
+                                        <connections>
+                                            <action selector="InfoPressed:" destination="Asq-I3-XLI" id="4ak-Q0-fXH"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem enabled="NO" title="Info" id="5D5-W7-q5m"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="DKV-UP-hQI" firstAttribute="top" secondItem="wd1-Ez-gEd" secondAttribute="bottom" id="ByM-ng-g28"/>
-                            <constraint firstItem="Wnh-z8-xNk" firstAttribute="top" secondItem="4L8-0V-gYG" secondAttribute="bottom" id="Lej-fD-kd9"/>
-                            <constraint firstAttribute="trailing" secondItem="Wnh-z8-xNk" secondAttribute="trailing" id="OAV-sK-rPN"/>
-                            <constraint firstItem="Wnh-z8-xNk" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="R6L-Rt-XC2"/>
+                            <constraint firstItem="k3k-P9-WMO" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="HJ4-CM-SEs"/>
                             <constraint firstItem="jRS-Ea-b3R" firstAttribute="top" secondItem="iXH-M9-Ndg" secondAttribute="top" id="SW8-4Q-ChZ"/>
                             <constraint firstAttribute="bottom" secondItem="jRS-Ea-b3R" secondAttribute="bottom" id="SYl-QU-eCQ"/>
                             <constraint firstAttribute="trailing" secondItem="wd1-Ez-gEd" secondAttribute="trailing" id="T9z-B6-gcJ"/>
+                            <constraint firstAttribute="trailing" secondItem="k3k-P9-WMO" secondAttribute="trailing" id="Utd-Sx-POm"/>
                             <constraint firstAttribute="trailing" secondItem="jRS-Ea-b3R" secondAttribute="trailing" id="dH5-6b-Pof"/>
                             <constraint firstItem="jRS-Ea-b3R" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="hiD-aE-SHK"/>
+                            <constraint firstItem="k3k-P9-WMO" firstAttribute="top" secondItem="4L8-0V-gYG" secondAttribute="bottom" id="hx3-hI-Kwn"/>
                             <constraint firstItem="wd1-Ez-gEd" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="z1J-gt-Drs"/>
                         </constraints>
                     </view>
@@ -744,13 +696,12 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="UIConnection" destination="XNf-qh-9hf" id="gJG-sF-nJm"/>
-                        <outlet property="UIDetailView" destination="Wnh-z8-xNk" id="K5D-fu-J6K"/>
-                        <outlet property="UIImage" destination="nGd-vV-8vd" id="WPd-9R-IOd"/>
-                        <outlet property="UIInfo" destination="70r-sX-aDV" id="QzN-BT-YX9"/>
+                        <outlet property="UIDetailView" destination="k3k-P9-WMO" id="tjj-qu-j5Z"/>
+                        <outlet property="UIInfo" destination="we3-c9-Mn5" id="S9e-TP-D1t"/>
                         <outlet property="UIKiosk" destination="Mcd-8r-Cxc" id="amx-ar-6t6"/>
-                        <outlet property="UILabel1" destination="Dd7-ep-iuX" id="aYr-qn-dJF"/>
-                        <outlet property="UILabel2" destination="DaI-00-7bn" id="HE4-6c-qJP"/>
-                        <outlet property="UITrack" destination="sGo-Wi-6HR" id="9kC-Ls-fqI"/>
+                        <outlet property="UILabel" destination="5D5-W7-q5m" id="Ekq-Ja-bSt"/>
+                        <outlet property="UITid" destination="KED-uY-BIa" id="F3K-nY-jzk"/>
+                        <outlet property="UITrack" destination="hUc-Jd-Pc9" id="hp7-R5-3tU"/>
                         <outlet property="UITracking" destination="nq6-iC-Vl4" id="nRb-ef-bMU"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>
@@ -1174,9 +1125,16 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ConnectionOn" width="32" height="32"/>
+        <image name="Connection" width="22" height="22"/>
         <image name="Friends" width="32" height="32"/>
+        <image name="Info" width="22" height="22"/>
+        <image name="Kiosk" width="22" height="22"/>
+        <image name="Logout" width="22" height="22"/>
+        <image name="Map" width="22" height="22"/>
         <image name="OwnTracks" width="32" height="32"/>
+        <image name="Track" width="22" height="22"/>
+        <image name="Vehicles" width="22" height="22"/>
+        <image name="Zoom" width="22" height="22"/>
         <image name="iTunesArtwork.png" width="1024" height="1024"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MapPopOverSegue : UIStoryboardPopoverSegue
-@property (nonatomic) CGRect rect;
+@property (weak, nonatomic) UIBarButtonItem *item;
 @property (weak, nonatomic) UIView *view;
 @end

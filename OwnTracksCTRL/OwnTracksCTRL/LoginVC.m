@@ -114,7 +114,7 @@
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
-    NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"confdurl"];
+    NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"ctrld"];
     
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];

@@ -87,9 +87,6 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-                                                              @"confdurl": @"https://demo.owntracks.de/ext/conf"
-                                                              }];
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.completionHandler = nil;
     self.kiosk = @(false);
@@ -100,6 +97,11 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSDictionary *appDefaults = [NSDictionary
+                                 dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrld"];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
     self.Broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];

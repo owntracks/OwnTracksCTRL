@@ -106,7 +106,7 @@
 
 - (MKMapRect)boundingMapRect {
     MKMapPoint point = MKMapPointForCoordinate([self coordinate]);
-    MKMapRect rect = MKMapRectMake(
+    MKMapRect mapRect = MKMapRectMake(
                                    point.x,
                                    point.y,
                                    1.0,
@@ -125,23 +125,23 @@
                                                                                    [trackpoint[@"lon"] doubleValue]
                                                                                    );
                     MKMapPoint mapPoint = MKMapPointForCoordinate(coordinate);
-                    if (mapPoint.x < rect.origin.x) {
-                        rect.size.width += rect.origin.x - mapPoint.x;
-                        rect.origin.x = mapPoint.x;
-                    } else if (mapPoint.x + 3 > rect.origin.x + rect.size.width) {
-                        rect.size.width = mapPoint.x - rect.origin.x;
+                    if (mapPoint.x < mapRect.origin.x) {
+                        mapRect.size.width += mapRect.origin.x - mapPoint.x;
+                        mapRect.origin.x = mapPoint.x;
+                    } else if (mapPoint.x + 3 > mapRect.origin.x + mapRect.size.width) {
+                        mapRect.size.width = mapPoint.x - mapRect.origin.x;
                     }
-                    if (mapPoint.y < rect.origin.y) {
-                        rect.size.height += rect.origin.y - mapPoint.y;
-                        rect.origin.y = mapPoint.y;
-                    } else if (mapPoint.y > rect.origin.y + rect.size.height) {
-                        rect.size.height = mapPoint.y - rect.origin.y;
+                    if (mapPoint.y < mapRect.origin.y) {
+                        mapRect.size.height += mapRect.origin.y - mapPoint.y;
+                        mapRect.origin.y = mapPoint.y;
+                    } else if (mapPoint.y > mapRect.origin.y + mapRect.size.height) {
+                        mapRect.size.height = mapPoint.y - mapRect.origin.y;
                     }
                 }
             }
         }
     }
-    return rect;
+    return mapRect;
 }
 
 - (NSUInteger)trackCount {

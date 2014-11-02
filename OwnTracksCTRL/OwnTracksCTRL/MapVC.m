@@ -19,12 +19,11 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
-@property (weak, nonatomic) IBOutlet UIButton *UIInfo;
-@property (weak, nonatomic) IBOutlet UIButton *UITrack;
-@property (weak, nonatomic) IBOutlet UILabel *UILabel1;
-@property (weak, nonatomic) IBOutlet UILabel *UILabel2;
-@property (weak, nonatomic) IBOutlet UIImageView *UIImage;
-@property (weak, nonatomic) IBOutlet UIView *UIDetailView;
+@property (weak, nonatomic) IBOutlet UIToolbar *UIDetailView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UILabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITrack;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITid;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIInfo;
 
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) Vehicle *vehicleToGet;
@@ -35,8 +34,9 @@
 #define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
 #define COLOR_ON  [UIColor colorWithRed:0.0 green:190.0/255.0 blue:0.0 alpha:1.0]
 #define COLOR_TRANSITION  [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:0.0 alpha:1.0]
-#define COLOR_NEUTRAL [UIColor grayColor]
+#define COLOR_NEUTRAL [UIColor colorWithRed:67.0/255.0 green:142.0/255.0 blue:225.0/255.0 alpha:1.0]
 #define COLOR_TRACK [UIColor redColor]
+#define INSET UIEdgeInsetsMake(100.0, 25.0, 75.0, 25.0)
 
 static MapVC *theMapVC;
 
@@ -71,6 +71,13 @@ static MapVC *theMapVC;
                                                 selector:@selector(updateDetailView)
                                                 userInfo:nil
                                                  repeats:true];
+    
+    if ([self.mapView.selectedAnnotations count] > 0) {
+        self.UIDetailView.hidden = false;
+    } else {
+        self.UIDetailView.hidden = true;
+    }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -116,50 +123,23 @@ static MapVC *theMapVC;
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"showDetail:"]) {
-        if ([segue isKindOfClass:[MapPopOverSegue class]]) {
-            MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
-            mapPopOverSegue.view = self.mapView;
-            mapPopOverSegue.rect = self.UIInfo.frame;
-            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
-                [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                      withObject:sender];
-            }
-        }
-    }
-    if ([segue.identifier isEqualToString:@"showDetailPush:"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
-            [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                  withObject:sender];
-        }
-    }
-}
-
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
-    if ([view isKindOfClass:[AnnotationV class]]) {
-        AnnotationV *annotationV = (AnnotationV *)view;
-        self.UIImage.image = [annotationV getImage];
-        [self updateDetailView];
-    }
+    [self updateDetailView];
     self.UIDetailView.hidden = false;
 }
 
 - (void)updateDetailView {
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
-        
+        self.UITid.title = vehicle.tid;
         NSTimeInterval age = -[vehicle.tst timeIntervalSinceNow];
-        self.UILabel1.text = [NSString stringWithFormat:@"T=%.0fkm, A=%@%@%@%@",
+        self.UILabel.title = [NSString stringWithFormat:@"T=%.0fkm, A=%@%@%@%@, n=%ld, I=%@",
                               [vehicle.trip doubleValue] / 1000,
                               age > 24*60*60 ? [NSString stringWithFormat:@"%0.f:", age / (24*60*60)]: @"",
                               age > 60*60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / (60*60), 24)]: @"",
                               age > 60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / 60, 60)]: @"",
-                              [NSString stringWithFormat:@"%0.fs", fmod(age, 60)]
-                              ];
-        self.UILabel2.text = [NSString stringWithFormat:@"n=%ld, I=%@",
+                              [NSString stringWithFormat:@"%0.fs", fmod(age, 60)],
                               (long)[vehicle trackCount],
                               vehicle.info ? vehicle.info : @"-"];
         
@@ -180,7 +160,6 @@ static MapVC *theMapVC;
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    self.UIImage.image = nil;
     self.UIDetailView.hidden = true;
 }
 
@@ -265,11 +244,7 @@ static MapVC *theMapVC;
             if (annotation == selectedAnnotation) {
                 [self.mapView selectAnnotation:annotation animated:true];
                 if ([annotation isKindOfClass:[Vehicle class]]) {
-                    Vehicle *vehicle = (Vehicle *)annotation;
                     [self updateDetailView];
-                    AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-                    annotationView.annotation = vehicle;
-                    self.UIImage.image = [annotationView getImage];
                 }
             }
             if ([annotation isKindOfClass:[Vehicle class]]) {
@@ -291,32 +266,50 @@ static MapVC *theMapVC;
     //
 }
 
-#define ACTION_MAP @"Map Modes"
-#define ACTION_ZOOM @"Zoom"
-
 - (IBAction)mapPressed:(UIBarButtonItem *)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_MAP
-                                                             delegate:self
-                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:
-                                  @"Standard Map",
-                                  @"Satellite Map",
-                                  @"Hybrid Map",
-                                  nil];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
+    if (self.mapView.mapType == MKMapTypeStandard) {
+        self.mapView.mapType = MKMapTypeSatellite;
+    } else if (self.mapView.mapType == MKMapTypeSatellite) {
+        self.mapView.mapType = MKMapTypeHybrid;
+    } else {
+        self.mapView.mapType = MKMapTypeStandard;
+    }
 }
 
 - (IBAction)zoomPressed:(UIBarButtonItem *)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:ACTION_ZOOM
-                                                             delegate:self
-                                                    cancelButtonTitle:([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"Cancel" : nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:
-                                  @"Zoom to selected Vehicle",
-                                  @"Show all Vehicles",
-                                  nil];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
+    MKMapRect rect;
+    BOOL first = TRUE;
+    
+    for (Vehicle *vehicle in [self.mapView annotations])
+    {
+        CLLocationCoordinate2D coordinate = vehicle.coordinate;
+        if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+            MKMapPoint point = MKMapPointForCoordinate(coordinate);
+            if (first) {
+                rect.origin = point;
+                rect.size.height = 0;
+                rect.size.width = 0;
+                first = false;
+            }
+            
+            if (point.x < rect.origin.x) {
+                rect.size.width += rect.origin.x - point.x;
+                rect.origin.x = point.x;
+            }
+            if (point.x > rect.origin.x + rect.size.width) {
+                rect.size.width = point.x - rect.origin.x;
+            }
+            if (point.y < rect.origin.y) {
+                rect.size.height += rect.origin.y - point.y;
+                rect.origin.y = point.y;
+            }
+            if (point.y > rect.origin.y + rect.size.height) {
+                rect.size.height = point.y - rect.origin.y;
+            }
+        }
+    }
+    
+    [self.mapView setVisibleMapRect:rect edgePadding:INSET animated:TRUE];
 }
 
 - (IBAction)ConnectionPressed:(UIBarButtonItem *)sender {
@@ -332,7 +325,7 @@ static MapVC *theMapVC;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)InfoPressed:(UIButton *)sender {
+- (IBAction)InfoPressed:(UIBarButtonItem *)sender {
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -343,7 +336,29 @@ static MapVC *theMapVC;
     }
 }
 
-- (IBAction)TrackPressed:(UIButton *)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"showDetail:"]) {
+        if ([segue isKindOfClass:[MapPopOverSegue class]]) {
+            MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
+            mapPopOverSegue.view = self.mapView;
+            mapPopOverSegue.item = self.UIInfo;
+            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+                [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                      withObject:sender];
+            }
+        }
+    }
+    if ([segue.identifier isEqualToString:@"showDetailPush:"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
+            [segue.destinationViewController performSelector:@selector(setVehicle:)
+                                                  withObject:sender];
+        }
+    }
+}
+
+
+- (IBAction)TrackPressed:(UIBarButtonItem *)sender {
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
         if ([vehicle.showtrack boolValue]) {
@@ -357,6 +372,27 @@ static MapVC *theMapVC;
     }
 }
 
+- (IBAction)TidPressed:(UIBarButtonItem *)sender {
+    if ([[self.mapView selectedAnnotations] count]) {
+        Vehicle *vehicle = (Vehicle *)[self.mapView selectedAnnotations][0];
+        if ([vehicle.showtrack boolValue]) {
+            MKMapRect mapRect = [vehicle boundingMapRect];
+            [self.mapView setVisibleMapRect:mapRect edgePadding:INSET animated:TRUE];
+        } else {
+            CLLocationCoordinate2D coordinate = vehicle.coordinate;
+            if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                MKMapRect mapRect;
+                mapRect.origin = point;
+                mapRect.size.height = 1;
+                mapRect.size.width = 1;
+                [self.mapView setVisibleMapRect:mapRect animated:YES];
+            }
+        }
+    }
+}
+
+
 - (IBAction)KioskPressed:(UIBarButtonItem *)sender {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if ([delegate.kiosk boolValue]) {
@@ -365,112 +401,6 @@ static MapVC *theMapVC;
         delegate.kiosk = @(true);
     }
 
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if ([actionSheet.title isEqualToString:ACTION_MAP]) {
-        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
-            case 0:
-                self.mapView.mapType = MKMapTypeStandard;
-                break;
-            case 1:
-                self.mapView.mapType = MKMapTypeSatellite;
-                break;
-            case 2:
-                self.mapView.mapType = MKMapTypeHybrid;
-                break;
-        }
-    } else if ([actionSheet.title isEqualToString:ACTION_ZOOM]) {
-        switch (buttonIndex - actionSheet.firstOtherButtonIndex) {
-            case 0:
-            {
-                if ([[self.mapView selectedAnnotations] count]) {
-                    MKMapRect rect;
-                    BOOL first = TRUE;
-                    
-                    for (Vehicle *vehicle in [self.mapView selectedAnnotations])
-                    {
-                        CLLocationCoordinate2D coordinate = vehicle.coordinate;
-                        if (coordinate.latitude != 0 || coordinate.longitude != 0) {
-                            MKMapPoint point = MKMapPointForCoordinate(coordinate);
-                            if (first) {
-                                rect.origin = point;
-                                rect.size.height = 0;
-                                rect.size.width = 0;
-                                first = false;
-                            }
-                            if (point.x < rect.origin.x) {
-                                rect.size.width += rect.origin.x - point.x;
-                                rect.origin.x = point.x;
-                            }
-                            if (point.x > rect.origin.x + rect.size.width) {
-                                rect.size.width += point.x - rect.origin.x;
-                            }
-                            if (point.y < rect.origin.y) {
-                                rect.size.height += rect.origin.y - point.y;
-                                rect.origin.y = point.y;
-                            }
-                            if (point.y > rect.origin.y + rect.size.height) {
-                                rect.size.height += point.y - rect.origin.y;
-                            }
-                        }
-                    }
-                    
-                    rect.origin.x -= rect.size.width/10.0;
-                    rect.origin.y -= rect.size.height/10.0;
-                    rect.size.width *= 1.2;
-                    rect.size.height *= 1.2;
-                    
-                    [self.mapView setVisibleMapRect:rect animated:YES];
-                }
-                break;
-            }
-                
-            case 1:
-            {
-                MKMapRect rect;
-                BOOL first = TRUE;
-                
-                for (Vehicle *vehicle in [self.mapView annotations])
-                {
-                    CLLocationCoordinate2D coordinate = vehicle.coordinate;
-                    if (coordinate.latitude != 0 || coordinate.longitude != 0) {
-                        MKMapPoint point = MKMapPointForCoordinate(coordinate);
-                        if (first) {
-                            rect.origin = point;
-                            rect.size.height = 0;
-                            rect.size.width = 0;
-                            first = false;
-                        }
-                        
-                        if (point.x < rect.origin.x) {
-                            rect.size.width += rect.origin.x - point.x;
-                            rect.origin.x = point.x;
-                        }
-                        if (point.x > rect.origin.x + rect.size.width) {
-                            rect.size.width += point.x - rect.origin.x;
-                        }
-                        if (point.y < rect.origin.y) {
-                            rect.size.height += rect.origin.y - point.y;
-                            rect.origin.y = point.y;
-                        }
-                        if (point.y > rect.origin.y + rect.size.height) {
-                            rect.size.height += point.y - rect.origin.y;
-                        }
-                    }
-                }
-                
-                rect.origin.x -= rect.size.width/10.0;
-                rect.origin.y -= rect.size.height/10.0;
-                rect.size.width *= 1.2;
-                rect.size.height *= 1.2;
-                
-                [self.mapView setVisibleMapRect:rect animated:YES];
-                break;
-            }
-        }
-    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
