@@ -12,10 +12,16 @@
 #import "Vehicle+Create.h"
 #import "MapVC.h"
 
+#undef BACKGROUND_CONNECT
+
 @interface AppDelegate()
+
+#ifdef BACKGROUND_CONNECT
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
+#endif
+
 @property (strong, nonatomic) StatelessThread *mqttThread;
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
@@ -87,10 +93,11 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#ifdef BACKGROUND_CONNECT
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.completionHandler = nil;
+#endif
     self.kiosk = @(false);
-    
     return YES;
 }
 
@@ -104,6 +111,7 @@ size_t isutf8(unsigned char *str, size_t len)
     
     self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
     self.Broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
+
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings
@@ -125,24 +133,12 @@ size_t isutf8(unsigned char *str, size_t len)
     [self disconnect];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        if (self.backgroundTask) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-            self.backgroundTask = UIBackgroundTaskInvalid;
-        }
-    }];
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    //
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [self connect];
+    if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        [navigationController popToRootViewControllerAnimated:false];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -582,14 +578,23 @@ size_t isutf8(unsigned char *str, size_t len)
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+#ifdef BACKGROUND_CONNECT
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        if (self.backgroundTask) {
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+            self.backgroundTask = UIBackgroundTaskInvalid;
+        }
+    }];
+}
+
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     self.completionHandler = completionHandler;
     [self connect];
     [self startBackgroundTimer];
 }
-
-#pragma actions
 
 - (void)startBackgroundTimer
 {
@@ -616,4 +621,6 @@ size_t isutf8(unsigned char *str, size_t len)
         self.completionHandler = nil;
     }
 }
+#endif
+
 @end
