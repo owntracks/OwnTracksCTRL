@@ -56,7 +56,6 @@
         if ([object valueForKey:keyPath]) {
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
                 if (self.firststart) {
-                    self.firststart = false;
                     [self lookup:nil];
                 }
             }
@@ -93,6 +92,7 @@
 }
 
 - (IBAction)lookup:(UIButton *)sender {
+    self.firststart = false;
     if (self.urlConnection) {
         [self.urlConnection cancel];
     }
