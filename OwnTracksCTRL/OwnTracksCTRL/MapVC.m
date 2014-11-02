@@ -29,6 +29,7 @@
 @property (strong, nonatomic) Vehicle *vehicleToGet;
 @property (strong, nonatomic) NSMutableData *dataToGet;
 @property (strong, nonatomic) NSTimer *timer;
+@property (nonatomic) MKMapRect lastMapRect;
 @end
 
 #define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
@@ -45,6 +46,7 @@ static MapVC *theMapVC;
 - (void)loadView {
     [super loadView];
     theMapVC = self;
+    self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
 }
 
 + (void)centerOn:(Vehicle *)vehicle {
@@ -277,39 +279,45 @@ static MapVC *theMapVC;
 }
 
 - (IBAction)zoomPressed:(UIBarButtonItem *)sender {
-    MKMapRect rect;
-    BOOL first = TRUE;
-    
-    for (Vehicle *vehicle in [self.mapView annotations])
-    {
-        CLLocationCoordinate2D coordinate = vehicle.coordinate;
-        if (coordinate.latitude != 0 || coordinate.longitude != 0) {
-            MKMapPoint point = MKMapPointForCoordinate(coordinate);
-            if (first) {
-                rect.origin = point;
-                rect.size.height = 0;
-                rect.size.width = 0;
-                first = false;
-            }
-            
-            if (point.x < rect.origin.x) {
-                rect.size.width += rect.origin.x - point.x;
-                rect.origin.x = point.x;
-            }
-            if (point.x > rect.origin.x + rect.size.width) {
-                rect.size.width = point.x - rect.origin.x;
-            }
-            if (point.y < rect.origin.y) {
-                rect.size.height += rect.origin.y - point.y;
-                rect.origin.y = point.y;
-            }
-            if (point.y > rect.origin.y + rect.size.height) {
-                rect.size.height = point.y - rect.origin.y;
+    if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
+        MKMapRect rect;
+        BOOL first = TRUE;
+        
+        for (Vehicle *vehicle in [self.mapView annotations])
+        {
+            CLLocationCoordinate2D coordinate = vehicle.coordinate;
+            if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                if (first) {
+                    rect.origin = point;
+                    rect.size.height = 0;
+                    rect.size.width = 0;
+                    first = false;
+                }
+                
+                if (point.x < rect.origin.x) {
+                    rect.size.width += rect.origin.x - point.x;
+                    rect.origin.x = point.x;
+                }
+                if (point.x > rect.origin.x + rect.size.width) {
+                    rect.size.width = point.x - rect.origin.x;
+                }
+                if (point.y < rect.origin.y) {
+                    rect.size.height += rect.origin.y - point.y;
+                    rect.origin.y = point.y;
+                }
+                if (point.y > rect.origin.y + rect.size.height) {
+                    rect.size.height = point.y - rect.origin.y;
+                }
             }
         }
+        
+        self.lastMapRect = self.mapView.visibleMapRect;
+        [self.mapView setVisibleMapRect:rect edgePadding:INSET animated:TRUE];
+    } else {
+        [self.mapView setVisibleMapRect:self.lastMapRect animated:TRUE];
+        self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
     }
-    
-    [self.mapView setVisibleMapRect:rect edgePadding:INSET animated:TRUE];
 }
 
 - (IBAction)ConnectionPressed:(UIBarButtonItem *)sender {
@@ -374,21 +382,29 @@ static MapVC *theMapVC;
 
 - (IBAction)TidPressed:(UIBarButtonItem *)sender {
     if ([[self.mapView selectedAnnotations] count]) {
-        Vehicle *vehicle = (Vehicle *)[self.mapView selectedAnnotations][0];
-        if ([vehicle.showtrack boolValue]) {
-            MKMapRect mapRect = [vehicle boundingMapRect];
-            [self.mapView setVisibleMapRect:mapRect edgePadding:INSET animated:TRUE];
-        } else {
-            CLLocationCoordinate2D coordinate = vehicle.coordinate;
-            if (coordinate.latitude != 0 || coordinate.longitude != 0) {
-                MKMapPoint point = MKMapPointForCoordinate(coordinate);
-                MKMapRect mapRect;
-                mapRect.origin = point;
-                mapRect.size.height = 1;
-                mapRect.size.width = 1;
-                [self.mapView setVisibleMapRect:mapRect animated:YES];
+        if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
+            Vehicle *vehicle = (Vehicle *)[self.mapView selectedAnnotations][0];
+            if ([vehicle.showtrack boolValue]) {
+                MKMapRect mapRect = [vehicle boundingMapRect];
+                self.lastMapRect = self.mapView.visibleMapRect;
+                [self.mapView setVisibleMapRect:mapRect edgePadding:INSET animated:TRUE];
+            } else {
+                CLLocationCoordinate2D coordinate = vehicle.coordinate;
+                if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                    MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                    MKMapRect mapRect;
+                    mapRect.origin = point;
+                    mapRect.size.height = 1;
+                    mapRect.size.width = 1;
+                    self.lastMapRect = self.mapView.visibleMapRect;
+                    [self.mapView setVisibleMapRect:mapRect animated:YES];
+                }
             }
+        } else {
+            [self.mapView setVisibleMapRect:self.lastMapRect animated:TRUE];
+            self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
         }
+        
     }
 }
 
@@ -400,7 +416,7 @@ static MapVC *theMapVC;
     } else {
         delegate.kiosk = @(true);
     }
-
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
