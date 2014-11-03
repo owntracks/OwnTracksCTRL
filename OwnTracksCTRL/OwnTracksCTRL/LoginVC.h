@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface LoginVC : UIViewController
-
-
+- (void)automaticStart;
 @end

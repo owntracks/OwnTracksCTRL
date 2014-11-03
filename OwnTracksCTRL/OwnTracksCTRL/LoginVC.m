@@ -18,7 +18,7 @@
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) NSMutableData *receivedData;
 
-@property (nonatomic) BOOL firststart;
+@property (nonatomic) BOOL autostart;
 
 @end
 
@@ -26,8 +26,11 @@
 
 - (void)loadView {
     [super loadView];
-    self.firststart = true;
-    
+    self.autostart = true;
+}
+
+- (void)automaticStart {
+    self.autostart = true;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -55,7 +58,7 @@
     if ([keyPath isEqualToString:@"token"]) {
         if ([object valueForKey:keyPath]) {
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-                if (self.firststart) {
+                if (self.autostart) {
                     [self lookup:nil];
                 }
             }
@@ -92,7 +95,7 @@
 }
 
 - (IBAction)lookup:(UIButton *)sender {
-    self.firststart = false;
+    self.autostart = false;
     if (self.urlConnection) {
         [self.urlConnection cancel];
     }
@@ -199,7 +202,7 @@
 
 - (IBAction)direct:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
-        [self performSegueWithIdentifier:@"Login" sender:nil];
+        [self performSegueWithIdentifier:@"Settings" sender:nil];
     }
 }
 

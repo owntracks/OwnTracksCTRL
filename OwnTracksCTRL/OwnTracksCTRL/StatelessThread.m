@@ -67,11 +67,12 @@
                                      && delegate.broker.certurl.length) > 0 ? @"Load Certificate" : nil;
 
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MQTT connection failed"
-                                                            message:[NSString stringWithFormat:@"%@://%@@%@:%d\n%@",
+                                                            message:[NSString stringWithFormat:@"%@://%@@%@:%d as %@\n%@",
                                                                      self.tls ? @"mqtts" : @"mqtt",
                                                                      self.user,
                                                                      self.host,
                                                                      self.port,
+                                                                     self.clientid,
                                                                      [self.error description]]
                                                            delegate:self
                                                   cancelButtonTitle:nil

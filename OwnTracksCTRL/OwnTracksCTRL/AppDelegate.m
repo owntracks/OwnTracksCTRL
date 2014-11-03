@@ -11,6 +11,7 @@
 #import "StatefullThread.h"
 #import "Vehicle+Create.h"
 #import "MapVC.h"
+#import "LoginVC.h"
 
 #undef BACKGROUND_CONNECT
 
@@ -138,6 +139,9 @@ size_t isutf8(unsigned char *str, size_t len)
     if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
         [navigationController popToRootViewControllerAnimated:false];
+        if ([navigationController.topViewController respondsToSelector:@selector(automaticStart)]) {
+            [navigationController.topViewController performSelector:@selector(automaticStart) withObject:nil];
+        }
     }
 }
 
