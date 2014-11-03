@@ -154,8 +154,22 @@ size_t isutf8(unsigned char *str, size_t len)
     self.mqttThread.host = self.broker.host;
     self.mqttThread.port = [self.broker.port intValue];
     self.mqttThread.tls = [self.broker.tls boolValue];
-    self.mqttThread.user = (self.broker.user == nil || self.broker.user.length > 0) ? self.broker.user : nil;
-    self.mqttThread.passwd = (self.broker.user != nil && self.broker.passwd.length > 0) ? self.broker.passwd : nil;
+    
+    if ([self.broker.auth boolValue]) {
+        if (self.broker.user && self.broker.user.length > 0) {
+            self.mqttThread.user = self.broker.user;
+            if (self.broker.passwd && self.broker.passwd.length > 0) {
+                self.mqttThread.passwd = self.broker.passwd;
+            }
+        } else {
+            self.broker.user = nil;
+            self.broker.passwd = nil;
+        }
+    } else {
+        self.mqttThread.user = nil;
+        self.mqttThread.passwd = nil;
+    }
+    
     self.mqttThread.base = self.broker.base;
     self.mqttThread.clientid = self.broker.clientid;
     
@@ -169,8 +183,22 @@ size_t isutf8(unsigned char *str, size_t len)
     self.mqttPlusThread.host = self.broker.host;
     self.mqttPlusThread.port = [self.broker.port intValue];
     self.mqttPlusThread.tls = [self.broker.tls boolValue];
-    self.mqttPlusThread.user = (self.broker.user == nil || self.broker.user.length > 0) ? self.broker.user : nil;
-    self.mqttPlusThread.passwd = (self.broker.user != nil && self.broker.passwd.length > 0) ? self.broker.passwd : nil;
+
+    if ([self.broker.auth boolValue]) {
+        if (self.broker.user && self.broker.user.length > 0) {
+            self.mqttPlusThread.user = self.broker.user;
+            if (self.broker.passwd && self.broker.passwd.length > 0) {
+                self.mqttPlusThread.passwd = self.broker.passwd;
+            }
+        } else {
+            self.broker.user = nil;
+            self.broker.passwd = nil;
+        }
+    } else {
+        self.mqttPlusThread.user = nil;
+        self.mqttPlusThread.passwd = nil;
+    }
+    
     self.mqttPlusThread.base = self.broker.base;
     self.mqttPlusThread.clientid = self.broker.clientid;
     [self.mqttPlusThread start];

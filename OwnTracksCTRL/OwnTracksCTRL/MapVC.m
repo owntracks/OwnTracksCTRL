@@ -17,7 +17,6 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITracking;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
 @property (weak, nonatomic) IBOutlet UIToolbar *UIDetailView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UILabel;
@@ -145,18 +144,24 @@ static MapVC *theMapVC;
                               (long)[vehicle trackCount],
                               vehicle.info ? vehicle.info : @"-"];
         
-        if ([vehicle.showtrack boolValue]) {
-            if (vehicle.track) {
-                if (vehicle.track.length > 0) {
-                    self.UITrack.tintColor = COLOR_ON;
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (delegate.broker.trackurl && delegate.broker.trackurl.length > 0) {
+            self.UITrack.enabled = true;
+            if ([vehicle.showtrack boolValue]) {
+                if (vehicle.track) {
+                    if (vehicle.track.length > 0) {
+                        self.UITrack.tintColor = COLOR_ON;
+                    } else {
+                        self.UITrack.tintColor = COLOR_TRANSITION;
+                    }
                 } else {
-                    self.UITrack.tintColor = COLOR_TRANSITION;
+                    self.UITrack.tintColor = COLOR_ERR;
                 }
             } else {
-                self.UITrack.tintColor = COLOR_ERR;
+                self.UITrack.tintColor = COLOR_NEUTRAL;
             }
         } else {
-            self.UITrack.tintColor = COLOR_NEUTRAL;
+            self.UITrack.enabled = false;
         }
     }
 }

@@ -702,7 +702,6 @@
                         <outlet property="UILabel" destination="5D5-W7-q5m" id="Ekq-Ja-bSt"/>
                         <outlet property="UITid" destination="KED-uY-BIa" id="F3K-nY-jzk"/>
                         <outlet property="UITrack" destination="hUc-Jd-Pc9" id="hp7-R5-3tU"/>
-                        <outlet property="UITracking" destination="nq6-iC-Vl4" id="nRb-ef-bMU"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>
                         <segue destination="paQ-xc-KlE" kind="custom" identifier="showDetail:" customClass="MapPopOverSegue" id="daK-RE-GLj"/>
