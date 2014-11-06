@@ -106,7 +106,7 @@ size_t isutf8(unsigned char *str, size_t len)
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSDictionary *appDefaults = [NSDictionary
-                                 dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrld"];
+                                 dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
     

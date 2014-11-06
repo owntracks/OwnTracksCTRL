@@ -57,7 +57,8 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"token"]) {
         if ([object valueForKey:keyPath]) {
-            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive
+                || [UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
                 if (self.autostart) {
                     [self lookup:nil];
                 }
@@ -117,7 +118,8 @@
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
-    NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"ctrld"];
+    NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"ctrldurl"];
+    NSLog(@"urlString=%@", urlString);
     
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
