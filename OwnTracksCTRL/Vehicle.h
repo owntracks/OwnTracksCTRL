@@ -2,7 +2,7 @@
 //  Vehicle.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 27.10.14.
+//  Created by Christoph Krey on 11.11.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -20,7 +20,7 @@
 @property (nonatomic, retain) NSString * event;
 @property (nonatomic, retain) NSNumber * gpio1;
 @property (nonatomic, retain) NSNumber * gpio3;
-@property (nonatomic, retain) NSNumber * gpio4;
+@property (nonatomic, retain) NSNumber * gpio2;
 @property (nonatomic, retain) NSNumber * gpio5;
 @property (nonatomic, retain) NSNumber * gpio7;
 @property (nonatomic, retain) NSString * imei;

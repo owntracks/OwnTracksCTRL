@@ -2,7 +2,7 @@
 //  Vehicle.m
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 27.10.14.
+//  Created by Christoph Krey on 11.11.14.
 //  Copyright (c) 2014 OwnTracks. All rights reserved.
 //
 
@@ -19,7 +19,7 @@
 @dynamic event;
 @dynamic gpio1;
 @dynamic gpio3;
-@dynamic gpio4;
+@dynamic gpio2;
 @dynamic gpio5;
 @dynamic gpio7;
 @dynamic imei;

@@ -466,12 +466,13 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"gpio/3"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio3= @([gpio intValue]);
-                } else if ([subTopic isEqualToString:@"gpio/4"]) {
+                } else if ([subTopic isEqualToString:@"gpio/2"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
-                    vehicle.gpio4= @([gpio intValue]);
+                    vehicle.gpio2= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/5"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio5= @([gpio intValue]);
+                    NSLog(@"gpio5 is %@", vehicle.gpio5);
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio7= @([gpio intValue]);

@@ -41,6 +41,8 @@
     self.keysToObserve = @[
                            @"tst",
                            @"status",
+                           @"lon",
+                           @"lat",
                            @"vbatt",
                            @"vext",
                            @"info",
@@ -48,7 +50,7 @@
                            @"event",
                            @"gpio1",
                            @"gpio3",
-                           @"gpio4",
+                           @"gpio2",
                            @"gpio5",
                            @"gpio7",
                            @"cog",
@@ -87,11 +89,21 @@
     self.UIVbatt.text = [NSString stringWithFormat:@"%.1f V", [self.vehicle.vbatt doubleValue]];
     self.UIVext.text = [NSString stringWithFormat:@"%.1f V", [self.vehicle.vext doubleValue]];
     self.UIGPIO.text = @"";
-    if (self.vehicle.gpio1) self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"1 "];
-    if (self.vehicle.gpio3) self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"3 "];
-    if (self.vehicle.gpio4) self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"4 "];
-    if (self.vehicle.gpio5) self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"5 "];
-    if (self.vehicle.gpio7) self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"7 "];
+    if ([self.vehicle.gpio1 boolValue]) {
+        self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"1 "];
+    }
+    if ([self.vehicle.gpio3 boolValue]) {
+        self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"3 "];
+    }
+    if ([self.vehicle.gpio2 boolValue]) {
+        self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"2 "];
+    }
+    if ([self.vehicle.gpio5 boolValue]) {
+        self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"5 "];
+    }
+    if ([self.vehicle.gpio7 boolValue]) {
+        self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"7 "];
+    }
     switch ([self.vehicle.status intValue]) {
         case -1:
             self.UIStatus.text = @"off";
@@ -135,24 +147,26 @@
     
     
     // Location
-    self.UILocation.text = @"reverse geocoding...";
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.vehicle.lat doubleValue] longitude:[self.vehicle.lon doubleValue]];
-    [geocoder reverseGeocodeLocation:location completionHandler:
-     ^(NSArray *placemarks, NSError *error) {
-         if ([placemarks count] > 0) {
-             CLPlacemark *placemark = placemarks[0];
-             NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
-             if (address && [address count] >= 1) {
-                 self.UILocation.text = address[0];
-                 for (int i = 1; i < [address count]; i++) {
-                     self.UILocation.text = [NSString stringWithFormat:@"%@, %@",
-                                             self.UILocation.text, address[i]];
+    if (!keyPath || [keyPath isEqualToString:@"lat"] || [keyPath isEqualToString:@"lon"]) {
+        self.UILocation.text = @"reverse geocoding...";
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.vehicle.lat doubleValue] longitude:[self.vehicle.lon doubleValue]];
+        [geocoder reverseGeocodeLocation:location completionHandler:
+         ^(NSArray *placemarks, NSError *error) {
+             if ([placemarks count] > 0) {
+                 CLPlacemark *placemark = placemarks[0];
+                 NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
+                 if (address && [address count] >= 1) {
+                     self.UILocation.text = address[0];
+                     for (int i = 1; i < [address count]; i++) {
+                         self.UILocation.text = [NSString stringWithFormat:@"%@, %@",
+                                                 self.UILocation.text, address[i]];
+                     }
+                     [self.UILocation setNeedsDisplay];
                  }
-                 [self.UILocation setNeedsDisplay];
              }
-         }
-     }];
+         }];
+    }
 }
 
 @end

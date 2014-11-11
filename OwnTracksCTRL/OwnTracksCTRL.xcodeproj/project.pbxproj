@@ -31,10 +31,10 @@
 		843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA8E19CC11E10045AC81 /* Main.storyboard */; };
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
-		848E0FEE19FEA10E0058DA5D /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E0FED19FEA10E0058DA5D /* Vehicle.m */; };
 		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
 		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
 		84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84B36E5E1A02F71400AA51A4 /* Settings.bundle */; };
+		84BF773F1A12A96900841D20 /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BF773E1A12A96900841D20 /* Vehicle.m */; };
 		84E335B119FA752D009093E9 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E335B019FA752D009093E9 /* LoginVC.m */; };
 		84FD42E619FFAF8200EFB946 /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD42E519FFAF8200EFB946 /* Broker.m */; };
 /* End PBXBuildFile section */
@@ -92,8 +92,6 @@
 		848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
-		848E0FEC19FEA10E0058DA5D /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
-		848E0FED19FEA10E0058DA5D /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		848FBE4119F191200048E3CF /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
 		84B36E581A02ECBB00AA51A4 /* ConfD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfD.h; sourceTree = "<group>"; };
@@ -101,6 +99,9 @@
 		84B36E5B1A02EEDE00AA51A4 /* ConfD+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConfD+Create.h"; sourceTree = "<group>"; };
 		84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ConfD+Create.m"; sourceTree = "<group>"; };
 		84B36E5E1A02F71400AA51A4 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
+		84BF773D1A12A96900841D20 /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
+		84BF773E1A12A96900841D20 /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		84E335AF19FA752D009093E9 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		84E335B019FA752D009093E9 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		84E335B219FC0968009093E9 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -134,6 +135,8 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
+				84BF773D1A12A96900841D20 /* Vehicle.h */,
+				84BF773E1A12A96900841D20 /* Vehicle.m */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CFA6119CC0CE00045AC81 /* MQTTClient.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
@@ -194,8 +197,6 @@
 				84B36E591A02ECBB00AA51A4 /* ConfD.m */,
 				84FD42E419FFAF8200EFB946 /* Broker.h */,
 				84FD42E519FFAF8200EFB946 /* Broker.m */,
-				848E0FEC19FEA10E0058DA5D /* Vehicle.h */,
-				848E0FED19FEA10E0058DA5D /* Vehicle.m */,
 			);
 			path = OwnTracksCTRL;
 			sourceTree = "<group>";
@@ -338,9 +339,9 @@
 			files = (
 				843CFA8D19CC11D20045AC81 /* Broker+Create.m in Sources */,
 				843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */,
+				84BF773F1A12A96900841D20 /* Vehicle.m in Sources */,
 				843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */,
 				843CFA8419CC11BC0045AC81 /* MapVC.m in Sources */,
-				848E0FEE19FEA10E0058DA5D /* Vehicle.m in Sources */,
 				843CFA8519CC11BC0045AC81 /* VehicleVC.m in Sources */,
 				843CFA8619CC11BC0045AC81 /* AppDelegate.m in Sources */,
 				84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */,
@@ -563,6 +564,7 @@
 		843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */,
 				84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */,
 				84FD42E319FFAF4A00EFB946 /* Model 7.xcdatamodel */,
 				848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */,
@@ -572,7 +574,7 @@
 				848FBE4119F191200048E3CF /* Model 2.xcdatamodel */,
 				843CFA6419CC0D390045AC81 /* Model.xcdatamodel */,
 			);
-			currentVersion = 84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */;
+			currentVersion = 84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
