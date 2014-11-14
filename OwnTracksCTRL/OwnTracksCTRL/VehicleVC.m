@@ -106,14 +106,14 @@
     }
     switch ([self.vehicle.status intValue]) {
         case -1:
-            self.UIStatus.text = @"off";
+            self.UIStatus.text = @"☒ off";
             break;
         case 1:
-            self.UIStatus.text = @"on";
+            self.UIStatus.text = @"☑︎ on";
             break;
         case 0:
         default:
-            self.UIStatus.text = @"???";
+            self.UIStatus.text = @"∅ disconnected";
             break;
             
     }

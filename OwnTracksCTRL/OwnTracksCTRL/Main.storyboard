@@ -237,7 +237,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Off" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yJS-bD-fwG">
-                                                    <rect key="frame" x="133" y="21" width="54" height="21"/>
+                                                    <rect key="frame" x="133" y="21" width="171" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -579,7 +579,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1WJ-5o-KXC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="222" y="-171"/>
+            <point key="canvasLocation" x="222" y="-173"/>
         </scene>
         <!--OwnTracksCTRL - Map-->
         <scene sceneID="YQJ-O2-RU4">
