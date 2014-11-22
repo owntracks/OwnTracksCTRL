@@ -134,13 +134,19 @@ static MapVC *theMapVC;
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
         self.UITid.title = vehicle.tid;
+        
         NSTimeInterval age = -[vehicle.tst timeIntervalSinceNow];
+        int days = age / (24*60*60);
+        int hours = fmod(age, 24*60*60) / (60*60);
+        int minutes = fmod(age , (24*60)) / 60;
+        int seconds = fmod(age, 60);
+        
         self.UILabel.title = [NSString stringWithFormat:@"T=%.0fkm, A=%@%@%@%@, n=%ld, I=%@",
                               [vehicle.trip doubleValue] / 1000,
-                              age > 24*60*60 ? [NSString stringWithFormat:@"%0.f:", age / (24*60*60)]: @"",
-                              age > 60*60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / (60*60), 24)]: @"",
-                              age > 60 ? [NSString stringWithFormat:@"%0.f:", fmod(age / 60, 60)]: @"",
-                              [NSString stringWithFormat:@"%0.fs", fmod(age, 60)],
+                              days > 0 ? [NSString stringWithFormat:@"%d:", days]: @"",
+                              hours > 0 ? [NSString stringWithFormat:@"%d:", hours]: @"",
+                              minutes > 0 ? [NSString stringWithFormat:@"%d:", minutes]: @"",
+                              [NSString stringWithFormat:@"%ds", seconds],
                               (long)[vehicle trackCount],
                               vehicle.info ? vehicle.info : @"-"];
         
