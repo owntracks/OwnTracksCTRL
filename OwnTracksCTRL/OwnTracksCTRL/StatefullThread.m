@@ -18,7 +18,7 @@
 - (void)main {
     NSLog(@"StatefullThread");
     
-    self.mqttSession = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"%@-plus", self.clientid]
+    self.mqttSession = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"%@Z", self.clientid]
                                                     userName:self.user
                                                     password:self.passwd
                                                    keepAlive:60

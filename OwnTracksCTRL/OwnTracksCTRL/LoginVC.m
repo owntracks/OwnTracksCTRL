@@ -109,10 +109,16 @@
         tokenPost = [NSString stringWithFormat:@"&token=%@", delegate.token];
     }
     
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@",
+    NSUUID *uuid = [[UIDevice currentDevice] identifierForVendor];
+    
+    NSString *uuidString = [uuid.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSLog(@"uuidString=%@", uuidString);
+    
+    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@&clientid=%@",
                       delegate.confD.user,
                       delegate.confD.passwd,
-                      tokenPost];
+                      tokenPost,
+                      uuidString];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
