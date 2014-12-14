@@ -8,15 +8,19 @@
 
 #import "TrackTVC.h"
 
-@interface NSString (Descend)
-- (NSComparisonResult)descendingLocalizedCompare:(NSString *)aString;
+@interface NSDate (Descend)
+- (NSComparisonResult)descendingCompare:(NSDate *)aDate;
 @end
 
-@implementation NSString (Descend)
-
-
-- (NSComparisonResult)descendingLocalizedCompare:(NSString *)aString {
-    return [self localizedCaseInsensitiveCompare:aString] * -1;
+@implementation NSDate (Descend)
+- (NSComparisonResult)descendingCompare:(NSDate *)aDate {
+    if ([self timeIntervalSince1970] == [aDate timeIntervalSince1970]) {
+        return NSOrderedSame;
+    } else if ([self timeIntervalSince1970] < [aDate timeIntervalSince1970]) {
+        return NSOrderedDescending;
+    } else {
+        return NSOrderedAscending;
+    }
 }
 @end
 
@@ -41,15 +45,21 @@
                 NSMutableDictionary *tracks = [[NSMutableDictionary alloc] init];
                 for (NSDictionary *trackpoint in track) {
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[trackpoint[@"tst"] doubleValue]];
-                    NSString *dateString = [NSDateFormatter localizedStringFromDate:date
-                                                                          dateStyle:NSDateFormatterShortStyle
-                                                                          timeStyle:NSDateFormatterNoStyle];
-                    NSMutableArray *dateTrack = [tracks[dateString] mutableCopy];
+                    
+                    // build day = date @ 00:00:00,0 hours
+                    NSDateComponents *components = [[NSCalendar currentCalendar] componentsInTimeZone:[NSTimeZone defaultTimeZone] fromDate:date];
+                    components.hour = 0;
+                    components.minute = 0;
+                    components.second = 0;
+                    components.nanosecond = 0;
+                    NSDate *day = [components date];
+                    
+                    NSMutableArray *dateTrack = [tracks[day] mutableCopy];
                     if (!dateTrack) {
                         dateTrack = [[NSMutableArray alloc] init];
                     }
                     [dateTrack addObject:trackpoint];
-                    tracks[dateString] = dateTrack;
+                    tracks[day] = dateTrack;
                 }
                 self.tracks = tracks;
             }
@@ -67,8 +77,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.tracks && self.tracks.count > section) {
-        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingLocalizedCompare:)];
-        return sortedKeys[section];
+        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingCompare:)];
+        NSDate *date = sortedKeys[section];
+        return [NSDateFormatter localizedStringFromDate:date
+                                              dateStyle:NSDateFormatterShortStyle
+                                              timeStyle:NSDateFormatterNoStyle];
     } else {
         return nil;
     }
@@ -76,8 +89,12 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     if (self.tracks) {
-        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingLocalizedCompare:)];
-        return sortedKeys;
+        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingCompare:)];
+        NSMutableArray *indices = [[NSMutableArray alloc] init];
+        for (NSDate *date in sortedKeys) {
+            [indices addObject:[NSString stringWithFormat:@"%ld", (long)[[NSCalendar currentCalendar] component:NSCalendarUnitDay fromDate:date]]];
+        }
+        return indices;
     } else {
         return nil;
     }
@@ -90,7 +107,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (self.tracks && self.tracks.count > section) {
-        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingLocalizedCompare:)];
+        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingCompare:)];
         NSArray *track = self.tracks[sortedKeys[section]];
         return track.count;
     } else {
@@ -118,7 +135,7 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath highlight:(BOOL)highlight
 {
     if (self.tracks && self.tracks.count > indexPath.section) {
-        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingLocalizedCompare:)];
+        NSArray *sortedKeys = [self.tracks.allKeys sortedArrayUsingSelector:@selector(descendingCompare:)];
         NSArray *track = self.tracks[sortedKeys[indexPath.section]];
         if (track.count > indexPath.row) {
             NSDictionary *trackpoint = track[indexPath.row];
