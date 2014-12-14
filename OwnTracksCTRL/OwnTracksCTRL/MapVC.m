@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITrack;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UITid;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIInfo;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIOrganize;
 
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) Vehicle *vehicleToGet;
@@ -134,6 +135,8 @@ static MapVC *theMapVC;
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
         self.UITid.title = vehicle.tid;
+        
+        self.UIOrganize.enabled = (vehicle.track != nil);
         
         NSTimeInterval age = -[vehicle.tst timeIntervalSinceNow];
         int days = age / (24*60*60);
@@ -354,21 +357,35 @@ static MapVC *theMapVC;
         }
     }
 }
+- (IBAction)organizePressed:(UIBarButtonItem *)sender {
+    if ([self.mapView.selectedAnnotations count] > 0) {
+        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self performSegueWithIdentifier:@"showTrack:" sender:vehicle];
+        } else {
+            [self performSegueWithIdentifier:@"showTrackPush:" sender:vehicle];
+        }
+    }
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showDetail:"]) {
+    if ([segue.identifier isEqualToString:@"showDetail:"] || [segue.identifier isEqualToString:@"showTrack:"]) {
         if ([segue isKindOfClass:[MapPopOverSegue class]]) {
             MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
             mapPopOverSegue.view = self.mapView;
-            mapPopOverSegue.item = self.UIInfo;
             if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
                 [segue.destinationViewController performSelector:@selector(setVehicle:)
                                                       withObject:sender];
             }
+            if ([segue.identifier isEqualToString:@"showDetail:"]) {
+                mapPopOverSegue.item = self.UIInfo;
+            } else {
+                mapPopOverSegue.item = self.UIOrganize;
+            }
         }
     }
-    if ([segue.identifier isEqualToString:@"showDetailPush:"]) {
+    if ([segue.identifier isEqualToString:@"showDetailPush:"] || [segue.identifier isEqualToString:@"showTrackPush:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
             [segue.destinationViewController performSelector:@selector(setVehicle:)
                                                   withObject:sender];

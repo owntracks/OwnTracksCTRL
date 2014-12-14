@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -655,6 +655,11 @@
                                             <action selector="TrackPressed:" destination="Asq-I3-XLI" id="wfc-Sr-C5O"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem systemItem="organize" id="2F2-yC-CAb">
+                                        <connections>
+                                            <action selector="organizePressed:" destination="Asq-I3-XLI" id="N40-Ba-kBx"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem image="Info" id="we3-c9-Mn5">
                                         <connections>
                                             <action selector="InfoPressed:" destination="Asq-I3-XLI" id="4ak-Q0-fXH"/>
@@ -687,16 +692,61 @@
                         <outlet property="UIInfo" destination="we3-c9-Mn5" id="S9e-TP-D1t"/>
                         <outlet property="UIKiosk" destination="Mcd-8r-Cxc" id="amx-ar-6t6"/>
                         <outlet property="UILabel" destination="5D5-W7-q5m" id="Ekq-Ja-bSt"/>
+                        <outlet property="UIOrganize" destination="2F2-yC-CAb" id="cvt-P2-AWj"/>
                         <outlet property="UITid" destination="KED-uY-BIa" id="F3K-nY-jzk"/>
                         <outlet property="UITrack" destination="hUc-Jd-Pc9" id="hp7-R5-3tU"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>
                         <segue destination="paQ-xc-KlE" kind="custom" identifier="showDetail:" customClass="MapPopOverSegue" id="daK-RE-GLj"/>
+                        <segue destination="YY6-iD-sI7" kind="push" identifier="showTrackPush:" id="xzF-i0-RTQ"/>
+                        <segue destination="YY6-iD-sI7" kind="custom" identifier="showTrack:" customClass="MapPopOverSegue" id="biV-Nf-ryJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mWV-Tb-Tua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-714" y="-166"/>
+            <point key="canvasLocation" x="-662" y="-146"/>
+        </scene>
+        <!--Track - TID-->
+        <scene sceneID="yRn-se-bWL">
+            <objects>
+                <tableViewController id="YY6-iD-sI7" customClass="TrackTVC" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="G4V-Mk-8pR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="track" textLabel="git-AV-Mfh" detailTextLabel="gvZ-vn-jl7" style="IBUITableViewCellStyleSubtitle" id="sro-7z-etW">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sro-7z-etW" id="59w-nW-4F0">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="git-AV-Mfh">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gvZ-vn-jl7">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YY6-iD-sI7" id="YNu-eu-Q7S"/>
+                            <outlet property="delegate" destination="YY6-iD-sI7" id="qZt-T8-i1V"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Track - TID" id="4jV-jh-o5y"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JcI-9y-411" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-682" y="628"/>
         </scene>
         <!--OwnTracksCTRL- Settings-->
         <scene sceneID="rm0-nB-eko">
@@ -1111,6 +1161,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jkL-3U-NMX"/>
+        <segue reference="biV-Nf-ryJ"/>
+        <segue reference="daK-RE-GLj"/>
     </inferredMetricsTieBreakers>
 </document>
