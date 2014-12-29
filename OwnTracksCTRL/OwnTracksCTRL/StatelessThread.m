@@ -59,21 +59,26 @@
         [self.mqttSession unsubscribeTopics:topicFilters];
         [self.mqttSession close];
     } else {
-        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        NSString *loadButtonTitle = ([self.error.domain isEqualToString:NSOSStatusErrorDomain] &&
-                                     self.error.code == errSSLXCertChainInvalid &&
-                                     self.tls &&
-                                     delegate.broker.certurl
-                                     && delegate.broker.certurl.length) > 0 ? @"Load Certificate" : nil;
-
+        NSString *loadButtonTitle = nil;
+        NSString *errorMessage = [NSString stringWithFormat:@"%@://%@@%@:%d as %@\n%@",
+                                  self.tls ? @"mqtts" : @"mqtt",
+                                  self.user,
+                                  self.host,
+                                  self.port,
+                                  self.clientid,
+                                  [self.error description]];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if ([self.error.domain isEqualToString:NSOSStatusErrorDomain] &&
+            self.error.code == errSSLXCertChainInvalid &&
+            self.tls &&
+            appDelegate.broker.certurl &&
+            appDelegate.broker.certurl.length > 0) {
+            loadButtonTitle = @"Load Certificate";
+            errorMessage = @"OwnTracks uses a TLS encrypted server connection to protect your privacy. Please load, check and install the server's certificate";
+        }
+        
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MQTT connection failed"
-                                                            message:[NSString stringWithFormat:@"%@://%@@%@:%d as %@\n%@",
-                                                                     self.tls ? @"mqtts" : @"mqtt",
-                                                                     self.user,
-                                                                     self.host,
-                                                                     self.port,
-                                                                     self.clientid,
-                                                                     [self.error description]]
+                                                            message:errorMessage
                                                            delegate:self
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"OK", loadButtonTitle, nil];
