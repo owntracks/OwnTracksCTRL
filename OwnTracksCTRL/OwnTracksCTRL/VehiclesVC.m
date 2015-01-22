@@ -13,12 +13,16 @@
 #import "AppDelegate.h"
 #import "VehicleVC.h"
 
+#import "DDLog.h"
+
 @interface VehiclesVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
 @implementation VehiclesVC
+
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -59,7 +63,7 @@
         
         NSError *error = nil;
         if (![context save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"context save: %@", error);
             abort();
         }
     }   
@@ -125,7 +129,7 @@
     
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DDLogError(@"fetchedResultsController performFetch: %@", error);
 	    abort();
 	}
     

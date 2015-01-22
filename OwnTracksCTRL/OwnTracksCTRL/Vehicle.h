@@ -2,8 +2,8 @@
 //  Vehicle.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 11.11.14.
-//  Copyright (c) 2014 OwnTracks. All rights reserved.
+//  Created by Christoph Krey on 20.01.15.
+//  Copyright (c) 2015 OwnTracks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -19,8 +19,8 @@
 @property (nonatomic, retain) NSNumber * dist;
 @property (nonatomic, retain) NSString * event;
 @property (nonatomic, retain) NSNumber * gpio1;
-@property (nonatomic, retain) NSNumber * gpio3;
 @property (nonatomic, retain) NSNumber * gpio2;
+@property (nonatomic, retain) NSNumber * gpio3;
 @property (nonatomic, retain) NSNumber * gpio5;
 @property (nonatomic, retain) NSNumber * gpio7;
 @property (nonatomic, retain) NSString * imei;
@@ -41,5 +41,7 @@
 @property (nonatomic, retain) NSNumber * vel;
 @property (nonatomic, retain) NSString * version;
 @property (nonatomic, retain) NSNumber * vext;
+@property (nonatomic, retain) NSNumber * temp0;
+@property (nonatomic, retain) NSNumber * temp1;
 
 @end

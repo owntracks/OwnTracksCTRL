@@ -14,7 +14,6 @@
 		843CF9D119CC0BD50045AC81 /* OwnTracksCTRLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9D019CC0BD50045AC81 /* OwnTracksCTRLTests.m */; };
 		843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DA19CC0C7D0045AC81 /* CoreData.framework */; };
 		843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DC19CC0C8B0045AC81 /* MapKit.framework */; };
-		843CFA6219CC0CE00045AC81 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA6119CC0CE00045AC81 /* MQTTClient.framework */; };
 		843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */; };
 		843CFA6819CC0D7B0045AC81 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA6619CC0D7B0045AC81 /* iTunesArtwork.png */; };
 		843CFA6919CC0D7B0045AC81 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA6719CC0D7B0045AC81 /* iTunesArtwork@2x.png */; };
@@ -35,9 +34,10 @@
 		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
 		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
 		84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84B36E5E1A02F71400AA51A4 /* Settings.bundle */; };
-		84BF773F1A12A96900841D20 /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BF773E1A12A96900841D20 /* Vehicle.m */; };
+		84E199F31A6EB52100AC5DDB /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E199F21A6EB52100AC5DDB /* Vehicle.m */; };
 		84E335B119FA752D009093E9 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E335B019FA752D009093E9 /* LoginVC.m */; };
 		84FD42E619FFAF8200EFB946 /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD42E519FFAF8200EFB946 /* Broker.m */; };
+		B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C9935AABD4F62FB17C485E /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +62,6 @@
 		843CF9D019CC0BD50045AC81 /* OwnTracksCTRLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksCTRLTests.m; sourceTree = "<group>"; };
 		843CF9DA19CC0C7D0045AC81 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		843CF9DC19CC0C8B0045AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		843CFA6119CC0CE00045AC81 /* MQTTClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTClient.framework; path = "../../MQTT-Client-Framework/MQTTClient/dist/MQTTClient.framework"; sourceTree = "<group>"; };
 		843CFA6419CC0D390045AC81 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		843CFA6619CC0D7B0045AC81 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		843CFA6719CC0D7B0045AC81 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
@@ -103,14 +102,18 @@
 		84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ConfD+Create.m"; sourceTree = "<group>"; };
 		84B36E5E1A02F71400AA51A4 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
-		84BF773D1A12A96900841D20 /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
-		84BF773E1A12A96900841D20 /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
+		84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 1.1.xcdatamodel"; sourceTree = "<group>"; };
+		84E199F11A6EB52100AC5DDB /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
+		84E199F21A6EB52100AC5DDB /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		84E335AF19FA752D009093E9 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		84E335B019FA752D009093E9 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		84E335B219FC0968009093E9 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		84FD42E319FFAF4A00EFB946 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
 		84FD42E419FFAF8200EFB946 /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Broker.h; sourceTree = "<group>"; };
 		84FD42E519FFAF8200EFB946 /* Broker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Broker.m; sourceTree = "<group>"; };
+		A2F709EFFC2CA5F7CFED78FB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		A8C9935AABD4F62FB17C485E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B42DB93961ECBD6406F1E231 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,9 +122,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */,
-				843CFA6219CC0CE00045AC81 /* MQTTClient.framework in Frameworks */,
 				843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */,
 				843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */,
+				B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,18 +138,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		68C628024C478AF253146346 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A8C9935AABD4F62FB17C485E /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
-				84BF773D1A12A96900841D20 /* Vehicle.h */,
-				84BF773E1A12A96900841D20 /* Vehicle.m */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
-				843CFA6119CC0CE00045AC81 /* MQTTClient.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
 				843CF9DA19CC0C7D0045AC81 /* CoreData.framework */,
 				843CF9B019CC0BD00045AC81 /* OwnTracksCTRL */,
 				843CF9CD19CC0BD40045AC81 /* OwnTracksCTRLTests */,
 				843CF9AF19CC0BCF0045AC81 /* Products */,
+				ACCEB7B5FCD437E30087DDA4 /* Pods */,
+				68C628024C478AF253146346 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,6 +208,8 @@
 				843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */,
 				843CF9B119CC0BD00045AC81 /* Supporting Files */,
 				843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */,
+				84E199F11A6EB52100AC5DDB /* Vehicle.h */,
+				84E199F21A6EB52100AC5DDB /* Vehicle.m */,
 				84B36E581A02ECBB00AA51A4 /* ConfD.h */,
 				84B36E591A02ECBB00AA51A4 /* ConfD.m */,
 				84FD42E419FFAF8200EFB946 /* Broker.h */,
@@ -233,6 +245,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		ACCEB7B5FCD437E30087DDA4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B42DB93961ECBD6406F1E231 /* Pods.debug.xcconfig */,
+				A2F709EFFC2CA5F7CFED78FB /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -240,9 +261,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 843CF9D419CC0BD50045AC81 /* Build configuration list for PBXNativeTarget "OwnTracksCTRL" */;
 			buildPhases = (
+				2F97DDB0B844A7CEDD703D94 /* Check Pods Manifest.lock */,
 				843CF9AA19CC0BCF0045AC81 /* Sources */,
 				843CF9AB19CC0BCF0045AC81 /* Frameworks */,
 				843CF9AC19CC0BCF0045AC81 /* Resources */,
+				494EE9D219A5AD4885F1D28E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -337,6 +360,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2F97DDB0B844A7CEDD703D94 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		494EE9D219A5AD4885F1D28E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		843CF9AA19CC0BCF0045AC81 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -344,10 +400,10 @@
 			files = (
 				843CFA8D19CC11D20045AC81 /* Broker+Create.m in Sources */,
 				843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */,
-				84BF773F1A12A96900841D20 /* Vehicle.m in Sources */,
 				843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */,
 				843CFA8419CC11BC0045AC81 /* MapVC.m in Sources */,
 				843CFA8519CC11BC0045AC81 /* VehicleVC.m in Sources */,
+				84E199F31A6EB52100AC5DDB /* Vehicle.m in Sources */,
 				843CFA8619CC11BC0045AC81 /* AppDelegate.m in Sources */,
 				84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */,
 				84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */,
@@ -474,6 +530,7 @@
 		};
 		843CF9D519CC0BD50045AC81 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B42DB93961ECBD6406F1E231 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -488,6 +545,7 @@
 		};
 		843CF9D619CC0BD50045AC81 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2F709EFFC2CA5F7CFED78FB /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -570,6 +628,7 @@
 		843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */,
 				84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */,
 				84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */,
 				84FD42E319FFAF4A00EFB946 /* Model 7.xcdatamodel */,
@@ -580,7 +639,7 @@
 				848FBE4119F191200048E3CF /* Model 2.xcdatamodel */,
 				843CFA6419CC0D390045AC81 /* Model.xcdatamodel */,
 			);
-			currentVersion = 84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */;
+			currentVersion = 84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

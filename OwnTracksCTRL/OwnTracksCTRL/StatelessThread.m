@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
+#import "DDLog.h"
+
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
 @property (nonatomic, strong, readwrite) NSString *connectedTo;
@@ -19,8 +21,10 @@
 
 @implementation StatelessThread
 
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+
 - (void)main {
-    NSLog(@"StatelessThread");
+    DDLogVerbose(@"StatelessThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:self.clientid
                                                     userName:self.user
@@ -87,7 +91,7 @@
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
-    NSLog(@"PUBLISH %@ %@", topic, data);
+    DDLogVerbose(@"PUBLISH %@ %@", topic, data);
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate performSelector:@selector(processMessage:)
                                   withObject:@{@"topic": topic, @"data": data}];

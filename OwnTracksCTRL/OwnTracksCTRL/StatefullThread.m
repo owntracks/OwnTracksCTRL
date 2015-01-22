@@ -9,14 +9,18 @@
 #import "StatefullThread.h"
 #import "AppDelegate.h"
 
+#import "DDLog.h"
+
 @interface StatefullThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
 @end
 
 @implementation StatefullThread
 
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+
 - (void)main {
-    NSLog(@"StatefullThread");
+    DDLogVerbose(@"StatefullThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"%@Z", self.clientid]
                                                     userName:self.user
@@ -56,7 +60,7 @@
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
-    NSLog(@"PUBLISH %@ %@", topic, data);
+    DDLogVerbose(@"PUBLISH %@ %@", topic, data);
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate performSelector:@selector(processMessage:)

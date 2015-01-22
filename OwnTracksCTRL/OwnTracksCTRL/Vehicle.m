@@ -2,8 +2,8 @@
 //  Vehicle.m
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 11.11.14.
-//  Copyright (c) 2014 OwnTracks. All rights reserved.
+//  Created by Christoph Krey on 20.01.15.
+//  Copyright (c) 2015 OwnTracks. All rights reserved.
 //
 
 #import "Vehicle.h"
@@ -18,8 +18,8 @@
 @dynamic dist;
 @dynamic event;
 @dynamic gpio1;
-@dynamic gpio3;
 @dynamic gpio2;
+@dynamic gpio3;
 @dynamic gpio5;
 @dynamic gpio7;
 @dynamic imei;
@@ -40,5 +40,7 @@
 @dynamic vel;
 @dynamic version;
 @dynamic vext;
+@dynamic temp0;
+@dynamic temp1;
 
 @end

@@ -1,0 +1,17 @@
+PODS:
+  - CocoaLumberjack (1.9.2):
+    - CocoaLumberjack/Extensions (= 1.9.2)
+  - CocoaLumberjack/Core (1.9.2)
+  - CocoaLumberjack/Extensions (1.9.2):
+    - CocoaLumberjack/Core
+  - MQTTClient (0.0.2)
+
+DEPENDENCIES:
+  - CocoaLumberjack
+  - MQTTClient
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  MQTTClient: 5d0a737c381ba5f57368eda11944a066cb927886
+
+COCOAPODS: 0.35.0

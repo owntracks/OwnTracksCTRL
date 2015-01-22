@@ -13,6 +13,8 @@
 #import "VehicleVC.h"
 #import "MapPopOverSegue.h"
 
+#import "DDLog.h"
+
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -42,6 +44,8 @@
 static MapVC *theMapVC;
 
 @implementation MapVC
+
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)loadView {
     [super loadView];
@@ -213,7 +217,7 @@ static MapVC *theMapVC;
     
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	    DDLogError(@"fetchedResultsController performFetch: %@", error);
 	    abort();
 	}
     

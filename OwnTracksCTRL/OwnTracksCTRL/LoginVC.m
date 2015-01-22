@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
+#import "DDLog.h"
+
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
 @property (weak, nonatomic) IBOutlet UITextField *UIpassword;
@@ -23,6 +25,8 @@
 @end
 
 @implementation LoginVC
+
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)loadView {
     [super loadView];
@@ -112,7 +116,7 @@
     NSUUID *uuid = [[UIDevice currentDevice] identifierForVendor];
     
     NSString *uuidString = [uuid.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    NSLog(@"uuidString=%@", uuidString);
+    DDLogVerbose(@"uuidString=%@", uuidString);
     
     NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@&clientid=%@",
                       delegate.confD.user,
@@ -125,7 +129,7 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
     NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"ctrldurl"];
-    NSLog(@"urlString=%@", urlString);
+    DDLogVerbose(@"urlString=%@", urlString);
     
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
@@ -138,7 +142,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSLog(@"NSURLResponse %@", response);
+    DDLogVerbose(@"NSURLResponse %@", response);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
 }
 
@@ -167,7 +171,7 @@
         dictionary = [NSJSONSerialization JSONObjectWithData:self.receivedData options:0 error:&error];
     }
     if (dictionary && [dictionary[@"_type"] isEqualToString:@"configuration"]) {
-        NSLog(@"configuration %@", dictionary);
+        DDLogVerbose(@"configuration %@", dictionary);
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         
         delegate.broker.host = [self stringFromJSON:dictionary key:@"host"];

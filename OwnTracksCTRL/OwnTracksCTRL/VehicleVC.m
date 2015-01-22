@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *UIVersion;
 @property (weak, nonatomic) IBOutlet UILabel *UIIMEI;
 @property (weak, nonatomic) IBOutlet UILabel *UITrigger;
+@property (weak, nonatomic) IBOutlet UILabel *UITemp1;
+@property (weak, nonatomic) IBOutlet UILabel *UITemp0;
 @property (strong, nonatomic) NSArray *keysToObserve;
 @end
 
@@ -48,6 +50,8 @@
                            @"info",
                            @"alarm",
                            @"event",
+                           @"temp0",
+                           @"temp1",
                            @"gpio1",
                            @"gpio3",
                            @"gpio2",
@@ -88,6 +92,10 @@
     
     self.UIVbatt.text = [NSString stringWithFormat:@"%.1f V", [self.vehicle.vbatt doubleValue]];
     self.UIVext.text = [NSString stringWithFormat:@"%.1f V", [self.vehicle.vext doubleValue]];
+
+    self.UITemp0.text = self.vehicle.temp0 ? [NSString stringWithFormat:@"%.2f °C", [self.vehicle.temp0 doubleValue]] : @"n/a";
+    self.UITemp1.text = self.vehicle.temp1 ? [NSString stringWithFormat:@"%.2f °C", [self.vehicle.temp1 doubleValue]] : @"n/a";
+
     self.UIGPIO.text = @"";
     if ([self.vehicle.gpio1 boolValue]) {
         self.UIGPIO.text = [self.UIGPIO.text stringByAppendingString:@"1 "];

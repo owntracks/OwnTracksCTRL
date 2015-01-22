@@ -1,9 +1,9 @@
 //
 //  OPAppDelegate.m
-//  OwnTracksGW
+//  OwnTracksCTRL
 //
 //  Created by Christoph Krey on 29.05.14.
-//  Copyright (c) 2014 christophkrey. All rights reserved.
+//  Copyright (c) 2014-2015 christophkrey. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -12,6 +12,9 @@
 #import "Vehicle+Create.h"
 #import "MapVC.h"
 #import "LoginVC.h"
+
+#import "DDLog.h"
+#import "DDTTYLogger.h"
 
 #undef BACKGROUND_CONNECT
 
@@ -92,6 +95,8 @@ size_t isutf8(unsigned char *str, size_t len)
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #ifdef BACKGROUND_CONNECT
@@ -105,6 +110,8 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
@@ -225,7 +232,7 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
-    NSLog(@"didRegisterUserNotificationSettings");
+    DDLogVerbose(@"didRegisterUserNotificationSettings");
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
@@ -269,12 +276,12 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    DDLogVerbose(@"didRegisterForRemoteNotificationsWithDeviceToken %@", deviceToken.description);
     NSString *token = [deviceToken description];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     token = [token substringFromIndex:1];
     token = [token substringToIndex:token.length - 1];
-    
-    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken %@", token);
+    DDLogVerbose(@"didRegisterForRemoteNotificationsWithDeviceToken %@", token);
     self.token = token;
 }
 
@@ -299,7 +306,7 @@ size_t isutf8(unsigned char *str, size_t len)
 }
 
 - (void)processMessage:(id)object {
-    NSLog(@"processMessage %@", object);
+    DDLogVerbose(@"processMessage %@", object);
     if ([object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionary = (NSDictionary *)object;
         NSData *data = dictionary[@"data"];
@@ -344,7 +351,7 @@ size_t isutf8(unsigned char *str, size_t len)
         
         [self.queueManagedObjectContext performBlock:^{
             
-            NSLog(@"processing %@", topic);
+            DDLogVerbose(@"processing %@", topic);
             
             Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
                               inManagedObjectContext:self.queueManagedObjectContext];
@@ -426,7 +433,7 @@ size_t isutf8(unsigned char *str, size_t len)
                                            [NSDateFormatter localizedStringFromDate:alarmAt
                                                                           dateStyle:NSDateFormatterShortStyle
                                                                           timeStyle:NSDateFormatterShortStyle]];
-                        NSLog(@"new alarm %@, existing alarm %@", alarm, vehicle.alarm);
+                        DDLogVerbose(@"new alarm %@, existing alarm %@", alarm, vehicle.alarm);
                         if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
                             vehicle.alarm = alarm;
                             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
@@ -472,7 +479,6 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"gpio/5"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio5= @([gpio intValue]);
-                    NSLog(@"gpio5 is %@", vehicle.gpio5);
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
                     vehicle.gpio7= @([gpio intValue]);
@@ -483,15 +489,23 @@ size_t isutf8(unsigned char *str, size_t len)
                 } else if ([subTopic isEqualToString:@"voltage/ext"]) {
                     NSString *voltage = [AppDelegate dataToString:data];
                     vehicle.vext = @([voltage doubleValue]);
+                    
+                } else if ([subTopic isEqualToString:@"temperature/0"]) {
+                    NSString *temperature = [AppDelegate dataToString:data];
+                    vehicle.temp0 = @([temperature doubleValue]);
+                } else if ([subTopic isEqualToString:@"temperature/1"]) {
+                    NSString *temperature = [AppDelegate dataToString:data];
+                    vehicle.temp1 = @([temperature doubleValue]);
                 } else {
                     //
                 }
             }
             
-            if ([self.queueManagedObjectContext hasChanges] && ![self.queueManagedObjectContext save:NULL]) {
-                NSLog(@"Unresolved error");
+            NSError *error;
+            if ([self.queueManagedObjectContext hasChanges] && ![self.queueManagedObjectContext save:&error]) {
+                DDLogError(@"queueManagedObjectContext save:%@", error);
             }
-            NSLog(@"processing %@ finished", topic);
+            DDLogVerbose(@"processing %@ finished", topic);
             
         }];
     }
@@ -547,7 +561,7 @@ size_t isutf8(unsigned char *str, size_t len)
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"managedObjectContext save: %@", error);
             abort();
         }
     }
@@ -597,7 +611,7 @@ size_t isutf8(unsigned char *str, size_t len)
                                                              URL:storeURL
                                                          options:options
                                                            error:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DDLogError(@"managedObjectContext save: %@", error);
         abort();
     }
     

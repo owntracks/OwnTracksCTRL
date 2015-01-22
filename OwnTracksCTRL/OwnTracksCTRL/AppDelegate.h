@@ -1,9 +1,9 @@
 //
 //  OPAppDelegate.h
-//  OwnTracksGW
+//  OwnTracksCTRL
 //
 //  Created by Christoph Krey on 29.05.14.
-//  Copyright (c) 2014 christophkrey. All rights reserved.
+//  Copyright (c) 2014-2015 christophkrey. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
