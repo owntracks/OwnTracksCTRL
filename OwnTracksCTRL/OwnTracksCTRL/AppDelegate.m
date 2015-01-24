@@ -458,14 +458,15 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                 } else if ([subTopic isEqualToString:@"start"]) {
                     NSString *start = [AppDelegate dataToString:data];
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                    
-                    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
-                    [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
-                    [dateFormatter setTimeZone:[[NSTimeZone alloc] initWithName:@"UTC"]];
-                    NSDate *startDate = [dateFormatter dateFromString:fields[2]];
-                    vehicle.start = startDate;
-                    vehicle.version = fields[1];
-                    vehicle.imei = fields[0];
+                    if (fields.count == 3) {
+                        NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
+                        [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
+                        [dateFormatter setTimeZone:[[NSTimeZone alloc] initWithName:@"UTC"]];
+                        NSDate *startDate = [dateFormatter dateFromString:fields[2]];
+                        vehicle.start = startDate;
+                        vehicle.version = fields[1];
+                        vehicle.imei = fields[0];
+                    }
                     
                 } else if ([subTopic isEqualToString:@"gpio/1"]) {
                     NSString *gpio = [AppDelegate dataToString:data];
