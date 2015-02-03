@@ -124,7 +124,9 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                       tokenPost,
                       uuidString];
     
+    DDLogVerbose(@"post=%@", post);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
