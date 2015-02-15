@@ -28,7 +28,6 @@
 - (void)saveContext;
 - (void)processMessage:(NSDictionary *)object;
 - (NSURL *)applicationDocumentsDirectory;
-+ (NSString *)dataToString:(NSData *)data;
 - (void)connect;
 - (void)disconnect;
 

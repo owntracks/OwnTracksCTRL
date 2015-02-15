@@ -525,7 +525,8 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
-                                                        message:[AppDelegate dataToString:self.dataToGet]
+                                                        message:[[NSString alloc] initWithData:self.dataToGet
+                                                                                      encoding:NSUTF8StringEncoding]
                                                        delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"OK", nil];

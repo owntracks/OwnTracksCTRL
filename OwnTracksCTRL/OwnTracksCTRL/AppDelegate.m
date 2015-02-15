@@ -40,55 +40,6 @@
 #define RECONNECT_TIMER_MAX 64.0
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
-size_t isutf8(unsigned char *str, size_t len);
-/*
- Check if the given unsigned char * is a valid utf-8 sequence.
- 
- Return value :
- If the string is valid utf-8, 0 is returned.
- Else the position, starting from 1, is returned.
- 
- Valid utf-8 sequences look like this :
- 0xxxxxxx
- 110xxxxx 10xxxxxx
- 1110xxxx 10xxxxxx 10xxxxxx
- 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
- 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
- 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
- */
-
-size_t isutf8(unsigned char *str, size_t len)
-{
-    size_t i = 0;
-    size_t continuation_bytes = 0;
-    
-    while (i < len)
-    {
-        if (str[i] <= 0x7F)
-            continuation_bytes = 0;
-        else if (str[i] >= 0xC0 /*11000000*/ && str[i] <= 0xDF /*11011111*/)
-            continuation_bytes = 1;
-        else if (str[i] >= 0xE0 /*11100000*/ && str[i] <= 0xEF /*11101111*/)
-            continuation_bytes = 2;
-        else if (str[i] >= 0xF0 /*11110000*/ && str[i] <= 0xF4 /* Cause of RFC 3629 */)
-            continuation_bytes = 3;
-        else
-            return i + 1;
-        i += 1;
-        while (i < len && continuation_bytes > 0
-               && str[i] >= 0x80
-               && str[i] <= 0xBF)
-        {
-            i += 1;
-            continuation_bytes -= 1;
-        }
-        if (continuation_bytes != 0)
-            return i + 1;
-    }
-    return 0;
-}
-
-
 @implementation AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -365,7 +316,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                 dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
                 
                 if (!dictionary) {
-                    NSString *payload = [AppDelegate dataToString:data];
+                    NSString *payload = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSArray *values = [payload componentsSeparatedByString:@","];
                     if ([values count] == 10) {
                         dictionary = [[NSMutableDictionary alloc] initWithCapacity:9];
@@ -443,7 +394,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                         }
                     }
                 } else if ([subTopic isEqualToString:@"status"]) {
-                    NSString *status = [AppDelegate dataToString:data];
+                    NSString *status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.status = @([status intValue]);
                     
                 } else if ([subTopic isEqualToString:@"event"]) {
@@ -452,11 +403,11 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                     }
                     
                 } else if ([subTopic isEqualToString:@"info"]) {
-                    NSString *info = [AppDelegate dataToString:data];
+                    NSString *info = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.info= info;
                     
                 } else if ([subTopic isEqualToString:@"start"]) {
-                    NSString *start = [AppDelegate dataToString:data];
+                    NSString *start = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                     if (fields.count == 3) {
                         NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
@@ -469,33 +420,33 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                     }
                     
                 } else if ([subTopic isEqualToString:@"gpio/1"]) {
-                    NSString *gpio = [AppDelegate dataToString:data];
+                    NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio1= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/3"]) {
-                    NSString *gpio = [AppDelegate dataToString:data];
+                    NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio3= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/2"]) {
-                    NSString *gpio = [AppDelegate dataToString:data];
+                    NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio2= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/5"]) {
-                    NSString *gpio = [AppDelegate dataToString:data];
+                    NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio5= @([gpio intValue]);
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
-                    NSString *gpio = [AppDelegate dataToString:data];
+                    NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio7= @([gpio intValue]);
                     
                 } else if ([subTopic isEqualToString:@"voltage/batt"]) {
-                    NSString *voltage = [AppDelegate dataToString:data];
+                    NSString *voltage = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.vbatt = @([voltage doubleValue]);
                 } else if ([subTopic isEqualToString:@"voltage/ext"]) {
-                    NSString *voltage = [AppDelegate dataToString:data];
+                    NSString *voltage = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.vext = @([voltage doubleValue]);
                     
                 } else if ([subTopic isEqualToString:@"temperature/0"]) {
-                    NSString *temperature = [AppDelegate dataToString:data];
+                    NSString *temperature = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.temp0 = @([temperature doubleValue]);
                 } else if ([subTopic isEqualToString:@"temperature/1"]) {
-                    NSString *temperature = [AppDelegate dataToString:data];
+                    NSString *temperature = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.temp1 = @([temperature doubleValue]);
                 } else {
                     //
@@ -532,28 +483,6 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
         }
     }
 
-}
-
-+ (NSString *)dataToString:(NSData *)data
-{
-    if (isutf8((unsigned char *)[data bytes], data.length) == 0) {
-        NSString *message = [[NSString alloc] init];
-        for (int i = 0; i < data.length; i++) {
-            char c;
-            [data getBytes:&c range:NSMakeRange(i, 1)];
-            message = [message stringByAppendingFormat:@"%c", c];
-        }
-        
-        const char *cp = [message cStringUsingEncoding:NSISOLatin1StringEncoding];
-        if (cp) {
-            NSString *u = @(cp);
-            return [NSString stringWithFormat:@"%@", u];
-        } else {
-            return [NSString stringWithFormat:@"%@", [data description]];
-        }
-    } else {
-        return [NSString stringWithFormat:@"%@", [data description]];
-    }
 }
 
 - (void)saveContext

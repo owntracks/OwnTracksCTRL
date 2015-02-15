@@ -198,7 +198,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
         [self updated];
         [self performSegueWithIdentifier:@"Login" sender:nil];
     } else {
-        NSString *message = [AppDelegate dataToString:self.receivedData];
+        NSString *message = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
         if (dictionary) {
             if ([dictionary[@"message"] isKindOfClass:[NSString class]]) {
                 message = dictionary[@"message"];
