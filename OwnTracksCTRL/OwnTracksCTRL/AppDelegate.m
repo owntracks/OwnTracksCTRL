@@ -13,10 +13,11 @@
 #import "MapVC.h"
 #import "LoginVC.h"
 
-#import "DDLog.h"
-#import "DDTTYLogger.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
-#undef BACKGROUND_CONNECT
+#undef BACKGROUND_CONNECT // if enabled, background capability has to be setup again
+#undef EVENT_REPORTING
+#undef ALARM_REPORTING
 
 @interface AppDelegate()
 
@@ -26,15 +27,14 @@
 @property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
 #endif
 
-@property (strong, nonatomic) StatelessThread *mqttThread;
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
+@property (strong, nonatomic) StatelessThread *mqttThread;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (readwrite, strong, nonatomic) NSString *connectedTo;
 @property (readwrite, strong, nonatomic) NSString *token;
 @property (nonatomic) BOOL registered;
 
 @end
-
 
 #define RECONNECT_TIMER 1.0
 #define RECONNECT_TIMER_MAX 64.0
@@ -46,7 +46,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -55,6 +55,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     self.completionHandler = nil;
 #endif
     self.kiosk = @(false);
+    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     return YES;
 }
 
@@ -69,9 +70,11 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
-    self.Broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
+    self.broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
 
+#ifdef BACKGROUND_CONNECT
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+#endif
     
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings
                                                             settingsForTypes:
@@ -373,35 +376,15 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                     vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
                     vehicle.vacc=dictionary[@"vacc"];
                     vehicle.vel=dictionary[@"vel"];
+#ifdef EVENT_REPORTING
                     [self processEventMessage:dictionary forVehicle:vehicle];
+#endif
                 }
             } else {
-                if ([subTopic isEqualToString:@"alarm"]) {
-                    if (dictionary) {
-                        NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
-                        NSString *alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
-                                           vehicle.tid,
-                                           [NSDateFormatter localizedStringFromDate:alarmAt
-                                                                          dateStyle:NSDateFormatterShortStyle
-                                                                          timeStyle:NSDateFormatterShortStyle]];
-                        DDLogVerbose(@"new alarm %@, existing alarm %@", alarm, vehicle.alarm);
-                        if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
-                            vehicle.alarm = alarm;
-                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                            localNotification.alertBody = vehicle.alarm;
-                            localNotification.userInfo = @{@"tid": vehicle.tid, @"title": @"Alarm"};
-                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-                        }
-                    }
-                } else if ([subTopic isEqualToString:@"status"]) {
+                if ([subTopic isEqualToString:@"status"]) {
                     NSString *status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.status = @([status intValue]);
-                    
-                } else if ([subTopic isEqualToString:@"event"]) {
-                    if (dictionary) {
-                        [self processEventMessage:dictionary forVehicle:vehicle];
-                    }
-                    
+
                 } else if ([subTopic isEqualToString:@"info"]) {
                     NSString *info = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.info= info;
@@ -448,6 +431,34 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
                 } else if ([subTopic isEqualToString:@"temperature/1"]) {
                     NSString *temperature = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.temp1 = @([temperature doubleValue]);
+                    
+#ifdef ALARM_REPORTING
+                } else if ([subTopic isEqualToString:@"alarm"]) {
+                    if (dictionary) {
+                        NSDate *alarmAt = [NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
+                        NSString *alarm = [NSString stringWithFormat:@"Alarm sent by %@ @ %@",
+                                           vehicle.tid,
+                                           [NSDateFormatter localizedStringFromDate:alarmAt
+                                                                          dateStyle:NSDateFormatterShortStyle
+                                                                          timeStyle:NSDateFormatterShortStyle]];
+                        DDLogVerbose(@"new alarm %@, existing alarm %@", alarm, vehicle.alarm);
+                        if (!vehicle.alarm || ![alarm isEqualToString:vehicle.alarm]) {
+                            vehicle.alarm = alarm;
+                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                            localNotification.alertBody = vehicle.alarm;
+                            localNotification.userInfo = @{@"tid": vehicle.tid, @"title": @"Alarm"};
+                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                        }
+                    }
+#endif
+                    
+#ifdef EVENT_REPORTING
+                } else if ([subTopic isEqualToString:@"event"]) {
+                    if (dictionary) {
+                        [self processEventMessage:dictionary forVehicle:vehicle];
+                    }
+#endif
+                    
                 } else {
                     //
                 }
@@ -463,6 +474,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     }
 }
 
+#ifdef EVENT_REPORTING
 - (void)processEventMessage:(NSDictionary *)dictionary forVehicle:(Vehicle *)vehicle {
     NSString *event = dictionary[@"event"];
     if (event) {
@@ -484,6 +496,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     }
 
 }
+#endif
 
 - (void)saveContext
 {

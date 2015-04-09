@@ -7,7 +7,7 @@
  Using MQTT in your Objective-C application
  
  @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright (c) 2013, 2014, Christoph Krey based on Copyright (c) 2011, 2013, 2lemetry LLC
+ @copyright Copyright (c) 2013-2015, Christoph Krey based on Copyright (c) 2011, 2013, 2lemetry LLC
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 
 #import "MQTTMessage.h"
+#import "MQTTPersistence.h"
 
 @class MQTTSession;
 
@@ -70,7 +71,11 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
           retained:(BOOL)retained
                mid:(unsigned int)mid;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ @param session see newMessage for description
+ @param data see newMessage for description
+ @param topic see newMessage for description
+ */
 - (void)session:(MQTTSession*)session newMessage:(NSData*)data onTopic:(NSString*)topic;
 
 /** gets called when a connection is established, closed or a problem occurred
@@ -79,7 +84,11 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param error an optional additional error object with additional information
  */
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error;
-/* for mqttio-OBJC backward compatibility */
+
+/** for mqttio-OBJC backward compatibility
+ @param session the MQTTSession reporting the event
+ @param eventCode the code of the event
+ */
 - (void)session:(MQTTSession*)session handleEvent:(MQTTSessionEvent)eventCode;
 
 /** gets called when a connection has been successfully established
@@ -164,15 +173,38 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 - (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 
+/** gets called when a command is received from the MQTT broker
+ use this for low level control of the MQTT connection
+ @param session the MQTTSession reporting the received command
+ @param type the MQTT command type
+ @param qos the Quality of Service of the command
+ @param retained the retained status of the command
+ @param duped the duplication status of the command
+ @param mid the Message Identifier of the command
+ @param data the payload data of the command if any, might be zero length
+ @return true if the sessionmanager should ignore the received message
+ */
+- (BOOL)ignoreReceived:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
  @param session the MQTTSession reporting the change
- @param queued the number of queued messages waiting to be send when the connection becomes established and ready
+ @param queued for backward compatibility only: MQTTClient does not queue messages anymore except during QoS protocol
  @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
  @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
  */
 - (void)buffered:(MQTTSession *)session
           queued:(NSUInteger)queued
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut;
+
+/** gets called when the content of MQTTClients internal buffers change
+ use for monitoring the completion of transmitted and received messages
+ @param session the MQTTSession reporting the change
+ @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
+ @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
+ */
+- (void)buffered:(MQTTSession *)session
        flowingIn:(NSUInteger)flowingIn
       flowingOut:(NSUInteger)flowingOut;
 
@@ -214,8 +246,25 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 @property (weak, nonatomic) id<MQTTSessionDelegate> delegate;
 
-/* for mqttio-OBJC backward compatibility */
+/** Control MQTT persistence by setting the properties of persistence before connecting to an MQTT broker.
+    The settings are specific to a clientId.
+ 
+    persistence.persistent = YES or NO (default) to establish file or in memory persistence
+ 
+    persistence.maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are
+        stored and transmitted later.
+ 
+    persistence.maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
+ 
+    persistence.maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
+ 
+    Messages are deleted after they have been acknowledged.
+*/
+@property (strong, nonatomic) MQTTPersistence *persistence;
+
+/** for mqttio-OBJC backward compatibility */
 @property (strong) void (^connectionHandler)(MQTTSessionEvent event);
+/** for mqttio-OBJC backward compatibility */
 @property (strong) void (^messageHandler)(NSData* message, NSString* topic);
 
 /** Session status
@@ -262,7 +311,9 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 @property (strong, nonatomic) NSString *runLoopMode;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ the connect message used is stored here
+ */
 @property (strong, nonatomic) MQTTMessage *connectMessage;
 
 /** initialises the MQTT session with default values
@@ -351,23 +402,76 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId;
-- (id)initWithClientId:(NSString*)theClientId runLoop:(NSRunLoop*)theRunLoop
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theRunLoop see initWithClientId for description.
+ @param theRunLoopMode see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
+- (id)initWithClientId:(NSString*)theClientId
+               runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUsername see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUserName see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @param theRunLoop see initWithClientId for description.
+ @param theRunLoopMode see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUsername see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @param theKeepAliveInterval see initWithClientId for description.
+ @param cleanSessionFlag see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)cleanSessionFlag;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUsername see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @param theKeepAlive see initWithClientId for description.
+ @param theCleanSessionFlag see initWithClientId for description.
+ @param theRunLoop see initWithClientId for description.
+ @param theMode see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword
@@ -375,6 +479,20 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
           cleanSession:(BOOL)theCleanSessionFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theMode;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUserName see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @param theKeepAliveInterval see initWithClientId for description.
+ @param theCleanSessionFlag see initWithClientId for description.
+ @param willTopic see initWithClientId for description.
+ @param willMsg see initWithClientId for description.
+ @param willQoS see initWithClientId for description.
+ @param willRetainFlag see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
@@ -384,6 +502,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                willMsg:(NSData*)willMsg
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theUserName see initWithClientId for description.
+ @param thePassword see initWithClientId for description.
+ @param theKeepAliveInterval see initWithClientId for description.
+ @param theCleanSessionFlag see initWithClientId for description.
+ @param willTopic see initWithClientId for description.
+ @param willMsg see initWithClientId for description.
+ @param willQoS see initWithClientId for description.
+ @param willRetainFlag see initWithClientId for description.
+ @param theRunLoop see initWithClientId for description.
+ @param theRunLoopMode see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
@@ -395,6 +529,16 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
         willRetainFlag:(BOOL)willRetainFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode;
+
+/** for mqttio-OBJC backward compatibility
+ @param theClientId see initWithClientId for description.
+ @param theKeepAliveInterval see initWithClientId for description.
+ @param theConnectMessage has to be constructed using MQTTMessage connectMessage...
+ @param theRunLoop see initWithClientId for description.
+ @param theRunLoopMode see initWithClientId for description.
+ @return the initialised MQTTSession object
+ All other parameters are set to defaults
+ */
 - (id)initWithClientId:(NSString*)theClientId
              keepAlive:(UInt16)theKeepAliveInterval
         connectMessage:(MQTTMessage*)theConnectMessage
@@ -420,10 +564,35 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ @param ip see connectToHost for description
+ @param port see connectoToHost for description
+ */
 - (void)connectToHost:(NSString*)ip port:(UInt32)port;
-- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
-- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+
+/** for mqttio-OBJC backward compatibility
+ @param ip see connectToHost for description
+ @param port see connectoToHost for description
+ @param connHandler event handler block
+ @param messHandler message handler block
+ */
+- (void)connectToHost:(NSString*)ip
+                 port:(UInt32)port
+withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
+       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+
+/** for mqttio-OBJC backward compatibility
+ @param ip see connectToHost for description
+ @param port see connectoToHost for description
+ @param usingSSL indicator to use TLS
+ @param connHandler event handler block
+ @param messHandler message handler block
+ */
+- (void)connectToHost:(NSString*)ip
+                 port:(UInt32)port
+             usingSSL:(BOOL)usingSSL
+withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
+       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
 
 
 /** connects to the specified MQTT server synchronously
@@ -471,7 +640,9 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 - (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ @param theTopic see subscribeToTopic for description
+ */
 - (void)subscribeTopic:(NSString*)theTopic;
 
 /** subscribes to a topic at a specific QoS level synchronously
@@ -652,7 +823,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
  @param qos specifies the Quality of Service for the publish
  qos can be 0, 1, or 2.
- @return the Message Identifier of the PUBLISH message.
+ @return the Message Identifier of the PUBLISH message. Zero if qos 0. If qos 1 or 2, zero if message was dropped
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
  
@@ -673,14 +844,55 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 - (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
 
-/* for mqttio-OBJC backward compatibility */
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+  */
 - (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ */
 - (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ @param retainFlag see publishData for description
+ */
 - (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ */
 - (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ @param retainFlag see publishData for description
+ */
 - (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ */
 - (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ @param retainFlag see publishData for description
+ */
 - (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+
+/** for mqttio-OBJC backward compatibility
+ @param payload JSON payload is converted to NSData and then send. See publishData for description
+ @param theTopic see publishData for description
+ */
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
 
 /** publishes synchronously data on a given topic at a specified QoS level and retain flag

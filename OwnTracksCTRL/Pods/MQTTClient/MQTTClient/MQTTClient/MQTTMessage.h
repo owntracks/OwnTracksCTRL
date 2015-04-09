@@ -2,7 +2,7 @@
 // MQTTMessage.h
 // MQTTClient.framework
 //
-// Copyright (c) 2013, 2014, Christoph Krey
+// Copyright (c) 2013-2015, Christoph Krey
 //
 // based on
 //
@@ -47,7 +47,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
  Enumeration of MQTT Quality of Service levels
  */
 typedef NS_ENUM(UInt8, MQTTQosLevel) {
-    MQTTQoSLevelAtMostOnce = 0,
+    MQTTQosLevelAtMostOnce = 0,
     MQTTQosLevelAtLeastOnce,
     MQTTQosLevelExactlyOnce
 };

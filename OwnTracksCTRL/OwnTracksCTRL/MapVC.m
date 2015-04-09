@@ -13,7 +13,7 @@
 #import "VehicleVC.h"
 #import "MapPopOverSegue.h"
 
-#import "DDLog.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -45,10 +45,11 @@ static MapVC *theMapVC;
 
 @implementation MapVC
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)loadView {
     [super loadView];
+    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     theMapVC = self;
     self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
 }
@@ -229,14 +230,18 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
     //
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex
+     forChangeType:(NSFetchedResultsChangeType)type
 {
     //
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath
+     forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
     id <MKAnnotation> annotation = (id <MKAnnotation>)anObject;

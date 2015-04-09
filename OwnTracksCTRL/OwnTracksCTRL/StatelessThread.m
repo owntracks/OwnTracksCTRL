@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
-#import "DDLog.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -21,9 +21,10 @@
 
 @implementation StatelessThread
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)main {
+    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     DDLogVerbose(@"StatelessThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:self.clientid
@@ -50,7 +51,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
         NSArray *topicFilters = [self.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         for (NSString *topicFilter in topicFilters) {
             if (topicFilter.length) {
-                [subscriptions setObject:@(MQTTQoSLevelAtMostOnce) forKey:topicFilter];
+                [subscriptions setObject:@(MQTTQosLevelAtMostOnce) forKey:topicFilter];
             }
         }
         

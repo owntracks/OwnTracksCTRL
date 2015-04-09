@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
-#import "DDLog.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
@@ -26,10 +26,11 @@
 
 @implementation LoginVC
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)loadView {
     [super loadView];
+    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     self.autostart = true;
 }
 

@@ -9,7 +9,7 @@
 #import "StatefullThread.h"
 #import "AppDelegate.h"
 
-#import "DDLog.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface StatefullThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -17,9 +17,10 @@
 
 @implementation StatefullThread
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)main {
+    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     DDLogVerbose(@"StatefullThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"%@Z", self.clientid]
