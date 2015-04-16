@@ -30,6 +30,8 @@
 		843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA8E19CC11E10045AC81 /* Main.storyboard */; };
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
+		84776D7A1AE065E1006C6113 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84776D781AE065E1006C6113 /* Crashlytics.framework */; };
+		84776D7B1AE065E1006C6113 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84776D791AE065E1006C6113 /* Fabric.framework */; };
 		84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A7DBC61A3C8F5E00DD12C4 /* TrackTVC.m */; };
 		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
 		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
@@ -89,6 +91,8 @@
 		843CFA9019CC12990045AC81 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8458EAF819F0274000D9C848 /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPopOverSegue.h; sourceTree = "<group>"; };
 		8458EAF919F0274000D9C848 /* MapPopOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPopOverSegue.m; sourceTree = "<group>"; };
+		84776D781AE065E1006C6113 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		84776D791AE065E1006C6113 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -122,9 +126,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */,
+				84776D7A1AE065E1006C6113 /* Crashlytics.framework in Frameworks */,
 				843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */,
 				843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */,
 				B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */,
+				84776D7B1AE065E1006C6113 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +155,8 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
+				84776D781AE065E1006C6113 /* Crashlytics.framework */,
+				84776D791AE065E1006C6113 /* Fabric.framework */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
 				843CF9DA19CC0C7D0045AC81 /* CoreData.framework */,
@@ -266,6 +274,7 @@
 				843CF9AB19CC0BCF0045AC81 /* Frameworks */,
 				843CF9AC19CC0BCF0045AC81 /* Resources */,
 				494EE9D219A5AD4885F1D28E /* Copy Pods Resources */,
+				84776D771AE06595006C6113 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -390,6 +399,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		84776D771AE06595006C6113 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run d0b0c708e43f69036ebedad1766ad086074d30f6 afbb978d421ea300ef93b42e9cbb24582aa85ce48f6294656153d911727dafce";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -536,6 +558,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnTracksCTRL/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -551,6 +574,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnTracksCTRL/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

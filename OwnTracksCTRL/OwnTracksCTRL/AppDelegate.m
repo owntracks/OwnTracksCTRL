@@ -14,6 +14,8 @@
 #import "LoginVC.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #undef BACKGROUND_CONNECT // if enabled, background capability has to be setup again
 #undef EVENT_REPORTING
@@ -62,6 +64,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Fabric with:@[CrashlyticsKit]];
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     
     NSDictionary *appDefaults = [NSDictionary
