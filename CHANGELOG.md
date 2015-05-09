@@ -2,6 +2,13 @@
 OwnTracksCTRL App 1.1 Release Notes
 ===================================
 
+## OwnTracksCTRL 1.1.6
+>Release date: pending
+
+QA
+
+[FIX] typo in location trigger long text #16
+
 ## OwnTracksCTRL 1.1.5
 >Release date: 2015-05-08
 

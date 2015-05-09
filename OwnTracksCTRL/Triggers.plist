@@ -29,6 +29,6 @@
 	<key>l</key>
 	<string>l (ost GPS fix)</string>
 	<key>L</key>
-	<string>L (ast position, devices shutting down)</string>
+	<string>L (ast position, device shutting down)</string>
 </dict>
 </plist>
