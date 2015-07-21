@@ -102,11 +102,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 {
     if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        [navigationController popToRootViewControllerAnimated:false];
+        //[navigationController popToRootViewControllerAnimated:false];
         if ([navigationController.topViewController respondsToSelector:@selector(automaticStart)]) {
-            [navigationController.topViewController performSelector:@selector(automaticStart) withObject:nil];
+            //[navigationController.topViewController performSelector:@selector(automaticStart) withObject:nil];
         }
     }
+    [self connect];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
