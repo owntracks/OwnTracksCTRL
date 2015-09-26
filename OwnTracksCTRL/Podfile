@@ -3,10 +3,9 @@ platform :ios, '8.1'
 
 pod 'CocoaLumberjack'
 pod 'MQTTClient'
+pod 'Fabric'
+pod 'Crashlytics'
 
 target 'OwnTracksCTRL' do
-end
-
-target 'OwnTracksCTRLTests' do
 end
 

@@ -11,7 +11,6 @@
 		843CF9B419CC0BD00045AC81 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9B319CC0BD00045AC81 /* main.m */; };
 		843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C119CC0BD40045AC81 /* Images.xcassets */; };
 		843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */; };
-		843CF9D119CC0BD50045AC81 /* OwnTracksCTRLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9D019CC0BD50045AC81 /* OwnTracksCTRLTests.m */; };
 		843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DA19CC0C7D0045AC81 /* CoreData.framework */; };
 		843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DC19CC0C8B0045AC81 /* MapKit.framework */; };
 		843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */; };
@@ -30,8 +29,6 @@
 		843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA8E19CC11E10045AC81 /* Main.storyboard */; };
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
-		84776D7A1AE065E1006C6113 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84776D781AE065E1006C6113 /* Crashlytics.framework */; };
-		84776D7B1AE065E1006C6113 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84776D791AE065E1006C6113 /* Fabric.framework */; };
 		84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A7DBC61A3C8F5E00DD12C4 /* TrackTVC.m */; };
 		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
 		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
@@ -42,16 +39,6 @@
 		B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C9935AABD4F62FB17C485E /* libPods.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		843CF9CB19CC0BD40045AC81 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 843CF9A619CC0BCE0045AC81 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 843CF9AD19CC0BCF0045AC81;
-			remoteInfo = OwnTracksCTRL;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		841CE30819D1968A00096F37 /* Triggers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Triggers.plist; path = ../Triggers.plist; sourceTree = "<group>"; };
 		843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnTracksCTRL.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,9 +46,6 @@
 		843CF9B319CC0BD00045AC81 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		843CF9C119CC0BD40045AC81 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		843CF9C419CC0BD40045AC81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		843CF9CA19CC0BD40045AC81 /* OwnTracksCTRLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwnTracksCTRLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		843CF9CF19CC0BD50045AC81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		843CF9D019CC0BD50045AC81 /* OwnTracksCTRLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksCTRLTests.m; sourceTree = "<group>"; };
 		843CF9DA19CC0C7D0045AC81 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		843CF9DC19CC0C8B0045AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		843CFA6419CC0D390045AC81 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -91,8 +75,6 @@
 		843CFA9019CC12990045AC81 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8458EAF819F0274000D9C848 /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPopOverSegue.h; sourceTree = "<group>"; };
 		8458EAF919F0274000D9C848 /* MapPopOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPopOverSegue.m; sourceTree = "<group>"; };
-		84776D781AE065E1006C6113 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		84776D791AE065E1006C6113 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -126,18 +108,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */,
-				84776D7A1AE065E1006C6113 /* Crashlytics.framework in Frameworks */,
 				843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */,
 				843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */,
 				B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */,
-				84776D7B1AE065E1006C6113 /* Fabric.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		843CF9C719CC0BD40045AC81 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,13 +128,10 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
-				84776D781AE065E1006C6113 /* Crashlytics.framework */,
-				84776D791AE065E1006C6113 /* Fabric.framework */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
 				843CF9DA19CC0C7D0045AC81 /* CoreData.framework */,
 				843CF9B019CC0BD00045AC81 /* OwnTracksCTRL */,
-				843CF9CD19CC0BD40045AC81 /* OwnTracksCTRLTests */,
 				843CF9AF19CC0BCF0045AC81 /* Products */,
 				ACCEB7B5FCD437E30087DDA4 /* Pods */,
 				68C628024C478AF253146346 /* Frameworks */,
@@ -172,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */,
-				843CF9CA19CC0BD40045AC81 /* OwnTracksCTRLTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,23 +205,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		843CF9CD19CC0BD40045AC81 /* OwnTracksCTRLTests */ = {
-			isa = PBXGroup;
-			children = (
-				843CF9D019CC0BD50045AC81 /* OwnTracksCTRLTests.m */,
-				843CF9CE19CC0BD50045AC81 /* Supporting Files */,
-			);
-			path = OwnTracksCTRLTests;
-			sourceTree = "<group>";
-		};
-		843CF9CE19CC0BD50045AC81 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				843CF9CF19CC0BD50045AC81 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		ACCEB7B5FCD437E30087DDA4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,31 +237,13 @@
 			productReference = 843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */;
 			productType = "com.apple.product-type.application";
 		};
-		843CF9C919CC0BD40045AC81 /* OwnTracksCTRLTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 843CF9D719CC0BD50045AC81 /* Build configuration list for PBXNativeTarget "OwnTracksCTRLTests" */;
-			buildPhases = (
-				843CF9C619CC0BD40045AC81 /* Sources */,
-				843CF9C719CC0BD40045AC81 /* Frameworks */,
-				843CF9C819CC0BD40045AC81 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				843CF9CC19CC0BD40045AC81 /* PBXTargetDependency */,
-			);
-			name = OwnTracksCTRLTests;
-			productName = OwnTracksCTRLTests;
-			productReference = 843CF9CA19CC0BD40045AC81 /* OwnTracksCTRLTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		843CF9A619CC0BCE0045AC81 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = OwnTracks;
 				TargetAttributes = {
 					843CF9AD19CC0BCF0045AC81 = {
@@ -319,10 +253,6 @@
 								enabled = 1;
 							};
 						};
-					};
-					843CF9C919CC0BD40045AC81 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 843CF9AD19CC0BCF0045AC81;
 					};
 				};
 			};
@@ -340,7 +270,6 @@
 			projectRoot = "";
 			targets = (
 				843CF9AD19CC0BCF0045AC81 /* OwnTracksCTRL */,
-				843CF9C919CC0BD40045AC81 /* OwnTracksCTRLTests */,
 			);
 		};
 /* End PBXProject section */
@@ -357,13 +286,6 @@
 				843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */,
 				841CE30919D1968A00096F37 /* Triggers.plist in Resources */,
 				84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		843CF9C819CC0BD40045AC81 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,7 +333,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run d0b0c708e43f69036ebedad1766ad086074d30f6 afbb978d421ea300ef93b42e9cbb24582aa85ce48f6294656153d911727dafce";
+			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" d0b0c708e43f69036ebedad1766ad086074d30f6 afbb978d421ea300ef93b42e9cbb24582aa85ce48f6294656153d911727dafce";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -442,23 +364,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		843CF9C619CC0BD40045AC81 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				843CF9D119CC0BD50045AC81 /* OwnTracksCTRLTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		843CF9CC19CC0BD40045AC81 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 843CF9AD19CC0BCF0045AC81 /* OwnTracksCTRL */;
-			targetProxy = 843CF9CB19CC0BD40045AC81 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */ = {
@@ -492,6 +398,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -561,7 +468,9 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnTracksCTRL/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.owntracks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -577,42 +486,10 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnTracksCTRL/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.owntracks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		843CF9D819CC0BD50045AC81 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = OwnTracksCTRLTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OwnTracksCTRL.app/OwnTracksCTRL";
-			};
-			name = Debug;
-		};
-		843CF9D919CC0BD50045AC81 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = OwnTracksCTRLTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OwnTracksCTRL.app/OwnTracksCTRL";
 			};
 			name = Release;
 		};
@@ -633,15 +510,6 @@
 			buildConfigurations = (
 				843CF9D519CC0BD50045AC81 /* Debug */,
 				843CF9D619CC0BD50045AC81 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		843CF9D719CC0BD50045AC81 /* Build configuration list for PBXNativeTarget "OwnTracksCTRLTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				843CF9D819CC0BD50045AC81 /* Debug */,
-				843CF9D919CC0BD50045AC81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
