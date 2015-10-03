@@ -1,11 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
+
 platform :ios, '8.1'
 
 pod 'CocoaLumberjack'
-pod 'MQTTClient'
+pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
 pod 'Fabric'
 pod 'Crashlytics'
-
-target 'OwnTracksCTRL' do
-end
 

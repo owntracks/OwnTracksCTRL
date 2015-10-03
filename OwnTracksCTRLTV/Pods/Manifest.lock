@@ -1,0 +1,14 @@
+PODS:
+  - MQTTClient (0.3.0)
+
+DEPENDENCIES:
+  - MQTTClient (from `~/MQTT-Client-Framework`)
+
+EXTERNAL SOURCES:
+  MQTTClient:
+    :path: ~/MQTT-Client-Framework
+
+SPEC CHECKSUMS:
+  MQTTClient: 2f4cc2056a815987df2be9c468dc69f5cc92704d
+
+COCOAPODS: 0.39.0.beta.5

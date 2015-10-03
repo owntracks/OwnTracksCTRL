@@ -13,10 +13,18 @@
 #import "VehicleVC.h"
 #import "MapPopOverSegue.h"
 
+#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "MapVC.h"
+#else
+#define DDLogVerbose NSLog
+#define DDLogError NSLog
+#endif
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+
+#ifndef CTRLTV
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
@@ -27,11 +35,19 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIInfo;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIOrganize;
 
+@property (nonatomic) MKMapRect lastMapRect;
+@property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) NSURLConnection *urlConnection;
 @property (strong, nonatomic) Vehicle *vehicleToGet;
 @property (strong, nonatomic) NSMutableData *dataToGet;
-@property (strong, nonatomic) NSTimer *timer;
-@property (nonatomic) MKMapRect lastMapRect;
+
+#else
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIButton *UIConnection;
+
+#endif
+
 @end
 
 #define COLOR_ERR [UIColor colorWithRed:190.0/255.0 green:0.0 blue:0.0 alpha:1.0]
@@ -45,29 +61,30 @@ static MapVC *theMapVC;
 
 @implementation MapVC
 
+#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#endif
 
 - (void)loadView {
     [super loadView];
-    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     theMapVC = self;
+#ifndef CTRLTV
     self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
-}
-
-+ (void)centerOn:(Vehicle *)vehicle {
-    [theMapVC centerOn:vehicle];
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.mapView.delegate = self;
-    for (Vehicle *vehicle in self.fetchedResultsController.fetchedObjects) {
-        [self.mapView addAnnotation:vehicle];
-    }
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate addObserver:self forKeyPath:@"connectedTo"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
+
+#ifndef CTRLTV
+    self.mapView.delegate = self;
+    for (Vehicle *vehicle in self.fetchedResultsController.fetchedObjects) {
+        [self.mapView addAnnotation:vehicle];
+    }
     [appDelegate addObserver:self forKeyPath:@"kiosk"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
@@ -84,21 +101,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     } else {
         self.UIDetailView.hidden = true;
     }
-
+#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.fetchedResultsController = nil;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate removeObserver:self forKeyPath:@"kiosk"
-                        context:nil];
     [appDelegate removeObserver:self forKeyPath:@"connectedTo"
+                        context:nil];
+#ifndef CTRLTV
+    [appDelegate removeObserver:self forKeyPath:@"kiosk"
                         context:nil];
     [self.navigationController.navigationBar setHidden:FALSE];
     [self.timer invalidate];
+#endif
     [super viewWillDisappear:animated];
 }
 
+#ifndef CTRLTV
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
@@ -134,6 +154,19 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
     [self updateDetailView];
     self.UIDetailView.hidden = false;
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    self.UIDetailView.hidden = true;
+}
+
++ (void)centerOn:(Vehicle *)vehicle {
+    [theMapVC centerOn:vehicle];
+}
+
+- (void)centerOn:(Vehicle *)vehicle {
+    [self.mapView setCenterCoordinate:[vehicle coordinate] animated:TRUE];
+    [self.mapView selectAnnotation:vehicle animated:TRUE];
 }
 
 - (void)updateDetailView {
@@ -180,15 +213,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    self.UIDetailView.hidden = true;
-}
-
-- (void)centerOn:(Vehicle *)vehicle {
-    [self.mapView setCenterCoordinate:[vehicle coordinate] animated:TRUE];
-    [self.mapView selectAnnotation:vehicle animated:TRUE];
-}
-
+#endif
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
@@ -244,6 +269,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
+#ifndef CTRLTV
     id <MKAnnotation> annotation = (id <MKAnnotation>)anObject;
     id <MKAnnotation> selectedAnnotation = nil;
     NSArray *selectedAnnotations = self.mapView.selectedAnnotations;
@@ -284,6 +310,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             //
             break;
     }
+#endif
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
@@ -291,6 +318,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     //
 }
 
+#ifndef CTRLTV
 - (IBAction)mapPressed:(UIBarButtonItem *)sender {
     if (self.mapView.mapType == MKMapTypeStandard) {
         self.mapView.mapType = MKMapTypeSatellite;
@@ -343,6 +371,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
+#endif
+- (IBAction)ConnectionButtonPressed:(UIButton *)sender {
+    [self ConnectionPressed:nil];
+}
+
 - (IBAction)ConnectionPressed:(UIBarButtonItem *)sender {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (delegate.connectedTo) {
@@ -352,6 +385,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
+#ifndef CTRLTV
 - (IBAction)exitPressed:(UIBarButtonItem *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -366,6 +400,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         }
     }
 }
+
 - (IBAction)organizePressed:(UIBarButtonItem *)sender {
     if ([self.mapView.selectedAnnotations count] > 0) {
         Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
@@ -456,6 +491,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
 }
 
+#endif
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"connectedTo"]) {
         if ([object valueForKey:keyPath]) {
@@ -463,6 +500,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         } else {
             self.UIConnection.tintColor = COLOR_ERR;
         }
+#ifndef CTRLTV
     } else if ([keyPath isEqualToString:@"kiosk"]) {
         if ([[object valueForKey:keyPath] boolValue]) {
             self.UIKiosk.tintColor = COLOR_ON;
@@ -471,9 +509,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             self.UIKiosk.tintColor = COLOR_NEUTRAL;
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
         }
+#endif
     }
 }
 
+#ifndef CTRLTV
 - (void)getTrack:(Vehicle *)vehicle {
     if (self.urlConnection) {
         [self.urlConnection cancel];
@@ -550,7 +590,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     self.urlConnection = nil;
 }
 
-
+#endif
 
 @end
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08AF564FFC856EA1F043CE78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C9935AABD4F62FB17C485E /* libPods.a */; };
+		840717161BBFBDF700FBB3CB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 840717151BBFBDF700FBB3CB /* Default-568h@2x.png */; };
 		841CE30919D1968A00096F37 /* Triggers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841CE30819D1968A00096F37 /* Triggers.plist */; };
 		843CF9B419CC0BD00045AC81 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9B319CC0BD00045AC81 /* main.m */; };
 		843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C119CC0BD40045AC81 /* Images.xcassets */; };
@@ -36,10 +38,10 @@
 		84E199F31A6EB52100AC5DDB /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E199F21A6EB52100AC5DDB /* Vehicle.m */; };
 		84E335B119FA752D009093E9 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E335B019FA752D009093E9 /* LoginVC.m */; };
 		84FD42E619FFAF8200EFB946 /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD42E519FFAF8200EFB946 /* Broker.m */; };
-		B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C9935AABD4F62FB17C485E /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		840717151BBFBDF700FBB3CB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		841CE30819D1968A00096F37 /* Triggers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Triggers.plist; path = ../Triggers.plist; sourceTree = "<group>"; };
 		843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnTracksCTRL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		843CF9B219CC0BD00045AC81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -110,7 +112,7 @@
 				843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */,
 				843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */,
 				843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */,
-				B3FD690F2189B90FCAD251AE /* libPods.a in Frameworks */,
+				08AF564FFC856EA1F043CE78 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +130,7 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
+				840717151BBFBDF700FBB3CB /* Default-568h@2x.png */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
 				843CF9DA19CC0C7D0045AC81 /* CoreData.framework */,
@@ -227,6 +230,7 @@
 				843CF9AC19CC0BCF0045AC81 /* Resources */,
 				494EE9D219A5AD4885F1D28E /* Copy Pods Resources */,
 				84776D771AE06595006C6113 /* ShellScript */,
+				D9BFDC6384B7487AE158914B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -284,6 +288,7 @@
 				843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */,
 				843CFA6819CC0D7B0045AC81 /* iTunesArtwork.png in Resources */,
 				843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */,
+				840717161BBFBDF700FBB3CB /* Default-568h@2x.png in Resources */,
 				841CE30919D1968A00096F37 /* Triggers.plist in Resources */,
 				84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */,
 			);
@@ -334,6 +339,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" d0b0c708e43f69036ebedad1766ad086074d30f6 afbb978d421ea300ef93b42e9cbb24582aa85ce48f6294656153d911727dafce";
+		};
+		D9BFDC6384B7487AE158914B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -472,6 +492,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.owntracks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -490,6 +511,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.owntracks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

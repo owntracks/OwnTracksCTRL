@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "3CC47C3FA81331DB756D5918F619B5CDEBD0E0B0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "35900F890DA32A28E8775453DB420201422CF214" : 0,
+    "3CC47C3FA81331DB756D5918F619B5CDEBD0E0B0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "2F20413C-8D0A-46E6-866C-3F6108585BB9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "35900F890DA32A28E8775453DB420201422CF214" : "..\/MQTT-Client-Framework",
+    "3CC47C3FA81331DB756D5918F619B5CDEBD0E0B0" : "OwnTracksCTRL\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "OwnTracksCTRLTV",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "OwnTracksCTRLTV\/OwnTracksCTRLTV.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ckrey\/MQTT-Client-Framework.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "35900F890DA32A28E8775453DB420201422CF214"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/owntracks\/OwnTracksCTRL.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3CC47C3FA81331DB756D5918F619B5CDEBD0E0B0"
+    }
+  ]
+}

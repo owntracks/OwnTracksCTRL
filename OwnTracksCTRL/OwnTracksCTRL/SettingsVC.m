@@ -13,8 +13,13 @@
 @interface SettingsVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIHost;
 @property (weak, nonatomic) IBOutlet UITextField *UIPort;
+#ifndef CTRLTV
 @property (weak, nonatomic) IBOutlet UISwitch *UITLS;
 @property (weak, nonatomic) IBOutlet UISwitch *UIAuth;
+#else
+@property (weak, nonatomic) IBOutlet UIButton *UITLS;
+@property (weak, nonatomic) IBOutlet UIButton *UIAuth;
+#endif
 @property (weak, nonatomic) IBOutlet UITextField *UIUserID;
 @property (weak, nonatomic) IBOutlet UITextField *UIPassword;
 @property (weak, nonatomic) IBOutlet UITextField *UIClientID;
@@ -46,8 +51,13 @@
     
     self.UIHost.text =                              delegate.broker.host;
     self.UIPort.text =                              [delegate.broker.port stringValue];
+#ifndef CTRLTV
     self.UITLS.on =                                 [delegate.broker.tls boolValue];
     self.UIAuth.on =                                [delegate.broker.auth boolValue];
+#else
+    self.UITLS.tintColor =                          [delegate.broker.tls boolValue] ? [UIColor redColor] : [UIColor whiteColor];
+    self.UIAuth.tintColor =                         [delegate.broker.auth boolValue] ? [UIColor redColor] : [UIColor whiteColor];
+#endif
     self.UIUserID.text =                            delegate.broker.user;
     self.UIPassword.text =                          delegate.broker.passwd;
     self.UIClientID.text =                          delegate.broker.clientid;

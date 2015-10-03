@@ -7,12 +7,16 @@
 //
 
 #import "AnnotationV.h"
-#import "Vehicle+Create.h"
 #import "AppDelegate.h"
 
 @implementation AnnotationV
 
+#ifndef CTRLTV
 #define CIRCLE_SIZE 40.0
+#else
+#define CIRCLE_SIZE 88.0
+#endif
+
 #define CIRCLE_COLOR [UIColor yellowColor]
 
 #define FENCE_ON_COLOR [UIColor greenColor]

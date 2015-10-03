@@ -11,18 +11,22 @@ PODS:
   - Fabric (1.5.1):
     - Fabric/Base (= 1.5.1)
   - Fabric/Base (1.5.1)
-  - MQTTClient (0.2.6)
+  - MQTTClient (0.3.0)
 
 DEPENDENCIES:
   - CocoaLumberjack
   - Crashlytics
   - Fabric
-  - MQTTClient
+  - MQTTClient (from `~/MQTT-Client-Framework`)
+
+EXTERNAL SOURCES:
+  MQTTClient:
+    :path: ~/MQTT-Client-Framework
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
   Crashlytics: 0e61bdda9def51f1e99720f804eebe94865442b2
   Fabric: 03c3b3fe77e11a2bc31421b989a9c7adaa4779a5
-  MQTTClient: f3af97fd4e26e0644364cb24e809b9646afce202
+  MQTTClient: 2f4cc2056a815987df2be9c468dc69f5cc92704d
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0.beta.5

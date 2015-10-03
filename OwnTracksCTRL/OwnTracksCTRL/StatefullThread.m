@@ -8,8 +8,12 @@
 
 #import "StatefullThread.h"
 #import "AppDelegate.h"
-
+#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#else
+#define DDLogVerbose NSLog
+#endif
+
 
 @interface StatefullThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -17,11 +21,12 @@
 
 @implementation StatefullThread
 
+#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#endif
+
 
 - (void)main {
-    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
-    DDLogVerbose(@"StatefullThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"%@Z", self.clientid]
                                                     userName:self.user

@@ -14,6 +14,7 @@
 
 @implementation MapPopOverSegue
 
+#ifndef CTRLTV
 - (void)perform {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     self.observer = [center addObserverForName:UIDeviceOrientationDidChangeNotification
@@ -31,4 +32,6 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self.observer];
 }
+#endif
+
 @end

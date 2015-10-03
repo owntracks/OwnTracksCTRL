@@ -7,13 +7,17 @@
 //
 
 #import "VehiclesVC.h"
-#import "MapVC.h"
 #import "AnnotationV.h"
 #import "Vehicle+Create.h"
 #import "AppDelegate.h"
 #import "VehicleVC.h"
-
+#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "MapVC.h"
+#else
+#define DDLogVerbose NSLog
+#define DDLogError NSLog
+#endif
 
 @interface VehiclesVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -22,11 +26,13 @@
 
 @implementation VehiclesVC
 
+#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#endif
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     self.navigationItem.title = @"OwnTracksCTRL - Vehicles";
 }
 
@@ -64,7 +70,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
         NSError *error = nil;
         if (![context save:&error]) {
-            DDLogError(@"context save: %@", error);
+            NSLog(@"context save: %@", error);
             abort();
         }
     }   
@@ -90,6 +96,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#ifndef CTRLTV
     Vehicle *vehicle = (Vehicle *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     
     UIViewController *vc = self.navigationController.viewControllers[[self.navigationController.viewControllers count] - 2];
@@ -97,6 +104,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [vc performSelector:@selector(centerOn:) withObject:vehicle];
     }
     [self.navigationController popViewControllerAnimated:true];
+#endif
 }
 
 #pragma mark - Fetched results controller
@@ -204,9 +212,29 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 {
     Vehicle *vehicle = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.textLabel.text = vehicle.info ? vehicle.info : @"";
+    cell.textLabel.text = vehicle.info ? vehicle.info : vehicle.topic;
+
+#ifndef CTRLTV
     cell.detailTextLabel.text = [vehicle subtitle];
-    
+#else
+    cell.detailTextLabel.text = @"reverse geocoding...";
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[vehicle.lat doubleValue] longitude:[vehicle.lon doubleValue]];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+         if ([placemarks count] > 0) {
+             CLPlacemark *placemark = placemarks[0];
+             NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
+             if (address && [address count] >= 1) {
+                 cell.detailTextLabel.text = address[0];
+                 for (int i = 1; i < [address count]; i++) {
+                      cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@",
+                                              cell.detailTextLabel.text, address[i]];
+                 }
+             }
+         }
+     }];
+#endif
+
     AnnotationV *annotationView = [[AnnotationV alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     annotationView.annotation = vehicle;
     cell.imageView.image = [annotationView getImage];

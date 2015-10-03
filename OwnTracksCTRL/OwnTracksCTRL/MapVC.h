@@ -7,11 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
 #import "Vehicle+Create.h"
 
+#ifndef CTRLTV
+
+#import <MapKit/MapKit.h>
 
 @interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate>
 + (void)centerOn:(Vehicle *)vehicle;
 - (void)centerOn:(Vehicle *)vehicle;
 @end
+
+#else
+
+@interface MapVC : UIViewController <NSFetchedResultsControllerDelegate>
+@end
+
+#endif

@@ -10,7 +10,11 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
+#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#else 
+#define DDLogVerbose NSLog
+#endif
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -21,10 +25,11 @@
 
 @implementation StatelessThread
 
+#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#endif
 
 - (void)main {
-    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     DDLogVerbose(@"StatelessThread");
     
     self.mqttSession = [[MQTTSession alloc] initWithClientId:self.clientid
@@ -72,22 +77,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                   self.port,
                                   self.clientid,
                                   [self.error description]];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if ([self.error.domain isEqualToString:NSOSStatusErrorDomain] &&
             self.error.code == errSSLXCertChainInvalid &&
             self.tls &&
-            appDelegate.broker.certurl &&
-            appDelegate.broker.certurl.length > 0) {
+            delegate.broker.certurl &&
+            delegate.broker.certurl.length > 0) {
             loadButtonTitle = @"Load Certificate";
             errorMessage = @"OwnTracks uses a TLS encrypted server connection to protect your privacy. Please load, check and install the server's certificate";
-        }
-        
+            DDLogVerbose(@"certurl %@", delegate.broker.certurl);
+#ifndef CTRLTV
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MQTT connection failed"
                                                             message:errorMessage
                                                            delegate:self
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"OK", loadButtonTitle, nil];
         [alertView show];
+#else
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:delegate.broker.certurl]];
+#endif
+        }
     }
 }
 
@@ -112,12 +121,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
+#ifndef CTRLTV
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (buttonIndex > 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:delegate.broker.certurl]];
     }
 }
-
+#endif
 
 @end

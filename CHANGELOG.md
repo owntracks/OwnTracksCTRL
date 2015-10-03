@@ -1,7 +1,14 @@
 
-OwnTracksCTRL App 1.1 Release Notes
+OwnTracksCTRL App Release Notes
 ===================================
 
+## OwnTracksCTRL 1.1.8
+>Release date: 2015-10-??
+
+tvOS support (incomplete
+
+[NEW] tvOS support #19
+ 
 ## OwnTracksCTRL 1.1.7
 >Release date: 2015-07-??
 
@@ -10,7 +17,7 @@ a few updates
 [NEW] version in launch screen
 [FIX] Avoid re-login when re-starting App closes #18
 [NEW] updated frameworks (MQTTClient, Lumberjack, Fabric.io)
-
+ 
 ## OwnTracksCTRL 1.1.6
 >Release date: pending
 

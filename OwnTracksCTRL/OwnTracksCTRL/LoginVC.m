@@ -10,15 +10,19 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
+#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#else
+#define DDLogVerbose NSLog
+#endif
 
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
 @property (weak, nonatomic) IBOutlet UITextField *UIpassword;
 @property (weak, nonatomic) IBOutlet UIButton *UILookup;
 
-@property (strong, nonatomic) NSURLConnection *urlConnection;
-@property (strong, nonatomic) NSMutableData *receivedData;
+@property (strong, nonatomic) NSURLSession *urlSession;
+@property (strong, nonatomic) NSURLSessionDownloadTask *downloadTask;
 
 @property (nonatomic) BOOL autostart;
 
@@ -26,11 +30,12 @@
 
 @implementation LoginVC
 
+#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#endif
 
 - (void)loadView {
     [super loadView];
-    DDLogVerbose(@"ddLogLevel %lu", (unsigned long)ddLogLevel);
     self.autostart = true;
 }
 
@@ -102,8 +107,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (IBAction)lookup:(UIButton *)sender {
     self.autostart = false;
-    if (self.urlConnection) {
-        [self.urlConnection cancel];
+    if (self.downloadTask) {
+        [self.downloadTask cancel];
     }
 
     [self updateValues];
@@ -139,80 +144,89 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
-    self.receivedData = [[NSMutableData alloc] init];
-    self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    self.urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    self.downloadTask =
+    [self.urlSession downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+
+        DDLogVerbose(@"downloadTaskWithRequest completionhandler %@ %@ %@", location, response, error);
+#ifndef CTRLTV
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
+#endif
+        if (error) {
+#ifndef CTRLTV
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
+                                                                message:[error description]
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"OK", nil];
+            [alertView show];
+#endif
+        } else {
+            NSDictionary *dictionary = nil;
+            NSData *data = nil;
+            if (location) {
+                data = [NSData dataWithContentsOfURL:location];
+            }
+            if (data) {
+                NSError *error;
+                dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            }
+            if (dictionary && [dictionary[@"_type"] isEqualToString:@"configuration"]) {
+                DDLogVerbose(@"configuration %@", dictionary);
+                AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+                delegate.broker.host = [self stringFromJSON:dictionary key:@"host"];
+                delegate.broker.port = [self numberFromJSON:dictionary key:@"port"];
+                delegate.broker.auth = [self numberFromJSON:dictionary key:@"auth"];
+                delegate.broker.tls = [self numberFromJSON:dictionary key:@"tls"];
+                delegate.broker.user = [self stringFromJSON:dictionary key:@"username"];
+                delegate.broker.passwd = [self stringFromJSON:dictionary key:@"password"];
+                delegate.broker.trackurl = [self stringFromJSON:dictionary key:@"trackurl"];
+                delegate.broker.certurl = [self stringFromJSON:dictionary key:@"certurl"];
+
+                NSString *base = @"";
+                for (NSString *topic in [self arrayFromJSON:dictionary key:@"topicList"]) {
+                    if (base.length) {
+                        base = [base stringByAppendingString:@" "];
+                    }
+                    base = [base stringByAppendingString:topic];
+                }
+                delegate.broker.base = base;
+
+                delegate.broker.clientid = [self stringFromJSON:dictionary key:@"clientid"];
+                [self updated];
+                [self performSelectorOnMainThread:@selector(login) withObject:nil waitUntilDone:NO];
+            } else {
+                NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                if (dictionary) {
+                    if ([dictionary[@"message"] isKindOfClass:[NSString class]]) {
+                        message = dictionary[@"message"];
+                    }
+                }
+#ifndef CTRLTV
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
+                                                                    message:message
+                                                                   delegate:nil
+                                                          cancelButtonTitle:nil
+                                                          otherButtonTitles:@"OK", nil];
+                [alertView show];
+#endif
+            }
+
+        }
+
+        self.downloadTask = nil;
+        self.urlSession = nil;
+    }];
+
+    [self.downloadTask resume];
+#ifndef CTRLTV
     [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
+#endif
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    DDLogVerbose(@"NSURLResponse %@", response);
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [self.receivedData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    self.urlConnection = nil;
-    self.receivedData = nil;
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
-                                                        message:[error description]
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-    [alertView show];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    self.urlConnection = nil;
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-    NSDictionary *dictionary = nil;
-    if (self.receivedData.length) {
-        NSError *error;
-        dictionary = [NSJSONSerialization JSONObjectWithData:self.receivedData options:0 error:&error];
-    }
-    if (dictionary && [dictionary[@"_type"] isEqualToString:@"configuration"]) {
-        DDLogVerbose(@"configuration %@", dictionary);
-        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        
-        delegate.broker.host = [self stringFromJSON:dictionary key:@"host"];
-        delegate.broker.port = [self numberFromJSON:dictionary key:@"port"];
-        delegate.broker.auth = [self numberFromJSON:dictionary key:@"auth"];
-        delegate.broker.tls = [self numberFromJSON:dictionary key:@"tls"];
-        delegate.broker.user = [self stringFromJSON:dictionary key:@"username"];
-        delegate.broker.passwd = [self stringFromJSON:dictionary key:@"password"];
-        delegate.broker.trackurl = [self stringFromJSON:dictionary key:@"trackurl"];
-        delegate.broker.certurl = [self stringFromJSON:dictionary key:@"certurl"];
-        
-        NSString *base = @"";
-        for (NSString *topic in [self arrayFromJSON:dictionary key:@"topicList"]) {
-            if (base.length) {
-                base = [base stringByAppendingString:@" "];
-            }
-            base = [base stringByAppendingString:topic];
-        }
-        delegate.broker.base = base;
-        
-        delegate.broker.clientid = [self stringFromJSON:dictionary key:@"clientid"];
-        [self updated];
-        [self performSegueWithIdentifier:@"Login" sender:nil];
-    } else {
-        NSString *message = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-        if (dictionary) {
-            if ([dictionary[@"message"] isKindOfClass:[NSString class]]) {
-                message = dictionary[@"message"];
-            }
-        }
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
-                                                            message:message
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-    }
-    self.receivedData = nil;
+- (void)login {
+    [self performSegueWithIdentifier:@"Login" sender:nil];
 }
 
 - (IBAction)direct:(UILongPressGestureRecognizer *)sender {
