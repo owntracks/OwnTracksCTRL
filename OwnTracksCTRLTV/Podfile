@@ -5,7 +5,7 @@ link_with 'OwnTracksCTRLTV'
 xcodeproj 'OwnTracksCTRLTV.xcodeproj'
 
 #pod 'CocoaLumberjack'
-pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
+pod 'MQTTClient'
 #pod 'Fabric'
 #pod 'Crashlytics'
 
