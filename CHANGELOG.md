@@ -1,6 +1,5 @@
-
 OwnTracksCTRL App Release Notes
-===================================
+===============================
 
 ## OwnTracksCTRL 1.1.8
 >Release date: 2015-10-??
