@@ -30,6 +30,10 @@
 		840717A01BC01A4A00FBB3CB /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717771BBFC17800FBB3CB /* SettingsVC.m */; };
 		840717A31BC01A8500FBB3CB /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717A11BC01A8500FBB3CB /* MapPopOverSegue.m */; };
 		840717A41BC01A8500FBB3CB /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717A21BC01A8500FBB3CB /* MapVC.m */; };
+		842095FE1BC3CAEE00C9CBFF /* TVMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842095FD1BC3CAEE00C9CBFF /* TVMapView.m */; };
+		842096001BC3D48400C9CBFF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842095FF1BC3D48400C9CBFF /* CoreLocation.framework */; };
+		842096021BC3D48A00C9CBFF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842096011BC3D48A00C9CBFF /* CFNetwork.framework */; };
+		842096041BC3D48F00C9CBFF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842096031BC3D48F00C9CBFF /* CoreData.framework */; };
 		FC1DF9C4EFAAE33CB80BA68A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 295E135C42A25A24EBA3F9E8 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +91,11 @@
 		840717A21BC01A8500FBB3CB /* MapVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MapVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.m; sourceTree = "<group>"; };
 		840717A51BC01B8E00FBB3CB /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPopOverSegue.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapPopOverSegue.h; sourceTree = "<group>"; };
 		840717A61BC01B8E00FBB3CB /* MapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.h; sourceTree = "<group>"; };
+		842095FC1BC3CAEE00C9CBFF /* TVMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVMapView.h; sourceTree = "<group>"; };
+		842095FD1BC3CAEE00C9CBFF /* TVMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVMapView.m; sourceTree = "<group>"; };
+		842095FF1BC3D48400C9CBFF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		842096011BC3D48A00C9CBFF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		842096031BC3D48F00C9CBFF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B300049816D21E1E8B4808C5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +104,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842096041BC3D48F00C9CBFF /* CoreData.framework in Frameworks */,
+				842096021BC3D48A00C9CBFF /* CFNetwork.framework in Frameworks */,
+				842096001BC3D48400C9CBFF /* CoreLocation.framework in Frameworks */,
 				FC1DF9C4EFAAE33CB80BA68A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +117,9 @@
 		31A34454E46CF3DB431AAAF0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				842096031BC3D48F00C9CBFF /* CoreData.framework */,
+				842096011BC3D48A00C9CBFF /* CFNetwork.framework */,
+				842095FF1BC3D48400C9CBFF /* CoreLocation.framework */,
 				295E135C42A25A24EBA3F9E8 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -135,6 +150,8 @@
 				8407179E1BC00C8C00FBB3CB /* main.m */,
 				8407179C1BBFFDB000FBB3CB /* AnnotationV.m */,
 				8407178D1BBFFD9000FBB3CB /* AnnotationV.h */,
+				842095FC1BC3CAEE00C9CBFF /* TVMapView.h */,
+				842095FD1BC3CAEE00C9CBFF /* TVMapView.m */,
 				8407178E1BBFFD9000FBB3CB /* AppDelegate.h */,
 				8407178F1BBFFD9000FBB3CB /* Broker.h */,
 				840717901BBFFD9000FBB3CB /* Broker+Create.h */,
@@ -334,6 +351,7 @@
 				8407178A1BBFC17800FBB3CB /* Vehicle+Create.m in Sources */,
 				8407178B1BBFC17800FBB3CB /* VehiclesVC.m in Sources */,
 				8407178C1BBFC17800FBB3CB /* VehicleVC.m in Sources */,
+				842095FE1BC3CAEE00C9CBFF /* TVMapView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +462,7 @@
 				);
 				INFOPLIST_FILE = OwnTracksCTRLTV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRLTV;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -462,7 +480,7 @@
 				);
 				INFOPLIST_FILE = OwnTracksCTRLTV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRLTV;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

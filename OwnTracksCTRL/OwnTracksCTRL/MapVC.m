@@ -19,6 +19,7 @@
 #else
 #define DDLogVerbose NSLog
 #define DDLogError NSLog
+#import "TVMapView.h"
 #endif
 
 @interface MapVC ()
@@ -43,8 +44,8 @@
 
 #else
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIButton *UIConnection;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 #endif
 
@@ -101,8 +102,48 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     } else {
         self.UIDetailView.hidden = true;
     }
+#else
+    if (!self.locationManager) {
+        CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+        if (authorizationStatus != kCLAuthorizationStatusDenied &&
+            authorizationStatus != kCLAuthorizationStatusDenied) {
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            if ([CLLocationManager locationServicesEnabled]) {
+                [self.locationManager requestLocation];
+            }
+        }
+    }
+
+    if ([self.view respondsToSelector:@selector(setVehicles:)]) {
+        [self.view performSelector:@selector(setVehicles:) withObject:self.fetchedResultsController.fetchedObjects];
+    }
 #endif
 }
+
+#ifdef CTRLTV
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    for (CLLocation *location in locations) {
+        if ([self.view isKindOfClass:[TVMapView class]]) {
+            TVMapView *tvMapView = (TVMapView *)self.view;
+            tvMapView.centerLocation = location.coordinate;
+        }
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    DDLogError(@"locationManager didFailWithError: %@", error);
+
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    DDLogVerbose(@"locationManager didChangeAuthorizationStatus: %d", status);
+
+}
+#endif
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.fetchedResultsController = nil;
@@ -315,7 +356,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    //
+#ifdef CTRLTV
+    if ([self.view respondsToSelector:@selector(setVehicles:)]) {
+        [self.view performSelector:@selector(setVehicles:) withObject:controller.fetchedObjects];
+    }
+#endif
 }
 
 #ifndef CTRLTV
@@ -496,8 +541,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"connectedTo"]) {
         if ([object valueForKey:keyPath]) {
+            [self.UIConnection setTitle:@"Disconnect" forState:UIControlStateNormal];
             self.UIConnection.tintColor = COLOR_ON;
         } else {
+            [self.UIConnection setTitle:@"Connect" forState:UIControlStateNormal];
             self.UIConnection.tintColor = COLOR_ERR;
         }
 #ifndef CTRLTV

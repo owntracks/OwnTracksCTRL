@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "Vehicle+Create.h"
 
 #ifndef CTRLTV
@@ -20,7 +21,7 @@
 
 #else
 
-@interface MapVC : UIViewController <NSFetchedResultsControllerDelegate>
+@interface MapVC : UIViewController <NSFetchedResultsControllerDelegate, CLLocationManagerDelegate>
 @end
 
 #endif
