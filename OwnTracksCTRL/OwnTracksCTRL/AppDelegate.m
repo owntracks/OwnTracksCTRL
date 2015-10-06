@@ -385,10 +385,11 @@
         return _persistentStoreCoordinator;
     }
 
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OwnTracksGW.sqlite"];
-
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+
+#ifndef CTRLTV
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OwnTracksGW.sqlite"];
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                               NSInferMappingModelAutomaticallyOption: @YES};
 
@@ -400,6 +401,16 @@
         NSLog(@"managedObjectContext save: %@", error);
         abort();
     }
+#else
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType
+                                                   configuration:nil
+                                                             URL:nil
+                                                         options:nil
+                                                           error:&error]) {
+        NSLog(@"managedObjectContext save: %@", error);
+        abort();
+    }
+#endif
 
     return _persistentStoreCoordinator;
 }
