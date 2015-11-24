@@ -4,9 +4,9 @@ platform :tvos, '9.0'
 link_with 'OwnTracksCTRLTV'
 xcodeproj 'OwnTracksCTRLTV.xcodeproj'
 
-#pod 'CocoaLumberjack'
-pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
-#pod 'Fabric'
-#pod 'Crashlytics'
+pod 'CocoaLumberjack'
+pod 'MQTTClient'
+pod 'Fabric'
+pod 'Crashlytics'
 
 

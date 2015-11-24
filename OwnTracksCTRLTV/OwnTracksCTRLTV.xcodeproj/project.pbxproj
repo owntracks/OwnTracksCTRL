@@ -28,7 +28,6 @@
 		8407179D1BBFFDB000FBB3CB /* AnnotationV.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407179C1BBFFDB000FBB3CB /* AnnotationV.m */; };
 		8407179F1BC00C8C00FBB3CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407179E1BC00C8C00FBB3CB /* main.m */; };
 		840717A01BC01A4A00FBB3CB /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717771BBFC17800FBB3CB /* SettingsVC.m */; };
-		840717A31BC01A8500FBB3CB /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717A11BC01A8500FBB3CB /* MapPopOverSegue.m */; };
 		840717A41BC01A8500FBB3CB /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717A21BC01A8500FBB3CB /* MapVC.m */; };
 		842095FE1BC3CAEE00C9CBFF /* TVMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842095FD1BC3CAEE00C9CBFF /* TVMapView.m */; };
 		842096001BC3D48400C9CBFF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842095FF1BC3D48400C9CBFF /* CoreLocation.framework */; };
@@ -87,9 +86,7 @@
 		8407179B1BBFFD9000FBB3CB /* VehicleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VehicleVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/VehicleVC.h; sourceTree = "<group>"; };
 		8407179C1BBFFDB000FBB3CB /* AnnotationV.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AnnotationV.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/AnnotationV.m; sourceTree = "<group>"; };
 		8407179E1BC00C8C00FBB3CB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/main.m; sourceTree = "<group>"; };
-		840717A11BC01A8500FBB3CB /* MapPopOverSegue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MapPopOverSegue.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapPopOverSegue.m; sourceTree = "<group>"; };
 		840717A21BC01A8500FBB3CB /* MapVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MapVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.m; sourceTree = "<group>"; };
-		840717A51BC01B8E00FBB3CB /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPopOverSegue.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapPopOverSegue.h; sourceTree = "<group>"; };
 		840717A61BC01B8E00FBB3CB /* MapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.h; sourceTree = "<group>"; };
 		842095FC1BC3CAEE00C9CBFF /* TVMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVMapView.h; sourceTree = "<group>"; };
 		842095FD1BC3CAEE00C9CBFF /* TVMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVMapView.m; sourceTree = "<group>"; };
@@ -146,25 +143,22 @@
 		840716FD1BBFBC9400FBB3CB /* OwnTracksCTRLTV */ = {
 			isa = PBXGroup;
 			children = (
-				840717A51BC01B8E00FBB3CB /* MapPopOverSegue.h */,
 				8407179E1BC00C8C00FBB3CB /* main.m */,
 				8407179C1BBFFDB000FBB3CB /* AnnotationV.m */,
 				8407178D1BBFFD9000FBB3CB /* AnnotationV.h */,
 				842095FC1BC3CAEE00C9CBFF /* TVMapView.h */,
 				842095FD1BC3CAEE00C9CBFF /* TVMapView.m */,
-				8407178E1BBFFD9000FBB3CB /* AppDelegate.h */,
 				8407178F1BBFFD9000FBB3CB /* Broker.h */,
 				840717901BBFFD9000FBB3CB /* Broker+Create.h */,
 				840717911BBFFD9000FBB3CB /* ConfD.h */,
 				840717921BBFFD9000FBB3CB /* ConfD+Create.h */,
 				840717941BBFFD9000FBB3CB /* SettingsVC.h */,
-				840717951BBFFD9000FBB3CB /* StatefullThread.h */,
-				840717961BBFFD9000FBB3CB /* StatelessThread.h */,
 				840717971BBFFD9000FBB3CB /* TrackTVC.h */,
 				840717981BBFFD9000FBB3CB /* Vehicle.h */,
 				840717991BBFFD9000FBB3CB /* Vehicle+Create.h */,
 				8407179A1BBFFD9000FBB3CB /* VehiclesVC.h */,
 				8407179B1BBFFD9000FBB3CB /* VehicleVC.h */,
+				8407178E1BBFFD9000FBB3CB /* AppDelegate.h */,
 				840717711BBFC17800FBB3CB /* AppDelegate.m */,
 				840717721BBFC17800FBB3CB /* Broker.m */,
 				840717731BBFC17800FBB3CB /* Broker+Create.m */,
@@ -173,10 +167,11 @@
 				840717931BBFFD9000FBB3CB /* LoginVC.h */,
 				840717761BBFC17800FBB3CB /* LoginVC.m */,
 				840717771BBFC17800FBB3CB /* SettingsVC.m */,
+				840717951BBFFD9000FBB3CB /* StatefullThread.h */,
 				840717781BBFC17800FBB3CB /* StatefullThread.m */,
+				840717961BBFFD9000FBB3CB /* StatelessThread.h */,
 				840717791BBFC17800FBB3CB /* StatelessThread.m */,
 				8407177A1BBFC17800FBB3CB /* TrackTVC.m */,
-				840717A11BC01A8500FBB3CB /* MapPopOverSegue.m */,
 				840717A61BC01B8E00FBB3CB /* MapVC.h */,
 				840717A21BC01A8500FBB3CB /* MapVC.m */,
 				8407177B1BBFC17800FBB3CB /* Vehicle.m */,
@@ -223,6 +218,7 @@
 				840716F91BBFBC9400FBB3CB /* Resources */,
 				52F44AA3F23CB463C5ADB3E0 /* Embed Pods Frameworks */,
 				693C427EFC2911C46837196E /* Copy Pods Resources */,
+				843FC9F11C0482E40010C371 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -244,6 +240,7 @@
 				TargetAttributes = {
 					840716FA1BBFBC9400FBB3CB = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = C652JFWU23;
 					};
 				};
 			};
@@ -326,6 +323,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		843FC9F11C0482E40010C371 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FABRIC_APIKEY=$(cat ${SRCROOT}/fabric.apikey)\\nFABRIC_BUILDSECRET=$(cat ${SRCROOT}/fabric.buildsecret)\\n./Pods/Fabric.framework/run ${FABRIC_APIKEY} ${FABRIC_BUILDSECRET}";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -333,7 +343,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840717A31BC01A8500FBB3CB /* MapPopOverSegue.m in Sources */,
 				840717A41BC01A8500FBB3CB /* MapVC.m in Sources */,
 				840717A01BC01A4A00FBB3CB /* SettingsVC.m in Sources */,
 				8407179F1BC00C8C00FBB3CB /* main.m in Sources */,
@@ -404,6 +413,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_NO_PIE = NO;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = appletvos;
@@ -434,6 +444,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -441,6 +452,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_NO_PIE = NO;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -455,15 +467,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
-					CTRLTV,
+					"CTRLTV=1",
 				);
 				INFOPLIST_FILE = OwnTracksCTRLTV/Info.plist;
+				LD_NO_PIE = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -473,15 +490,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
-					CTRLTV,
+					"CTRLTV=1",
 				);
 				INFOPLIST_FILE = OwnTracksCTRLTV/Info.plist;
+				LD_NO_PIE = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.OwnTracksCTRL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

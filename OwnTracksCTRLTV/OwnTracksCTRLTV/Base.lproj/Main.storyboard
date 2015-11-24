@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="9052" systemVersion="15A279b" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" initialViewController="zTv-kB-Yqs">
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="9058" systemVersion="15A284" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" initialViewController="zTv-kB-Yqs">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9040"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9048"/>
     </dependencies>
     <scenes>
         <!--LoginVC-->
@@ -16,36 +16,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="AppImage" translatesAutoresizingMaskIntoConstraints="NO" id="AeJ-3j-1a5">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppImage" translatesAutoresizingMaskIntoConstraints="NO" id="AeJ-3j-1a5">
                                 <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                                 <animations/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sq1-4B-Mnm">
-                                <rect key="frame" x="1002" y="642" width="174" height="86"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sq1-4B-Mnm">
+                                <rect key="frame" x="873" y="497" width="174" height="86"/>
                                 <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="174" id="8uM-vs-hDR"/>
+                                    <constraint firstAttribute="height" constant="86" id="iho-P6-0qD"/>
+                                </constraints>
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="Login"/>
                                 <connections>
                                     <action selector="lookup:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="a3g-E4-9Oe"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hu8-yz-LQr">
-                                <rect key="frame" x="1002" y="550" width="621" height="66"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hu8-yz-LQr">
+                                <rect key="frame" x="873" y="407" width="621" height="66"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="621" id="2b3-Sk-EbH"/>
+                                    <constraint firstAttribute="height" constant="66" id="gKp-ul-zBh"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="userid" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Npg-Vt-aQm">
-                                <rect key="frame" x="1002" y="455" width="621" height="66"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="userid" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Npg-Vt-aQm">
+                                <rect key="frame" x="873" y="333" width="621" height="66"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="621" id="9fQ-7Y-oki"/>
+                                    <constraint firstAttribute="height" constant="66" id="gDc-7d-cxQ"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="AeJ-3j-1a5" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Koz-ZW-HfJ"/>
+                            <constraint firstItem="sq1-4B-Mnm" firstAttribute="top" secondItem="hu8-yz-LQr" secondAttribute="bottom" constant="24" symbolic="YES" id="MrY-Yj-BUg"/>
+                            <constraint firstAttribute="trailing" secondItem="AeJ-3j-1a5" secondAttribute="trailing" id="RFU-v4-6L9"/>
+                            <constraint firstItem="AeJ-3j-1a5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="XpK-lX-fMP"/>
+                            <constraint firstItem="sq1-4B-Mnm" firstAttribute="leading" secondItem="hu8-yz-LQr" secondAttribute="leading" id="mDb-Nl-FpR"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="AeJ-3j-1a5" secondAttribute="bottom" id="nfj-F6-j2S"/>
+                            <constraint firstItem="sq1-4B-Mnm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pXt-h3-Lf8"/>
+                            <constraint firstItem="hu8-yz-LQr" firstAttribute="top" secondItem="Npg-Vt-aQm" secondAttribute="bottom" constant="8" symbolic="YES" id="vQP-6y-QTT"/>
+                            <constraint firstItem="sq1-4B-Mnm" firstAttribute="leading" secondItem="Npg-Vt-aQm" secondAttribute="leading" id="wBd-ae-6P4"/>
+                            <constraint firstItem="sq1-4B-Mnm" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="zB2-PH-csV"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="w7j-D0-mKo"/>
                     <connections>

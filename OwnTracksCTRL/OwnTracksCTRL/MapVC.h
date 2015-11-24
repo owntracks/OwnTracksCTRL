@@ -14,7 +14,7 @@
 
 #import <MapKit/MapKit.h>
 
-@interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate>
+@interface MapVC : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate>
 + (void)centerOn:(Vehicle *)vehicle;
 - (void)centerOn:(Vehicle *)vehicle;
 @end

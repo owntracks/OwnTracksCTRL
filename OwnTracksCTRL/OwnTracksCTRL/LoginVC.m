@@ -10,11 +10,7 @@
 #import "AppDelegate.h"
 #import "Vehicle+Create.h"
 
-#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#else
-#define DDLogVerbose NSLog
-#endif
 
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIuser;
@@ -24,15 +20,15 @@
 @property (strong, nonatomic) NSURLSession *urlSession;
 @property (strong, nonatomic) NSURLSessionDownloadTask *downloadTask;
 
+@property (strong, nonatomic) UIAlertController *alertController;
+
 @property (nonatomic) BOOL autostart;
 
 @end
 
 @implementation LoginVC
 
-#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#endif
 
 - (void)loadView {
     [super loadView];
@@ -153,14 +149,29 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
 #endif
         if (error) {
-#ifndef CTRLTV
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
-                                                                message:[error description]
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"OK", nil];
-            [alertView show];
-#endif
+            self.alertController = [UIAlertController alertControllerWithTitle:@"Lookup failed"
+                                                                           message:[error localizedDescription]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * action) {
+                                                                     [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                                 }];
+            
+            UIAlertAction* continueAction = [UIAlertAction actionWithTitle:@"Continue"
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self performSelectorOnMainThread:@selector(login)
+                                                                                             withObject:nil
+                                                                                          waitUntilDone:NO];
+                                                                      [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                                  }];
+            
+            [self.alertController addAction:cancelAction];
+            [self.alertController addAction:continueAction];
+            [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
+            
         } else {
             NSDictionary *dictionary = nil;
             NSData *data = nil;
@@ -203,16 +214,18 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                         message = dictionary[@"message"];
                     }
                 }
-#ifndef CTRLTV
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Settings invalid"
-                                                                    message:message
-                                                                   delegate:nil
-                                                          cancelButtonTitle:nil
-                                                          otherButtonTitles:@"OK", nil];
-                [alertView show];
-#endif
+                self.alertController = [UIAlertController alertControllerWithTitle:@"Settings invalid"
+                                                                           message:message                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                       style:UIAlertActionStyleDefault
+                                                                     handler:^(UIAlertAction * action) {
+                                                                         [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                                     }];
+                
+                [self.alertController addAction:cancelAction];
+                [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
             }
-
         }
 
         self.downloadTask = nil;
@@ -223,6 +236,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #ifndef CTRLTV
     [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
 #endif
+}
+
+- (void)showAlertController {
+    [self presentViewController:self.alertController animated:YES completion:nil];
 }
 
 - (void)login {

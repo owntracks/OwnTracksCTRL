@@ -7,10 +7,13 @@
 //
 
 #import "AppDelegate.h"
-#import "StatelessThread.h"
 #import "StatefullThread.h"
 #import "Vehicle+Create.h"
 #import "LoginVC.h"
+
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 #undef BACKGROUND_CONNECT // if enabled, background capability has to be setup again
 #undef EVENT_REPORTING
@@ -26,6 +29,8 @@
 
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
 @property (strong, nonatomic) StatelessThread *mqttThread;
+@property (strong, nonatomic) UIAlertController *alertController;
+
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (readwrite, strong, nonatomic) NSString *connectedTo;
 @property (readwrite, strong, nonatomic) NSString *token;
@@ -38,6 +43,8 @@
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation AppDelegate
+
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -53,14 +60,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Fabric with:@[CrashlyticsKit]];
+    
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
-
+    
     self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
     self.broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
-
+    
     return YES;
 }
 
@@ -90,12 +99,12 @@
 
 - (void)connect {
     [self disconnect];
-
+    
     self.mqttThread = [[StatelessThread alloc] init];
     self.mqttThread.host = self.broker.host;
     self.mqttThread.port = [self.broker.port intValue];
     self.mqttThread.tls = [self.broker.tls boolValue];
-
+    
     if ([self.broker.auth boolValue]) {
         if (self.broker.user && self.broker.user.length > 0) {
             self.mqttThread.user = self.broker.user;
@@ -110,21 +119,21 @@
         self.mqttThread.user = nil;
         self.mqttThread.passwd = nil;
     }
-
+    
     self.mqttThread.base = self.broker.base;
     self.mqttThread.clientid = self.broker.clientid;
-
+    
     [self.mqttThread addObserver:self forKeyPath:@"connectedTo"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:nil];
     self.registered = true;
     [self.mqttThread start];
-
+    
     self.mqttPlusThread = [[StatefullThread alloc] init];
     self.mqttPlusThread.host = self.broker.host;
     self.mqttPlusThread.port = [self.broker.port intValue];
     self.mqttPlusThread.tls = [self.broker.tls boolValue];
-
+    
     if ([self.broker.auth boolValue]) {
         if (self.broker.user && self.broker.user.length > 0) {
             self.mqttPlusThread.user = self.broker.user;
@@ -139,7 +148,7 @@
         self.mqttPlusThread.user = nil;
         self.mqttPlusThread.passwd = nil;
     }
-
+    
     self.mqttPlusThread.base = self.broker.base;
     self.mqttPlusThread.clientid = self.broker.clientid;
     [self.mqttPlusThread start];
@@ -175,87 +184,87 @@
         NSDictionary *dictionary = (NSDictionary *)object;
         NSData *data = dictionary[@"data"];
         NSString *topic = dictionary[@"topic"];
-
+        
         NSArray *topicComponents = [topic componentsSeparatedByCharactersInSet:
                                     [NSCharacterSet characterSetWithCharactersInString:@"/"]];
-
+        
         NSArray *topicFilters = [self.broker.base componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSArray *baseComponents = [topicFilters[0] componentsSeparatedByCharactersInSet:
                                    [NSCharacterSet characterSetWithCharactersInString:@"/"]];
-
+        
         if (topicComponents.count < baseComponents.count) {
             return;
         }
-
+        
         NSString *baseTopic = @"";
-
+        
         for (int i = 0; i < [baseComponents count]; i++) {
             if (baseTopic.length) {
                 baseTopic = [baseTopic stringByAppendingString:@"/"];
             }
             baseTopic = [baseTopic stringByAppendingString:topicComponents[i]];
         }
-
+        
         NSString *subTopic = @"";
-
+        
         for (unsigned long i = [baseComponents count]; i < [topicComponents count]; i++) {
             if (subTopic.length) {
                 subTopic = [subTopic stringByAppendingString:@"/"];
             }
             subTopic = [subTopic stringByAppendingString:topicComponents[i]];
         }
-
+        
         [self.queueManagedObjectContext performBlock:^{
-
+            
             Vehicle *vehicle = [Vehicle vehicleNamed:baseTopic
                               inManagedObjectContext:self.queueManagedObjectContext];
             if (!vehicle.tid) {
                 vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
             }
-
+            
             NSDictionary *dictionary = nil;
             if (data.length) {
                 NSError *error;
                 dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-
+                
                 if (!dictionary) {
                     NSString *payload = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSArray *values = [payload componentsSeparatedByString:@","];
                     if ([values count] == 10) {
                         dictionary = [[NSMutableDictionary alloc] initWithCapacity:9];
                         [dictionary setValue:values[0] forKey:@"tid"];
-
+                        
                         NSScanner *scanner = [NSScanner scannerWithString:values[1]];
                         unsigned int tst = 0;
                         [scanner scanHexInt:&tst];
                         [dictionary setValue:[NSString stringWithFormat:@"%u", tst] forKey:@"tst"];
-
+                        
                         [dictionary setValue:values[2] forKey:@"t"];
-
+                        
                         double lat = [values[3] doubleValue] / 1000000.0;
                         [dictionary setValue:[NSString stringWithFormat:@"%.6f", lat] forKey:@"lat"];
-
+                        
                         double lon = [values[4] doubleValue] / 1000000.0;
                         [dictionary setValue:[NSString stringWithFormat:@"%.6f", lon] forKey:@"lon"];
-
+                        
                         int cog = [values[5] intValue] * 10;
                         [dictionary setValue:@(cog) forKey:@"cog"];
-
+                        
                         int vel = [values[6] intValue];
                         [dictionary setValue:@(vel) forKey:@"vel"];
-
+                        
                         int alt = [values[7] intValue] * 10;
                         [dictionary setValue:@(alt) forKey:@"alt"];
-
+                        
                         int dist = [values[8] intValue];
                         [dictionary setValue:@(dist) forKey:@"dist"];
-
+                        
                         int trip = [values[9] intValue] * 1000;
                         [dictionary setValue:@(trip) forKey:@"trip"];
                     }
                 }
             }
-
+            
             if ([topicComponents count] == [baseComponents count]) {
                 if (dictionary) {
                     vehicle.acc = @([dictionary[@"acc"] doubleValue]);
@@ -264,13 +273,13 @@
                     vehicle.dist= dictionary[@"dist"];
                     vehicle.lat= @([dictionary[@"lat"] doubleValue]);
                     vehicle.lon= @([dictionary[@"lon"] doubleValue]);
-
+                    
                     if (dictionary[@"tid"]) {
                         vehicle.tid = dictionary[@"tid"];
                     } else {
                         vehicle.tid = [baseTopic substringFromIndex:MAX(0, baseTopic.length - 2)];
                     }
-
+                    
                     vehicle.trigger= dictionary[@"t"];
                     vehicle.trip=dictionary[@"trip"];
                     vehicle.tst=[NSDate dateWithTimeIntervalSince1970:[dictionary[@"tst"] doubleValue]];
@@ -281,11 +290,11 @@
                 if ([subTopic isEqualToString:@"status"]) {
                     NSString *status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.status = @([status intValue]);
-
+                    
                 } else if ([subTopic isEqualToString:@"info"]) {
                     NSString *info = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.info= info;
-
+                    
                 } else if ([subTopic isEqualToString:@"start"]) {
                     NSString *start = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSArray *fields = [start componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -298,7 +307,7 @@
                         vehicle.version = fields[1];
                         vehicle.imei = fields[0];
                     }
-
+                    
                 } else if ([subTopic isEqualToString:@"gpio/1"]) {
                     NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio1= @([gpio intValue]);
@@ -314,14 +323,14 @@
                 } else if ([subTopic isEqualToString:@"gpio/7"]) {
                     NSString *gpio = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.gpio7= @([gpio intValue]);
-
+                    
                 } else if ([subTopic isEqualToString:@"voltage/batt"]) {
                     NSString *voltage = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.vbatt = @([voltage doubleValue]);
                 } else if ([subTopic isEqualToString:@"voltage/ext"]) {
                     NSString *voltage = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.vext = @([voltage doubleValue]);
-
+                    
                 } else if ([subTopic isEqualToString:@"temperature/0"]) {
                     NSString *temperature = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.temp0 = @([temperature doubleValue]);
@@ -329,14 +338,14 @@
                     NSString *temperature = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     vehicle.temp1 = @([temperature doubleValue]);
                 }
-
+                
                 NSError *error;
                 if ([self.queueManagedObjectContext hasChanges] && ![self.queueManagedObjectContext save:&error]) {
                     NSLog(@"queueManagedObjectContext save:%@", error);
                 }
                 NSLog(@"processing %@ finished", topic);
             }
-
+            
         }];
     }
 }
@@ -360,7 +369,7 @@
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-
+    
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
@@ -384,15 +393,15 @@
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
-
+    
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-
+    
 #ifndef CTRLTV
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OwnTracksGW.sqlite"];
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                               NSInferMappingModelAutomaticallyOption: @YES};
-
+    
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                    configuration:nil
                                                              URL:storeURL
@@ -411,7 +420,7 @@
         abort();
     }
 #endif
-
+    
     return _persistentStoreCoordinator;
 }
 
@@ -421,5 +430,57 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+- (void)connectError:(StatelessThread *)statelessThread {
+    NSString *loadButtonTitle = nil;
+    NSString *errorMessage = [NSString stringWithFormat:@"%@://%@@%@:%d as %@\n%@",
+                              statelessThread.tls ? @"mqtts" : @"mqtt",
+                              statelessThread.user,
+                              statelessThread.host,
+                              statelessThread.port,
+                              statelessThread.clientid,
+                              [statelessThread.error localizedDescription]];
+    self.alertController = [UIAlertController alertControllerWithTitle:@"MQTT connection failed"
+                                                               message:errorMessage
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * action) {
+                                                             [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                         }];
+    [self.alertController addAction:cancelAction];
+    
+    
+    if ([statelessThread.error.domain isEqualToString:NSOSStatusErrorDomain] &&
+        statelessThread.error.code == errSSLXCertChainInvalid &&
+        statelessThread.tls &&
+        self.broker.certurl &&
+        self.broker.certurl.length > 0) {
+        loadButtonTitle = @"Load Certificate";
+        errorMessage = @"OwnTracks uses a TLS encrypted server connection to protect your privacy. Please load, check and install the server's certificate";
+        DDLogVerbose(@"certurl %@", self.broker.certurl);
+        UIAlertAction* continueAction = [UIAlertAction actionWithTitle:@"Load Certificate"
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction * action) {
+                                                                   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.broker.certurl]];
+                                                                   [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                               }];
+        
+        [self.alertController addAction:continueAction];
+        [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
+    }
+    //[self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
+}
+
+- (void)showAlertController {
+    UIViewController *vc = self.window.rootViewController;
+    if ([vc isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nc = (UINavigationController *)vc;
+        UIViewController *presentingVC = nc.topViewController;
+        [presentingVC presentViewController:self.alertController animated:YES completion:nil];
+    }
+}
+
 
 @end

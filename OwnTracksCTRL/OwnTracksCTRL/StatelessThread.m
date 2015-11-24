@@ -69,34 +69,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [self.mqttSession unsubscribeTopics:topicFilters];
         [self.mqttSession close];
     } else {
-        NSString *loadButtonTitle = nil;
-        NSString *errorMessage = [NSString stringWithFormat:@"%@://%@@%@:%d as %@\n%@",
-                                  self.tls ? @"mqtts" : @"mqtt",
-                                  self.user,
-                                  self.host,
-                                  self.port,
-                                  self.clientid,
-                                  [self.error description]];
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if ([self.error.domain isEqualToString:NSOSStatusErrorDomain] &&
-            self.error.code == errSSLXCertChainInvalid &&
-            self.tls &&
-            delegate.broker.certurl &&
-            delegate.broker.certurl.length > 0) {
-            loadButtonTitle = @"Load Certificate";
-            errorMessage = @"OwnTracks uses a TLS encrypted server connection to protect your privacy. Please load, check and install the server's certificate";
-            DDLogVerbose(@"certurl %@", delegate.broker.certurl);
-#ifndef CTRLTV
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MQTT connection failed"
-                                                            message:errorMessage
-                                                           delegate:self
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", loadButtonTitle, nil];
-        [alertView show];
-#else
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:delegate.broker.certurl]];
-#endif
-        }
+        [delegate connectError:self];
     }
 }
 
@@ -120,14 +94,5 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             break;
     }
 }
-
-#ifndef CTRLTV
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (buttonIndex > 0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:delegate.broker.certurl]];
-    }
-}
-#endif
 
 @end

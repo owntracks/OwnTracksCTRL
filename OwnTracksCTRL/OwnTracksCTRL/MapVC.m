@@ -11,19 +11,20 @@
 #import "AnnotationV.h"
 #import "AppDelegate.h"
 #import "VehicleVC.h"
-#import "MapPopOverSegue.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 #ifndef CTRLTV
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#import "MapVC.h"
+#import "MapPopOverSegue.h"
 #else
-#define DDLogVerbose NSLog
-#define DDLogError NSLog
 #import "TVMapView.h"
 #endif
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSURLSession *urlSession;
+@property (strong, nonatomic) NSURLSessionDownloadTask *downloadTask;
+@property (strong, nonatomic) Vehicle *vehicleToGet;
+@property (strong, nonatomic) UIAlertController *alertController;
 
 #ifndef CTRLTV
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -38,9 +39,6 @@
 
 @property (nonatomic) MKMapRect lastMapRect;
 @property (strong, nonatomic) NSTimer *timer;
-@property (strong, nonatomic) NSURLConnection *urlConnection;
-@property (strong, nonatomic) Vehicle *vehicleToGet;
-@property (strong, nonatomic) NSMutableData *dataToGet;
 
 #else
 
@@ -62,9 +60,7 @@ static MapVC *theMapVC;
 
 @implementation MapVC
 
-#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#endif
 
 - (void)loadView {
     [super loadView];
@@ -541,29 +537,48 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"connectedTo"]) {
         if ([object valueForKey:keyPath]) {
-            [self.UIConnection setTitle:@"Disconnect" forState:UIControlStateNormal];
-            self.UIConnection.tintColor = COLOR_ON;
+            [self performSelectorOnMainThread:@selector(changeUIForConnectedTo:) withObject:@TRUE waitUntilDone:NO];
         } else {
-            [self.UIConnection setTitle:@"Connect" forState:UIControlStateNormal];
-            self.UIConnection.tintColor = COLOR_ERR;
+            [self performSelectorOnMainThread:@selector(changeUIForConnectedTo:) withObject:@FALSE waitUntilDone:NO];
         }
-#ifndef CTRLTV
-    } else if ([keyPath isEqualToString:@"kiosk"]) {
-        if ([[object valueForKey:keyPath] boolValue]) {
-            self.UIKiosk.tintColor = COLOR_ON;
-            [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
-        } else {
-            self.UIKiosk.tintColor = COLOR_NEUTRAL;
-            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-        }
-#endif
+    }
+    if ([keyPath isEqualToString:@"kiosk"]) {
+            [self performSelectorOnMainThread:@selector(changeUIForKiosk:)
+                                   withObject:[object valueForKey:keyPath]
+                                waitUntilDone:NO];
     }
 }
 
+- (void)changeUIForConnectedTo:(NSNumber *)connectedTo {
+    if ([connectedTo boolValue]) {
+        self.UIConnection.tintColor = COLOR_ON;
+    } else {
+        self.UIConnection.tintColor = COLOR_ERR;
+    }
+#ifdef CTRLTV
+    if ([connectedTo boolValue]) {
+        [self.UIConnection setTitle:@"Disconnect" forState:UIControlStateNormal];
+    } else {
+        [self.UIConnection setTitle:@"Connect" forState:UIControlStateNormal];
+    }
+#endif
+}
+
+- (void)changeUIForKiosk:(NSNumber *)kiosk {
 #ifndef CTRLTV
+    if ([kiosk boolValue]) {
+        self.UIKiosk.tintColor = COLOR_ON;
+        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
+    } else {
+        self.UIKiosk.tintColor = COLOR_NEUTRAL;
+        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    }
+#endif
+}
+
 - (void)getTrack:(Vehicle *)vehicle {
-    if (self.urlConnection) {
-        [self.urlConnection cancel];
+    if (self.downloadTask) {
+        [self.downloadTask cancel];
     }
     self.vehicleToGet = vehicle;
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -582,62 +597,72 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
-    self.dataToGet = [[NSMutableData alloc] init];
-    self.urlConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-        NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse *)response;
-        if (httpURLResponse.statusCode != 200) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-            NSString *message = [NSString stringWithFormat:@"%ld %@\n%@",
-                                 (long)httpURLResponse.statusCode,
-                                 [NSHTTPURLResponse localizedStringForStatusCode:httpURLResponse.statusCode],
-                                 httpURLResponse.URL];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"HTTP Response"
-                                                                message:message
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"OK", nil];
-            [alertView show];
-            self.vehicleToGet.track = nil;
-            self.dataToGet = nil;
-            self.vehicleToGet = nil;
-            self.urlConnection = nil;
-        }
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [self.dataToGet appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Loading failed"
-                                                        message:[[NSString alloc] initWithData:self.dataToGet
-                                                                                      encoding:NSUTF8StringEncoding]
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-    [alertView show];
-    self.vehicleToGet.track = nil;
-    self.dataToGet = nil;
-    self.vehicleToGet = nil;
-    self.urlConnection = nil;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-    self.vehicleToGet.track = self.dataToGet;
-    self.dataToGet = nil;
-    self.vehicleToGet = nil;
-    self.urlConnection = nil;
-}
-
+    self.urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    self.downloadTask =
+    [self.urlSession downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        
+        DDLogVerbose(@"downloadTaskWithRequest completionhandler %@ %@ %@", location, response, error);
+#ifndef CTRLTV
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
 #endif
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode != 200) {
+            NSString *message = [NSString stringWithFormat:@"%ld %@\n%@",
+                                 (long)httpResponse.statusCode,
+                                 [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode],
+                                 httpResponse.URL];
+
+            self.alertController = [UIAlertController alertControllerWithTitle:@"HTTP Response"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * action) {
+                                                                     [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                                 }];
+            
+            [self.alertController addAction:cancelAction];
+            [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
+            self.vehicleToGet.track = nil;
+            self.vehicleToGet = nil;
+        }
+        
+        if (error) {
+            self.alertController = [UIAlertController alertControllerWithTitle:@"Loading failed"
+                                                                       message:[error localizedDescription]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * action) {
+                                                                     [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
+                                                                 }];
+            
+            [self.alertController addAction:cancelAction];
+            [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
+            self.vehicleToGet.track = nil;
+            self.vehicleToGet = nil;
+
+        } else {
+            if (location) {
+                self.vehicleToGet.track = [NSData dataWithContentsOfURL:location];
+            }
+        }
+        
+        self.downloadTask = nil;
+        self.urlSession = nil;
+    }];
+    
+    [self.downloadTask resume];
+#ifndef CTRLTV
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
+#endif
+}
+
+- (void)showAlertController {
+    [self presentViewController:self.alertController animated:YES completion:nil];
+}
 
 @end
 

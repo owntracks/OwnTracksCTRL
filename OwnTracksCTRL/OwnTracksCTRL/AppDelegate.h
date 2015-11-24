@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Broker+Create.h"
 #import "ConfD+Create.h"
+#import "StatelessThread.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -30,5 +31,6 @@
 - (NSURL *)applicationDocumentsDirectory;
 - (void)connect;
 - (void)disconnect;
+- (void)connectError:(StatelessThread *)statelessThread;
 
 @end
