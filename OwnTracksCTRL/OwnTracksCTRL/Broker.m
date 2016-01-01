@@ -3,7 +3,7 @@
 //  OwnTracksCTRL
 //
 //  Created by Christoph Krey on 28.10.14.
-//  Copyright (c) 2014 OwnTracks. All rights reserved.
+//  Copyright © 2014-2016 OwnTracks. All rights reserved.
 //
 
 #import "Broker.h"

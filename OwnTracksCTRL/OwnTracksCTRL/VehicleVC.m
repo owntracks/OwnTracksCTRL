@@ -3,7 +3,7 @@
 //  OwnTracksGW
 //
 //  Created by Christoph Krey on 18.09.14.
-//  Copyright (c) 2014 christophkrey. All rights reserved.
+//  Copyright © 2014-2016 christophkrey. All rights reserved.
 //
 
 #import "VehicleVC.h"

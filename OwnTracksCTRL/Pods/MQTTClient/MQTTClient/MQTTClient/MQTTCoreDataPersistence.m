@@ -1,41 +1,27 @@
 //
-//  MQTTPersistence.m
+//  MQTTCoreDataPersistence.m
 //  MQTTClient
 //
 //  Created by Christoph Krey on 22.03.15.
 //  Copyright (c) 2015 Christoph Krey. All rights reserved.
 //
 
-#import "MQTTPersistence.h"
+#import "MQTTCoreDataPersistence.h"
 
-@implementation MQTTFlow
-@dynamic clientId;
-@dynamic incomingFlag;
-@dynamic retainedFlag;
-@dynamic commandType;
-@dynamic qosLevel;
-@dynamic messageId;
-@dynamic topic;
-@dynamic data;
-@dynamic deadline;
-
-@end
-
+#ifdef LUMBERJACK
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGPERSIST FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
-#define DEBUGPERSIST FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
-
-#define PERSISTENT NO
-#define MAX_SIZE 64*1024*1024
-#define MAX_WINDOW_SIZE 16
-#define MAX_MESSAGES 1024
-
-
-@interface MQTTPersistence()
-//@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@end
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
+#endif
 
 static NSRecursiveLock *lock;
 static NSManagedObjectContext *parentManagedObjectContext;
@@ -44,14 +30,18 @@ static NSPersistentStoreCoordinator *persistentStoreCoordinator;
 static unsigned long long fileSize;
 static unsigned long long fileSystemFreeSize;
 
-@implementation MQTTPersistence
+@implementation MQTTCoreDataPersistence
+@synthesize persistent;
+@synthesize maxSize;
+@synthesize maxMessages;
+@synthesize maxWindowSize;
 
-- (MQTTPersistence *)init {
+- (MQTTCoreDataPersistence *)init {
     self = [super init];
-    self.persistent = PERSISTENT;
-    self.maxSize = MAX_SIZE;
-    self.maxMessages = MAX_MESSAGES;
-    self.maxWindowSize = MAX_WINDOW_SIZE;
+    self.persistent = MQTT_PERSISTENT;
+    self.maxSize = MQTT_MAX_SIZE;
+    self.maxMessages = MQTT_MAX_MESSAGES;
+    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
     if (!lock) {
         lock = [[NSRecursiveLock alloc] init];
     }
@@ -62,33 +52,33 @@ static unsigned long long fileSystemFreeSize;
     NSUInteger windowSize = 0;
     NSArray *flows = [self allFlowsforClientId:clientId
                                   incomingFlag:NO];
-    for (MQTTFlow *flow in flows) {
-        if ([flow.commandType intValue] != 0) {
+    for (MQTTCoreDataFlow *flow in flows) {
+        if ([flow.commandType unsignedIntegerValue] != MQTT_None) {
             windowSize++;
         }
     }
     return windowSize;
 }
 
-- (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
-                                topic:(NSString *)topic
-                                 data:(NSData *)data
-                           retainFlag:(BOOL)retainFlag
-                                  qos:(MQTTQosLevel)qos
-                                msgId:(UInt16)msgId
-                         incomingFlag:(BOOL)incomingFlag
-                          commandType:(UInt8)commandType
-                             deadline:(NSDate *)deadline {
+- (MQTTCoreDataFlow *)storeMessageForClientId:(NSString *)clientId
+                                        topic:(NSString *)topic
+                                         data:(NSData *)data
+                                   retainFlag:(BOOL)retainFlag
+                                          qos:(MQTTQosLevel)qos
+                                        msgId:(UInt16)msgId
+                                 incomingFlag:(BOOL)incomingFlag
+                                  commandType:(UInt8)commandType
+                                     deadline:(NSDate *)deadline {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (fileSize <= self.maxSize)) {
-        MQTTFlow *flow = [self createFlowforClientId:clientId
-                                        incomingFlag:incomingFlag
-                                           messageId:msgId];
+        MQTTCoreDataFlow *flow = (MQTTCoreDataFlow *)[self createFlowforClientId:clientId
+                                                                    incomingFlag:incomingFlag
+                                                                       messageId:msgId];
         flow.topic = topic;
         flow.data = data;
-        flow.retainedFlag = @(retainFlag);
-        flow.qosLevel = @(qos);
-        flow.commandType = @(commandType);
+        flow.retainedFlag = [NSNumber numberWithBool:retainFlag];
+        flow.qosLevel = [NSNumber numberWithUnsignedInteger:qos];
+        flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
         flow.deadline = deadline;
         return flow;
     } else {
@@ -96,7 +86,7 @@ static unsigned long long fileSystemFreeSize;
     }
 }
 
-- (void)deleteFlow:(MQTTFlow *)flow {
+- (void)deleteFlow:(MQTTCoreDataFlow *)flow {
     [self.managedObjectContext performBlockAndWait:^{
         [self.managedObjectContext deleteObject:flow];
         [self sync];
@@ -105,10 +95,10 @@ static unsigned long long fileSystemFreeSize;
 
 - (void)deleteAllFlowsForClientId:(NSString *)clientId {
     [self.managedObjectContext performBlockAndWait:^{
-        for (MQTTFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
+        for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
             [self.managedObjectContext deleteObject:flow];
         }
-        for (MQTTFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
+        for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
             [self.managedObjectContext deleteObject:flow];
         }
         [self sync];
@@ -118,23 +108,23 @@ static unsigned long long fileSystemFreeSize;
 - (void)sync {
     [self.managedObjectContext performBlockAndWait:^{
         if (self.managedObjectContext.hasChanges) {
-            if (DEBUGPERSIST) NSLog(@"pre-sync: i%lu u%lu d%lu",
-                                    (unsigned long)self.managedObjectContext.insertedObjects.count,
-                                    (unsigned long)self.managedObjectContext.updatedObjects.count,
-                                    (unsigned long)self.managedObjectContext.deletedObjects.count
-                                    );
+            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+                         (unsigned long)self.managedObjectContext.insertedObjects.count,
+                         (unsigned long)self.managedObjectContext.updatedObjects.count,
+                         (unsigned long)self.managedObjectContext.deletedObjects.count
+                         );
             NSError *error = nil;
             if (![self.managedObjectContext save:&error]) {
-                NSLog(@"sync error %@", error);
+                DDLogError(@"[MQTTPersistence] sync error %@", error);
             }
             if (self.managedObjectContext.hasChanges) {
-                NSLog(@"sync not complete");
+                DDLogError(@"[MQTTPersistence] sync not complete");
             }
-            if (DEBUGPERSIST) NSLog(@"postsync: i%lu u%lu d%lu",
-                                    (unsigned long)self.managedObjectContext.insertedObjects.count,
-                                    (unsigned long)self.managedObjectContext.updatedObjects.count,
-                                    (unsigned long)self.managedObjectContext.deletedObjects.count
-                                    );
+            DDLogVerbose(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
+                         (unsigned long)self.managedObjectContext.insertedObjects.count,
+                         (unsigned long)self.managedObjectContext.updatedObjects.count,
+                         (unsigned long)self.managedObjectContext.deletedObjects.count
+                         );
             [self sizes];
         }
     }];
@@ -155,16 +145,16 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"allFlowsforClientId %@", error);
+            DDLogError(@"[MQTTPersistence] allFlowsforClientId %@", error);
         }
     }];
     return flows;
 }
 
-- (MQTTFlow *)flowforClientId:(NSString *)clientId
-                 incomingFlag:(BOOL)incomingFlag
-                    messageId:(UInt16)messageId {
-    __block MQTTFlow *flow = nil;
+- (MQTTCoreDataFlow *)flowforClientId:(NSString *)clientId
+                         incomingFlag:(BOOL)incomingFlag
+                            messageId:(UInt16)messageId {
+    __block MQTTCoreDataFlow *flow = nil;
     
     [self.managedObjectContext performBlockAndWait:^{
         
@@ -179,7 +169,7 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"flowForClientId %@", error);
+            DDLogError(@"[MQTTPersistence] flowForClientId %@", error);
         } else {
             if ([flows count]) {
                 flow = [flows lastObject];
@@ -191,10 +181,12 @@ static unsigned long long fileSystemFreeSize;
     return flow;
 }
 
-- (MQTTFlow *)createFlowforClientId:(NSString *)clientId
-                       incomingFlag:(BOOL)incomingFlag
-                          messageId:(UInt16)messageId {
-    __block MQTTFlow *flow = [self flowforClientId:clientId incomingFlag:incomingFlag messageId:messageId];
+- (MQTTCoreDataFlow *)createFlowforClientId:(NSString *)clientId
+                               incomingFlag:(BOOL)incomingFlag
+                                  messageId:(UInt16)messageId {
+    __block MQTTCoreDataFlow *flow = (MQTTCoreDataFlow *)[self flowforClientId:clientId
+                                                                  incomingFlag:incomingFlag
+                                                                     messageId:messageId];
     if (!flow) {
         [self.managedObjectContext performBlockAndWait:^{
             flow = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
@@ -324,7 +316,7 @@ static unsigned long long fileSystemFreeSize;
         
         NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
                                      URLByAppendingPathComponent:@"MQTTClient"];
-        if (DEBUGPERSIST) NSLog(@"Persistent store: %@", persistentStoreURL.path);
+        DDLogInfo(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
         
         
         NSError *error = nil;
@@ -340,7 +332,7 @@ static unsigned long long fileSystemFreeSize;
                                                                 URL:self.persistent ? persistentStoreURL : nil
                                                             options:options
                                                               error:&error]) {
-            if (DEBUGPERSIST) NSLog(@"managedObjectContext save: %@", error);
+            DDLogError(@"[MQTTPersistence] managedObjectContext save: %@", error);
             persistentStoreCoordinator = nil;
         }
         
@@ -373,6 +365,6 @@ static unsigned long long fileSystemFreeSize;
         fileSize = 0;
         fileSystemFreeSize = 0;
     }
-    if (DEBUGPERSIST) NSLog(@"sizes %llu/%llu", fileSize, fileSystemFreeSize);
+    DDLogVerbose(@"[MQTTPersistence] sizes %llu/%llu", fileSize, fileSystemFreeSize);
 }
 @end
