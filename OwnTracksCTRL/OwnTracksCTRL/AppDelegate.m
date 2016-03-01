@@ -11,21 +11,9 @@
 #import "Vehicle+Create.h"
 #import "LoginVC.h"
 
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
-#undef BACKGROUND_CONNECT // if enabled, background capability has to be setup again
-#undef EVENT_REPORTING
-#undef ALARM_REPORTING
-
 @interface AppDelegate()
-
-#ifdef BACKGROUND_CONNECT
-@property (strong, nonatomic) NSTimer *disconnectTimer;
-@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-@property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
-#endif
 
 @property (strong, nonatomic) StatefullThread *mqttPlusThread;
 @property (strong, nonatomic) StatelessThread *mqttThread;
@@ -58,9 +46,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    [Fabric with:@[CrashlyticsKit]];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{    
     
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];

@@ -3,26 +3,13 @@
 //  MQTTClient
 //
 //  Created by Christoph Krey on 09.07.14.
-//  Copyright (c) 2013-2015 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTSessionManager.h"
 #import "MQTTCoreDataPersistence.h"
 
-#ifdef LUMBERJACK
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-#else
-#define DDLogVerbose NSLog
-#define DDLogWarn NSLog
-#define DDLogInfo NSLog
-#define DDLogError NSLog
-#endif
+#import "MQTTLog.h"
 
 @interface MQTTSessionManager()
 @property (nonatomic, readwrite) MQTTSessionManagerState state;

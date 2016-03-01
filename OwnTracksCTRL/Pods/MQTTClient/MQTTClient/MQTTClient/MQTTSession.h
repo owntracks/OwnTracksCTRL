@@ -7,7 +7,7 @@
  Using MQTT in your Objective-C application
  
  @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright (c) 2013-2015, Christoph Krey 
+ @copyright Copyright © 2013-2016, Christoph Krey 
  
  based on Copyright (c) 2011, 2013, 2lemetry LLC
     All rights reserved. This program and the accompanying materials
@@ -378,10 +378,13 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 
 /** the transport provider for MQTTClient
  *
- * assign an in instanc of a class implementing the MQTTTransport protocol e.g.
+ * assign an in instance of a class implementing the MQTTTransport protocol e.g.
  * MQTTCFSocketTransport before connecting.
  */
 @property (strong, nonatomic) id <MQTTTransport> transport;
+
+/** certificates an NSArray holding client certificates or nil */
+@property (strong, nonatomic) NSArray *certificates;
 
 /** connect to the given host through the given transport with the given
  *  MQTT session parameters asynchronously
@@ -389,6 +392,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  *  @exception NSInternalInconsistencyException if the parameters are invalid
  *
  */
+
 
 - (void)connect;
 

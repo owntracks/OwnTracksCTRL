@@ -6,7 +6,5 @@ xcodeproj 'OwnTracksCTRLTV.xcodeproj'
 
 pod 'CocoaLumberjack'
 pod 'MQTTClient'
-pod 'Fabric'
-pod 'Crashlytics'
 
 

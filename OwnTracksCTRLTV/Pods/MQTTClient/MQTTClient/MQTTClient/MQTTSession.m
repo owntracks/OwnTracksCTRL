@@ -2,7 +2,7 @@
 // MQTTSession.m
 // MQTTClient.framework
 //
-// Copyright (c) 2013-2015, Christoph Krey
+// Copyright © 2013-2016, Christoph Krey
 //
 
 
@@ -11,20 +11,9 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 
-#ifdef LUMBERJACK
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-#else
-#define DDLogVerbose NSLog
-#define DDLogWarn NSLog
-#define DDLogInfo NSLog
-#define DDLogError NSLog
-#endif
+//#define myLogLevel DDLogLevelVerbose
+
+#import "MQTTLog.h"
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
@@ -58,6 +47,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #define DUPLOOP 1.0
 
 @implementation MQTTSession
+@synthesize certificates;
+
+- (void)setCertificates:(NSArray *)newCertificates {
+    certificates = newCertificates;
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(setCertificates:)]) {
+            [self.transport performSelector:@selector(setCertificates:) withObject:certificates];
+        }
+    }
+}
 
 - (instancetype)init {
     DDLogVerbose(@"[MQTTSession] init");
@@ -79,8 +78,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.willQoS = MQTTQosLevelAtMostOnce;
     self.willRetainFlag = false;
     self.protocolLevel = MQTTProtocolVersion311;
-    self.runLoop = nil;
-    self.runLoopMode = nil;
+    self.runLoop = [NSRunLoop currentRunLoop];
+    self.runLoopMode = NSRunLoopCommonModes;
     
     self.status = MQTTSessionStatusCreated;
     
@@ -679,6 +678,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     NSData *topicData = [data subdataWithRange:NSMakeRange(2, topicLength)];
     NSString *topic = [[NSString alloc] initWithData:topicData
                                             encoding:NSUTF8StringEncoding];
+    if (!topic) {
+        topic = [[NSString alloc] initWithData:topicData
+                                      encoding:NSISOLatin1StringEncoding];
+        DDLogError(@"non UTF8 topic %@", topic);
+    }
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
@@ -936,13 +940,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 }
 
 - (UInt16)nextMsgId {
+    DDLogVerbose(@"nextMsgId synchronizing");
     @synchronized(self) {
+        DDLogVerbose(@"nextMsgId synchronized");
         self.txMsgId++;
         while (self.txMsgId == 0 || [self.persistence flowforClientId:self.clientId
                                                          incomingFlag:NO
                                                             messageId:self.txMsgId] != nil) {
             self.txMsgId++;
         }
+        DDLogVerbose(@"nextMsgId synchronized done");
         return self.txMsgId;
     }
 }
@@ -1062,6 +1069,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.status = MQTTSessionStatusConnecting;
     
     self.decoder = [[MQTTDecoder alloc] init];
+    self.decoder.runLoop = self.runLoop;
+    self.decoder.runLoopMode = self.runLoopMode;
     self.decoder.delegate = self;
     [self.decoder open];
     
