@@ -21,14 +21,12 @@
 
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (readwrite, strong, nonatomic) NSString *connectedTo;
-@property (readwrite, strong, nonatomic) NSString *token;
 @property (nonatomic) BOOL registered;
 
 @end
 
 #define RECONNECT_TIMER 1.0
 #define RECONNECT_TIMER_MAX 64.0
-#define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation AppDelegate
 
@@ -48,8 +46,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{    
     
+#ifdef DEBUG
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelVerbose];
+#endif
+    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+    
     NSDictionary *appDefaults = [NSDictionary
-                                 dictionaryWithObject:@"https://demo.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
+                                 dictionaryWithObject:@"https://mqtt-b.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
     

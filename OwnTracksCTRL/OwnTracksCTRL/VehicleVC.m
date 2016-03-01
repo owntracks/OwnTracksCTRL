@@ -8,6 +8,7 @@
 
 #import "VehicleVC.h"
 #import "Vehicle+Create.h"
+#import <AddressBookUI/AddressBookUI.h>
 
 @interface VehicleVC ()
 @property (weak, nonatomic) IBOutlet UILabel *UIInfo;
@@ -163,15 +164,8 @@
          ^(NSArray *placemarks, NSError *error) {
              if ([placemarks count] > 0) {
                  CLPlacemark *placemark = placemarks[0];
-                 NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
-                 if (address && [address count] >= 1) {
-                     self.UILocation.text = address[0];
-                     for (int i = 1; i < [address count]; i++) {
-                         self.UILocation.text = [NSString stringWithFormat:@"%@, %@",
-                                                 self.UILocation.text, address[i]];
-                     }
-                     [self.UILocation setNeedsDisplay];
-                 }
+                 self.UILocation.text = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+                 [self.UILocation setNeedsDisplay];
              }
          }];
     }

@@ -219,11 +219,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         int minutes = fmod(age , (24*60)) / 60;
         int seconds = fmod(age, 60);
         
-        self.UILabel.title = [NSString stringWithFormat:@"T=%.0fkm, A=%@%@%@%@, n=%ld, I=%@",
-                              [vehicle.trip doubleValue] / 1000,
-                              days > 0 ? [NSString stringWithFormat:@"%d:", days]: @"",
-                              hours > 0 ? [NSString stringWithFormat:@"%d:", hours]: @"",
-                              minutes > 0 ? [NSString stringWithFormat:@"%d:", minutes]: @"",
+        self.UILabel.title = [NSString stringWithFormat:@"Age=%@%@%@%@, Track=%ld, Info=%@",
+                              days > 0 ? [NSString stringWithFormat:@"%dd:", days]: @"",
+                              hours > 0 ? [NSString stringWithFormat:@"%dh:", hours]: @"",
+                              minutes > 0 ? [NSString stringWithFormat:@"%dm:", minutes]: @"",
                               [NSString stringWithFormat:@"%ds", seconds],
                               (long)[vehicle trackCount],
                               vehicle.info ? vehicle.info : @"-"];
@@ -582,18 +581,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     self.vehicleToGet = vehicle;
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@&tid=%@&nrecs=%d&topic=%@",
-                      delegate.broker.user,
-                      delegate.broker.passwd,
-                      vehicle.tid,
-                      500,
-                      vehicle.topic];
+    NSArray <NSString *> *topicComponents = [vehicle.topic componentsSeparatedByString:@"/"];
+    NSString *post = [NSString stringWithFormat:@"user=%@&device=%@",
+                      topicComponents[1],
+                      topicComponents[2]
+                      ];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:delegate.broker.trackurl]];
     [request setHTTPMethod:@"POST"];
+    
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", delegate.confD.user, delegate.confD.passwd];
+    NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *authValue = [NSString stringWithFormat: @"Basic %@",[authData base64EncodedStringWithOptions:0]];
+    [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+    
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];

@@ -7,6 +7,7 @@
 //
 
 #import "TrackTVC.h"
+#import <AddressBookUI/AddressBookUI.h>
 
 @interface NSDate (Descend)
 - (NSComparisonResult)descendingCompare:(NSDate *)aDate;
@@ -155,23 +156,18 @@
              ^(NSArray *placemarks, NSError *error) {
                  if ([placemarks count] > 0) {
                      CLPlacemark *placemark = placemarks[0];
-                     NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
-                     if (address && [address count] >= 1) {
-                         cell.detailTextLabel.text = address[0];
-                         for (int i = 1; i < [address count]; i++) {
-                             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@",
-                                                          cell.detailTextLabel.text, address[i]];
-                         }
-                         [cell.detailTextLabel setNeedsDisplay];
-                         cell.textLabel.text = [NSString stringWithFormat:@"%@ (%.6f,%.6f)",
-                                                [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:[trackpoint[@"tst"] doubleValue]]
-                                                                               dateStyle:NSDateFormatterNoStyle
-                                                                               timeStyle:NSDateFormatterShortStyle],
-                                                [trackpoint[@"lat"] doubleValue],
-                                                [trackpoint[@"lon"] doubleValue]
-                                                ];
-                         [cell.textLabel setNeedsDisplay];
-                     }
+                     NSString *address = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+                     cell.detailTextLabel.text = [address stringByReplacingOccurrencesOfString:@"\n"
+                                                                                    withString:@", "];
+                     [cell.detailTextLabel setNeedsDisplay];
+                     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%.6f,%.6f)",
+                                            [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:[trackpoint[@"tst"] doubleValue]]
+                                                                           dateStyle:NSDateFormatterNoStyle
+                                                                           timeStyle:NSDateFormatterShortStyle],
+                                            [trackpoint[@"lat"] doubleValue],
+                                            [trackpoint[@"lon"] doubleValue]
+                                            ];
+                     [cell.textLabel setNeedsDisplay];
                  }
              }];
         }

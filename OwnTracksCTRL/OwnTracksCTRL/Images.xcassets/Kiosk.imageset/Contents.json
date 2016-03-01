@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Kiosk22.png"
+      "filename" : "Kiosk-22-noalpha.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "Kiosk44.png"
+      "filename" : "Kiosk-22-noalpha@2x.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "Kiosk66.png"
+      "filename" : "Kiosk-22-noalpha@3x.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

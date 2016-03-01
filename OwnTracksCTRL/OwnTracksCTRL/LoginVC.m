@@ -43,34 +43,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [super viewWillAppear:animated];
     [self updated];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate addObserver:self forKeyPath:@"token"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
     [self.navigationController.navigationBar setHidden:TRUE];
     [appDelegate disconnect];
+    if (self.autostart) {
+        [self lookup:nil];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self updateValues];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate removeObserver:self
-                     forKeyPath:@"token"
-                        context:nil];
-    [appDelegate saveContext];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"token"]) {
-        if ([object valueForKey:keyPath]) {
-            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive
-                || [UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
-                if (self.autostart) {
-                    [self lookup:nil];
-                }
-            }
-        }
-    }
 }
 
 - (void)updateValues {
@@ -78,6 +60,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     if (self.UIuser) delegate.confD.user = self.UIuser.text;
     if (self.UIpassword) delegate.confD.passwd = self.UIpassword.text;
+    [delegate saveContext];
 }
 
 - (void)updated {
@@ -120,34 +103,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString *uuidString = [uuid.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
     DDLogVerbose(@"uuidString=%@", uuidString);
     
-    NSString *post = [NSString stringWithFormat:@"username=%@&password=%@%@&clientid=%@",
-                      delegate.confD.user,
-                      delegate.confD.passwd,
-                      tokenPost,
-                      uuidString];
-    
-    DDLogVerbose(@"post=%@", post);
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-
-    NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
     NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:@"ctrldurl"];
     DDLogVerbose(@"urlString=%@", urlString);
     
     [request setURL:[NSURL URLWithString:urlString]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
+    [request setHTTPMethod:@"GET"];
+    
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", delegate.confD.user, delegate.confD.passwd];
+    NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *authValue = [NSString stringWithFormat: @"Basic %@",[authData base64EncodedStringWithOptions:0]];
+    [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+    
+    DDLogVerbose(@"request=%@", request);
+
     self.urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     self.downloadTask =
     [self.urlSession downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
 
         DDLogVerbose(@"downloadTaskWithRequest completionhandler %@ %@ %@", location, response, error);
-#ifndef CTRLTV
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-#endif
         if (error) {
             self.alertController = [UIAlertController alertControllerWithTitle:@"Lookup failed"
                                                                            message:[error localizedDescription]
@@ -204,8 +179,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                 }
                 delegate.broker.base = base;
 
-                delegate.broker.clientid = [self stringFromJSON:dictionary key:@"clientid"];
+                NSUUID *uuid = [[UIDevice currentDevice] identifierForVendor];
+                NSString *uuidString = [uuid.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                
+                delegate.broker.clientid = [NSString stringWithFormat:@"%@-%@",
+                                            [self stringFromJSON:dictionary key:@"clientid"],
+                                            uuidString
+                                            ];
                 [self updated];
+                [delegate saveContext];
                 [self performSelectorOnMainThread:@selector(login) withObject:nil waitUntilDone:NO];
             } else {
                 NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -233,9 +215,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }];
 
     [self.downloadTask resume];
-#ifndef CTRLTV
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
-#endif
 }
 
 - (void)showAlertController {

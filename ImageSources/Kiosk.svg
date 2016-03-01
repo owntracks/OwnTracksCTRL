@@ -14,7 +14,7 @@
    height="66"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="Kiosk.svg"
    inkscape:export-filename="/Users/ckrey/OwnTracksCTRL/ImageSources/Kiosk44.png"
    inkscape:export-xdpi="60"
@@ -267,158 +267,24 @@
          transform="matrix(0.8,0,0,0.8,10,0)"
          inkscape:connector-curvature="0" />
     </marker>
-    <linearGradient
-       inkscape:collect="always"
-       x1="344.45001"
-       y1="31.900999"
-       x2="-696.35999"
-       gradientUnits="userSpaceOnUse"
-       y2="-337.06"
-       id="linearGradient4983">
-      <stop
-         offset="0"
-         style="stop-color:#000000;stop-opacity:.78195"
-         id="stop4987" />
-      <stop
-         offset="1"
-         style="stop-color:#000000;stop-opacity:0"
-         id="stop4989" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       x1="344.45001"
-       y1="31.900999"
-       x2="-696.35999"
-       gradientUnits="userSpaceOnUse"
-       y2="-337.06"
-       id="linearGradient4981">
-      <stop
-         offset="0"
-         style="stop-color:#333333;stop-opacity:.78195"
-         id="stop4971" />
-      <stop
-         offset="1"
-         style="stop-color:#333333;stop-opacity:0"
-         id="stop4973" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       x1="-779.69"
-       y1="-40.512001"
-       x2="796.75"
-       gradientUnits="userSpaceOnUse"
-       y2="-40.512001"
-       id="linearGradient4967">
-      <stop
-         offset="0"
-         style="stop-color:#000000"
-         id="stop4963" />
-      <stop
-         offset="1"
-         style="stop-color:#000000;stop-opacity:0"
-         id="stop4965" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       x1="-1080.6"
-       y1="400.87"
-       gradientTransform="translate(290.32,-443.38)"
-       x2="504.57999"
-       gradientUnits="userSpaceOnUse"
-       y2="400.87"
-       id="linearGradient5183">
-      <stop
-         offset="0"
-         style="stop-color:#000000"
-         id="stop5056-2" />
-      <stop
-         offset="1"
-         style="stop-color:#000000;stop-opacity:0"
-         id="stop5058-4" />
-    </linearGradient>
-    <filter
-       inkscape:collect="always"
-       x="-0.22999001"
-       y="-1.4374"
-       width="1.46"
-       height="3.8748"
-       id="filter5035"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="33.043923"
-         id="feGaussianBlur5037" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       x="-0.55418998"
-       y="-0.098283"
-       width="2.1084001"
-       height="1.1966"
-       id="filter4949"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="12.870672"
-         id="feGaussianBlur4951" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       x="-0.11723"
-       y="-0.70700997"
-       width="1.2345001"
-       height="2.414"
-       id="filter4864"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="32.508966"
-         id="feGaussianBlur4866" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       x="-0.039535999"
-       y="-0.23842999"
-       width="1.0791"
-       height="1.4769"
-       id="filter4832"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="10.963395"
-         id="feGaussianBlur4834" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       x="-0.069514997"
-       y="-0.1225"
-       width="1.1390001"
-       height="1.245"
-       id="filter4810"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="47.820372"
-         id="feGaussianBlur4812" />
-    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#000000"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="29.996964"
-     inkscape:cy="19.35679"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="147.50905"
+     inkscape:cy="470.09272"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1398"
-     inkscape:window-height="1074"
-     inkscape:window-x="742"
-     inkscape:window-y="136"
+     inkscape:window-height="856"
+     inkscape:window-x="277"
+     inkscape:window-y="98"
      inkscape:window-maximized="0"
      inkscape:showpageshadow="true">
     <inkscape:grid
@@ -439,7 +305,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -448,14 +314,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-2038.7244)">
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect9561"
-       width="20"
-       height="13"
-       x="1"
-       y="2"
-       transform="translate(0,1030.3622)" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect9563"
@@ -478,7 +336,7 @@
        sodipodi:cy="55"
        sodipodi:rx="17.023724"
        sodipodi:ry="3.2197099"
-       d="m 52.010387,54.87258 c 0.372083,1.776803 -6.942095,3.274235 -16.336672,3.344608 -9.394577,0.07037 -17.31202,-1.312964 -17.684102,-3.089768 -0.372083,-1.776803 6.942095,-3.274235 16.336672,-3.344608 8.991664,-0.06735 16.707447,1.200452 17.61134,2.893778"
+       d="M 52.010387,54.87258 A 17.023724,3.2197099 0 0 1 35.933168,58.214869 17.023724,3.2197099 0 0 1 18.018088,55.22552 17.023724,3.2197099 0 0 1 33.548639,51.792013 17.023724,3.2197099 0 0 1 51.937625,54.67659"
        transform="matrix(1,0,0,0.99934357,-0.97627645,2038.9781)"
        sodipodi:start="6.2435999"
        sodipodi:end="12.465754"

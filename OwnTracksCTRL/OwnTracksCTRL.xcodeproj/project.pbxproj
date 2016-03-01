@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		08AF564FFC856EA1F043CE78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C9935AABD4F62FB17C485E /* libPods.a */; };
-		840717161BBFBDF700FBB3CB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 840717151BBFBDF700FBB3CB /* Default-568h@2x.png */; };
 		841CE30919D1968A00096F37 /* Triggers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841CE30819D1968A00096F37 /* Triggers.plist */; };
 		843CF9B419CC0BD00045AC81 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CF9B319CC0BD00045AC81 /* main.m */; };
 		843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C119CC0BD40045AC81 /* Images.xcassets */; };
@@ -16,8 +15,6 @@
 		843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DA19CC0C7D0045AC81 /* CoreData.framework */; };
 		843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DC19CC0C8B0045AC81 /* MapKit.framework */; };
 		843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */; };
-		843CFA6819CC0D7B0045AC81 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA6619CC0D7B0045AC81 /* iTunesArtwork.png */; };
-		843CFA6919CC0D7B0045AC81 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA6719CC0D7B0045AC81 /* iTunesArtwork@2x.png */; };
 		843CFA7219CC11620045AC81 /* StatelessThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7019CC11620045AC81 /* StatelessThread.m */; };
 		843CFA7519CC11A50045AC81 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7319CC11A50045AC81 /* SettingsVC.m */; };
 		843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7619CC11BC0045AC81 /* StatefullThread.m */; };
@@ -31,6 +28,7 @@
 		843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA8E19CC11E10045AC81 /* Main.storyboard */; };
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
+		847791571C85B86C00A43D53 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847791561C85B86C00A43D53 /* AddressBookUI.framework */; };
 		84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A7DBC61A3C8F5E00DD12C4 /* TrackTVC.m */; };
 		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
 		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
@@ -41,7 +39,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		840717151BBFBDF700FBB3CB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		841CE30819D1968A00096F37 /* Triggers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Triggers.plist; path = ../Triggers.plist; sourceTree = "<group>"; };
 		843CF9AE19CC0BCF0045AC81 /* OwnTracksCTRL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnTracksCTRL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		843CF9B219CC0BD00045AC81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,8 +48,6 @@
 		843CF9DA19CC0C7D0045AC81 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		843CF9DC19CC0C8B0045AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		843CFA6419CC0D390045AC81 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		843CFA6619CC0D7B0045AC81 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
-		843CFA6719CC0D7B0045AC81 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		843CFA7019CC11620045AC81 /* StatelessThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatelessThread.m; sourceTree = "<group>"; };
 		843CFA7119CC11620045AC81 /* StatelessThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatelessThread.h; sourceTree = "<group>"; };
 		843CFA7319CC11A50045AC81 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
@@ -77,6 +72,7 @@
 		843CFA9019CC12990045AC81 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8458EAF819F0274000D9C848 /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPopOverSegue.h; sourceTree = "<group>"; };
 		8458EAF919F0274000D9C848 /* MapPopOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPopOverSegue.m; sourceTree = "<group>"; };
+		847791561C85B86C00A43D53 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -109,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				847791571C85B86C00A43D53 /* AddressBookUI.framework in Frameworks */,
 				843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */,
 				843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */,
 				843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */,
@@ -122,6 +119,7 @@
 		68C628024C478AF253146346 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				847791561C85B86C00A43D53 /* AddressBookUI.framework */,
 				A8C9935AABD4F62FB17C485E /* libPods.a */,
 			);
 			name = Frameworks;
@@ -130,7 +128,6 @@
 		843CF9A519CC0BCE0045AC81 = {
 			isa = PBXGroup;
 			children = (
-				840717151BBFBDF700FBB3CB /* Default-568h@2x.png */,
 				843CFA9019CC12990045AC81 /* UIKit.framework */,
 				843CF9DC19CC0C8B0045AC81 /* MapKit.framework */,
 				843CF9DA19CC0C7D0045AC81 /* CoreData.framework */,
@@ -181,8 +178,6 @@
 				843CFA7619CC11BC0045AC81 /* StatefullThread.m */,
 				843CFA7119CC11620045AC81 /* StatelessThread.h */,
 				843CFA7019CC11620045AC81 /* StatelessThread.m */,
-				843CFA6619CC0D7B0045AC81 /* iTunesArtwork.png */,
-				843CFA6719CC0D7B0045AC81 /* iTunesArtwork@2x.png */,
 				843CFA8E19CC11E10045AC81 /* Main.storyboard */,
 				843CF9C119CC0BD40045AC81 /* Images.xcassets */,
 				843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */,
@@ -229,7 +224,6 @@
 				843CF9AB19CC0BCF0045AC81 /* Frameworks */,
 				843CF9AC19CC0BCF0045AC81 /* Resources */,
 				494EE9D219A5AD4885F1D28E /* Copy Pods Resources */,
-				84776D771AE06595006C6113 /* ShellScript */,
 				D9BFDC6384B7487AE158914B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -254,7 +248,7 @@
 						CreatedOnToolsVersion = 6.0;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -283,12 +277,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				843CFA6919CC0D7B0045AC81 /* iTunesArtwork@2x.png in Resources */,
 				843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */,
 				843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */,
-				843CFA6819CC0D7B0045AC81 /* iTunesArtwork.png in Resources */,
 				843CF9C219CC0BD40045AC81 /* Images.xcassets in Resources */,
-				840717161BBFBDF700FBB3CB /* Default-568h@2x.png in Resources */,
 				841CE30919D1968A00096F37 /* Triggers.plist in Resources */,
 				84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */,
 			);
@@ -326,19 +317,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		84776D771AE06595006C6113 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "FABRIC_APIKEY=$(cat ${SRCROOT}/fabric.apikey)\\nFABRIC_BUILDSECRET=$(cat ${SRCROOT}/fabric.buildsecret)\\n./Pods/Fabric.framework/run ${FABRIC_APIKEY} ${FABRIC_BUILDSECRET}";
 		};
 		D9BFDC6384B7487AE158914B /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

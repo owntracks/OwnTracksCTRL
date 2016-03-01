@@ -1,6 +1,14 @@
 OwnTracksCTRL App Release Notes
 ===============================
 
+## OwnTracksCTRL 2.0.0
+>Release date: 2016-03-01
+
+Target Recorder
+
+[NEW] targets recorder for data
+[NEW] logo
+ 
 ## OwnTracksCTRL 1.1.8
 >Release date: 2015-10-??
 

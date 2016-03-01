@@ -11,6 +11,8 @@
 #import "Vehicle+Create.h"
 #import "AppDelegate.h"
 #import "VehicleVC.h"
+#import <AddressBookUI/AddressBookUI.h>
+
 #ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "MapVC.h"
@@ -223,14 +225,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
          if ([placemarks count] > 0) {
              CLPlacemark *placemark = placemarks[0];
-             NSArray *address = placemark.addressDictionary[@"FormattedAddressLines"];
-             if (address && [address count] >= 1) {
-                 cell.detailTextLabel.text = address[0];
-                 for (int i = 1; i < [address count]; i++) {
-                      cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@",
-                                              cell.detailTextLabel.text, address[i]];
-                 }
-             }
+             cell.detailTextLabel.text = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
          }
      }];
 #endif
