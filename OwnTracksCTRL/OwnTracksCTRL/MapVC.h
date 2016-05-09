@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import "Vehicle+Create.h"
-
-#ifndef CTRLTV
+#import "Vehicle.h"
 
 #import <MapKit/MapKit.h>
 
@@ -18,10 +16,3 @@
 + (void)centerOn:(Vehicle *)vehicle;
 - (void)centerOn:(Vehicle *)vehicle;
 @end
-
-#else
-
-@interface MapVC : UIViewController <NSFetchedResultsControllerDelegate, CLLocationManagerDelegate>
-@end
-
-#endif

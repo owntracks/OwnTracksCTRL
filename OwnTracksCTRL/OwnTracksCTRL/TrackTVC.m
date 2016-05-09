@@ -7,7 +7,9 @@
 //
 
 #import "TrackTVC.h"
+#ifndef CTRLTV
 #import <AddressBookUI/AddressBookUI.h>
+#endif
 
 @interface NSDate (Descend)
 - (NSComparisonResult)descendingCompare:(NSDate *)aDate;
@@ -156,7 +158,16 @@
              ^(NSArray *placemarks, NSError *error) {
                  if ([placemarks count] > 0) {
                      CLPlacemark *placemark = placemarks[0];
+#ifndef CTRLTV
                      NSString *address = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+#else
+                     NSString *address = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",
+                                          placemark.subThoroughfare,
+                                          placemark.thoroughfare,
+                                          placemark.postalCode,
+                                          placemark.administrativeArea,
+                                          placemark.country];
+#endif
                      cell.detailTextLabel.text = [address stringByReplacingOccurrencesOfString:@"\n"
                                                                                     withString:@", "];
                      [cell.detailTextLabel setNeedsDisplay];

@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "StatefullThread.h"
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
 #import "LoginVC.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
@@ -51,12 +51,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #endif
     [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
     
-    NSDictionary *appDefaults = [NSDictionary
-                                 dictionaryWithObject:@"https://mqtt-b.owntracks.de/ctrld/conf" forKey:@"ctrldurl"];
+    NSDictionary *appDefaults = @{
+                                  @"ctrldurl": @"https://mqtt-b.owntracks.de/ctrld/conf",
+                                  @"ctrluser": @"demo",
+                                  @"ctrlpass": @"demo"
+                                  };
+
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    self.confD = [ConfD confDInManagedObjectContext:self.managedObjectContext];
     self.broker = [Broker brokerInManagedObjectContext:self.managedObjectContext];
     
     return YES;
@@ -387,6 +390,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     
 #ifndef CTRLTV
+
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OwnTracksGW.sqlite"];
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                               NSInferMappingModelAutomaticallyOption: @YES};
@@ -399,7 +403,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSLog(@"managedObjectContext save: %@", error);
         abort();
     }
-#else
+
+#else  // no persistent memory on the Apple TV
+
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType
                                                    configuration:nil
                                                              URL:nil
@@ -408,6 +414,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSLog(@"managedObjectContext save: %@", error);
         abort();
     }
+    
 #endif
     
     return _persistentStoreCoordinator;

@@ -7,45 +7,24 @@
 //
 
 #import "MapVC.h"
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
 #import "AnnotationV.h"
 #import "AppDelegate.h"
 #import "VehicleVC.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
-#ifndef CTRLTV
 #import "MapPopOverSegue.h"
-#else
-#import "TVMapView.h"
-#endif
 
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSURLSession *urlSession;
-@property (strong, nonatomic) NSURLSessionDownloadTask *downloadTask;
-@property (strong, nonatomic) Vehicle *vehicleToGet;
 @property (strong, nonatomic) UIAlertController *alertController;
 
-#ifndef CTRLTV
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIConnection;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIKiosk;
-@property (weak, nonatomic) IBOutlet UIToolbar *UIDetailView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UILabel;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITrack;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UITid;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *UIInfo;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *UIOrganize;
 
 @property (nonatomic) MKMapRect lastMapRect;
-@property (strong, nonatomic) NSTimer *timer;
-
-#else
-
-@property (weak, nonatomic) IBOutlet UIButton *UIConnection;
-@property (strong, nonatomic) CLLocationManager *locationManager;
-
-#endif
 
 @end
 
@@ -65,9 +44,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)loadView {
     [super loadView];
     theMapVC = self;
-#ifndef CTRLTV
+    self.mapView.showsScale = TRUE;
+    self.mapView.showsTraffic = TRUE;
+
     self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
-#endif
+    [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -77,85 +58,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
 
-#ifndef CTRLTV
     self.mapView.delegate = self;
     for (Vehicle *vehicle in self.fetchedResultsController.fetchedObjects) {
         [self.mapView addAnnotation:vehicle];
     }
-    [appDelegate addObserver:self forKeyPath:@"kiosk"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
+#ifndef CTRLTV
     [self.navigationController.navigationBar setHidden:TRUE];
-
-     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                  target:self
-                                                selector:@selector(updateDetailView)
-                                                userInfo:nil
-                                                 repeats:true];
-    
-    if ([self.mapView.selectedAnnotations count] > 0) {
-        self.UIDetailView.hidden = false;
-    } else {
-        self.UIDetailView.hidden = true;
-    }
-#else
-    if (!self.locationManager) {
-        CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-        if (authorizationStatus != kCLAuthorizationStatusDenied &&
-            authorizationStatus != kCLAuthorizationStatusDenied) {
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-            if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
-                [self.locationManager requestWhenInUseAuthorization];
-            }
-            if ([CLLocationManager locationServicesEnabled]) {
-                [self.locationManager requestLocation];
-            }
-        }
-    }
-
-    if ([self.view respondsToSelector:@selector(setVehicles:)]) {
-        [self.view performSelector:@selector(setVehicles:) withObject:self.fetchedResultsController.fetchedObjects];
-    }
 #endif
 }
-
-#ifdef CTRLTV
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    for (CLLocation *location in locations) {
-        if ([self.view isKindOfClass:[TVMapView class]]) {
-            TVMapView *tvMapView = (TVMapView *)self.view;
-            tvMapView.centerLocation = location.coordinate;
-        }
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    DDLogError(@"locationManager didFailWithError: %@", error);
-
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    DDLogVerbose(@"locationManager didChangeAuthorizationStatus: %d", status);
-
-}
-#endif
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.fetchedResultsController = nil;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate removeObserver:self forKeyPath:@"connectedTo"
                         context:nil];
-#ifndef CTRLTV
-    [appDelegate removeObserver:self forKeyPath:@"kiosk"
-                        context:nil];
     [self.navigationController.navigationBar setHidden:FALSE];
-    [self.timer invalidate];
-#endif
     [super viewWillDisappear:animated];
 }
 
-#ifndef CTRLTV
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
@@ -169,6 +89,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             } else {
                 annotationView = [[AnnotationV alloc] initWithAnnotation:vehicle reuseIdentifier:@"Vehicle"];
             }
+#ifdef CTRLTV
+#else
+            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+
+            UIButton *trackButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            UIImage *trackImage = [UIImage imageNamed:@"Track"];
+
+            CGRect trackButtonFrame = trackButton.frame;
+            trackButtonFrame.size = trackImage.size;
+            trackButton.frame = trackButtonFrame;
+
+            [trackButton setImage:trackImage forState:UIControlStateNormal];
+            annotationView.leftCalloutAccessoryView = trackButton;
+#endif
+
+            annotationView.canShowCallout = TRUE;
+
             return annotationView;
         }
         return nil;
@@ -187,14 +124,53 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+    Vehicle *vehicle = (Vehicle *)view.annotation;
+    if (control == view.rightCalloutAccessoryView) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self performSegueWithIdentifier:@"showDetail:" sender:vehicle];
+        } else {
+            [self performSegueWithIdentifier:@"showDetailPush:" sender:vehicle];
+        }
+
+    } else if (control == view.leftCalloutAccessoryView) {
+        [self toggleTrack:vehicle];
+
+    } else {
+        if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
+            Vehicle *vehicle = (Vehicle *)view.annotation;
+            if ([vehicle.showtrack boolValue]) {
+                MKMapRect mapRect = [vehicle boundingMapRect];
+                self.lastMapRect = self.mapView.visibleMapRect;
+                [self.mapView setVisibleMapRect:mapRect edgePadding:INSET animated:TRUE];
+            } else {
+                CLLocationCoordinate2D coordinate = vehicle.coordinate;
+                if (coordinate.latitude != 0 || coordinate.longitude != 0) {
+                    MKMapPoint point = MKMapPointForCoordinate(coordinate);
+                    MKMapRect mapRect;
+                    mapRect.origin = point;
+                    mapRect.size.height = 1;
+                    mapRect.size.width = 1;
+                    self.lastMapRect = self.mapView.visibleMapRect;
+                    [self.mapView setVisibleMapRect:mapRect animated:YES];
+                }
+            }
+        } else {
+            [self.mapView setVisibleMapRect:self.lastMapRect animated:TRUE];
+            self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
+        }
+    }
+}
+
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [self.mapView setCenterCoordinate:[view.annotation coordinate] animated:true];
-    [self updateDetailView];
-    self.UIDetailView.hidden = false;
+    Vehicle *vehicle = (Vehicle *)view.annotation;
+    DDLogVerbose(@"didSelectAnnotationView: %@", vehicle.tid);
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    self.UIDetailView.hidden = true;
+    Vehicle *vehicle = (Vehicle *)view.annotation;
+    DDLogVerbose(@"didDeselectAnnotationView: %@", vehicle.tid);
 }
 
 + (void)centerOn:(Vehicle *)vehicle {
@@ -206,53 +182,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self.mapView selectAnnotation:vehicle animated:TRUE];
 }
 
-- (void)updateDetailView {
-    if ([self.mapView.selectedAnnotations count] > 0) {
-        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
-        self.UITid.title = vehicle.tid;
-        
-        self.UIOrganize.enabled = (vehicle.track != nil);
-        
-        NSTimeInterval age = -[vehicle.tst timeIntervalSinceNow];
-        int days = age / (24*60*60);
-        int hours = fmod(age, 24*60*60) / (60*60);
-        int minutes = fmod(age , (24*60)) / 60;
-        int seconds = fmod(age, 60);
-        
-        self.UILabel.title = [NSString stringWithFormat:@"Age=%@%@%@%@, Track=%ld, Info=%@",
-                              days > 0 ? [NSString stringWithFormat:@"%dd:", days]: @"",
-                              hours > 0 ? [NSString stringWithFormat:@"%dh:", hours]: @"",
-                              minutes > 0 ? [NSString stringWithFormat:@"%dm:", minutes]: @"",
-                              [NSString stringWithFormat:@"%ds", seconds],
-                              (long)[vehicle trackCount],
-                              vehicle.info ? vehicle.info : @"-"];
-        
-        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (delegate.broker.trackurl && delegate.broker.trackurl.length > 0) {
-            self.UITrack.enabled = true;
-            if ([vehicle.showtrack boolValue]) {
-                if (vehicle.track) {
-                    if (vehicle.track.length > 0) {
-                        self.UITrack.tintColor = COLOR_ON;
-                    } else {
-                        self.UITrack.tintColor = COLOR_TRANSITION;
-                    }
-                } else {
-                    self.UITrack.tintColor = COLOR_ERR;
-                }
-            } else {
-                self.UITrack.tintColor = COLOR_NEUTRAL;
-            }
-        } else {
-            self.UITrack.enabled = false;
-        }
+- (void)toggleTrack:(Vehicle *)vehicle {
+    if ([vehicle.showtrack boolValue]) {
+        [self.mapView removeOverlay:vehicle];
+        vehicle.showtrack = @(false);
+    } else {
+        vehicle.track = nil;
+        [self getTrack:vehicle];
+        [self.mapView addOverlay:vehicle];
+        vehicle.showtrack = @(true);
     }
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate saveContext];
 }
 
-#endif
-
-- (NSFetchedResultsController *)fetchedResultsController
-{
+- (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
@@ -286,16 +230,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return _fetchedResultsController;
 }
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     //
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
+     forChangeType:(NSFetchedResultsChangeType)type {
     //
 }
 
@@ -305,60 +247,53 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-#ifndef CTRLTV
-    id <MKAnnotation> annotation = (id <MKAnnotation>)anObject;
-    id <MKAnnotation> selectedAnnotation = nil;
-    NSArray *selectedAnnotations = self.mapView.selectedAnnotations;
-    if ([selectedAnnotations count] > 0) {
-        selectedAnnotation = (id <MKAnnotation>)selectedAnnotations[0];
-    }
-    
+    Vehicle *vehicle = (Vehicle *)anObject;
+
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [self.mapView addAnnotation:anObject];
+            [self.mapView addAnnotation:vehicle];
+            [self.mapView addOverlay:vehicle];
             break;
-            
+
         case NSFetchedResultsChangeDelete:
-            [self.mapView removeAnnotation:anObject];
-            [self.mapView removeOverlay:anObject];
+            [self.mapView removeAnnotation:vehicle];
+            [self.mapView removeOverlay:vehicle];
             break;
             
-        case NSFetchedResultsChangeUpdate:
-            [self.mapView removeAnnotation:anObject];
-            [self.mapView removeOverlay:anObject];
-            
-            [self.mapView addAnnotation:anObject];
-            if (annotation == selectedAnnotation) {
-                [self.mapView selectAnnotation:annotation animated:true];
-                if ([annotation isKindOfClass:[Vehicle class]]) {
-                    [self updateDetailView];
+        case NSFetchedResultsChangeUpdate: {
+            Vehicle *selectedVehicle;
+            for (id<MKAnnotation> annotation in self.mapView.selectedAnnotations) {
+                if (annotation == vehicle) {
+                    selectedVehicle = (Vehicle *)annotation;
+                    break;
                 }
             }
-            if ([annotation isKindOfClass:[Vehicle class]]) {
-                Vehicle *vehicle = (Vehicle *)annotation;
-                if ([vehicle.showtrack boolValue]) {
-                    [self.mapView addOverlay:vehicle];
-                }
+            [self.mapView removeAnnotation:vehicle];
+            [self.mapView removeOverlay:vehicle];
+            [self.mapView addAnnotation:vehicle];
+            if ([vehicle.showtrack boolValue]) {
+                [self.mapView addOverlay:vehicle];
+            }
+            if (selectedVehicle) {
+                [self.mapView setSelectedAnnotations:@[vehicle]];
+                [self.mapView setCenterCoordinate:vehicle.coordinate animated:TRUE];
             }
             break;
-            
+        }
+
         case NSFetchedResultsChangeMove:
             //
             break;
     }
-#endif
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    //
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-#ifdef CTRLTV
-    if ([self.view respondsToSelector:@selector(setVehicles:)]) {
-        [self.view performSelector:@selector(setVehicles:) withObject:controller.fetchedObjects];
-    }
-#endif
+- (IBAction)swipeGesture:(UISwipeGestureRecognizer *)sender {
+    [self mapPressed:nil];
 }
 
-#ifndef CTRLTV
 - (IBAction)mapPressed:(UIBarButtonItem *)sender {
     if (self.mapView.mapType == MKMapTypeStandard) {
         self.mapView.mapType = MKMapTypeSatellite;
@@ -368,10 +303,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         self.mapView.mapType = MKMapTypeStandard;
     }
 }
+- (IBAction)longPress:(UILongPressGestureRecognizer *)sender {
+    [self zoomPressed:nil];
+}
 
 - (IBAction)zoomPressed:(UIBarButtonItem *)sender {
     if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
-        MKMapRect rect;
+        MKMapRect rect = self.mapView.visibleMapRect;
         BOOL first = TRUE;
         
         for (Vehicle *vehicle in [self.mapView annotations])
@@ -411,7 +349,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
-#endif
+#ifndef CTRLTV
+
 - (IBAction)ConnectionButtonPressed:(UIButton *)sender {
     [self ConnectionPressed:nil];
 }
@@ -425,20 +364,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
-#ifndef CTRLTV
 - (IBAction)exitPressed:(UIBarButtonItem *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)InfoPressed:(UIBarButtonItem *)sender {
-    if ([self.mapView.selectedAnnotations count] > 0) {
-        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            [self performSegueWithIdentifier:@"showDetail:" sender:vehicle];
-        } else {
-            [self performSegueWithIdentifier:@"showDetailPush:" sender:vehicle];
-        }
-    }
 }
 
 - (IBAction)organizePressed:(UIBarButtonItem *)sender {
@@ -463,7 +390,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                                       withObject:sender];
             }
             if ([segue.identifier isEqualToString:@"showDetail:"]) {
-                mapPopOverSegue.item = self.UIInfo;
+                mapPopOverSegue.item = sender;
             } else {
                 mapPopOverSegue.item = self.UIOrganize;
             }
@@ -478,59 +405,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 
-- (IBAction)TrackPressed:(UIBarButtonItem *)sender {
-    if ([self.mapView.selectedAnnotations count] > 0) {
-        Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
-        if ([vehicle.showtrack boolValue]) {
-            [self.mapView removeOverlay:vehicle];
-            vehicle.showtrack = @(false);
-        } else {
-            [self getTrack:vehicle];
-            [self.mapView addOverlay:vehicle];
-            vehicle.showtrack = @(true);
-        }
-    }
-}
-
-- (IBAction)TidPressed:(UIBarButtonItem *)sender {
-    if ([[self.mapView selectedAnnotations] count]) {
-        if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
-            Vehicle *vehicle = (Vehicle *)[self.mapView selectedAnnotations][0];
-            if ([vehicle.showtrack boolValue]) {
-                MKMapRect mapRect = [vehicle boundingMapRect];
-                self.lastMapRect = self.mapView.visibleMapRect;
-                [self.mapView setVisibleMapRect:mapRect edgePadding:INSET animated:TRUE];
-            } else {
-                CLLocationCoordinate2D coordinate = vehicle.coordinate;
-                if (coordinate.latitude != 0 || coordinate.longitude != 0) {
-                    MKMapPoint point = MKMapPointForCoordinate(coordinate);
-                    MKMapRect mapRect;
-                    mapRect.origin = point;
-                    mapRect.size.height = 1;
-                    mapRect.size.width = 1;
-                    self.lastMapRect = self.mapView.visibleMapRect;
-                    [self.mapView setVisibleMapRect:mapRect animated:YES];
-                }
-            }
-        } else {
-            [self.mapView setVisibleMapRect:self.lastMapRect animated:TRUE];
-            self.lastMapRect = MKMapRectMake(0, 0, 0, 0);
-        }
-        
-    }
-}
-
-
-- (IBAction)KioskPressed:(UIBarButtonItem *)sender {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if ([delegate.kiosk boolValue]) {
-        delegate.kiosk = @(false);
-    } else {
-        delegate.kiosk = @(true);
-    }
-    
-}
-
 #endif
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -541,45 +415,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             [self performSelectorOnMainThread:@selector(changeUIForConnectedTo:) withObject:@FALSE waitUntilDone:NO];
         }
     }
-    if ([keyPath isEqualToString:@"kiosk"]) {
-            [self performSelectorOnMainThread:@selector(changeUIForKiosk:)
-                                   withObject:[object valueForKey:keyPath]
-                                waitUntilDone:NO];
-    }
 }
 
 - (void)changeUIForConnectedTo:(NSNumber *)connectedTo {
+    if (self.UIConnection) {
     if ([connectedTo boolValue]) {
         self.UIConnection.tintColor = COLOR_ON;
     } else {
         self.UIConnection.tintColor = COLOR_ERR;
     }
-#ifdef CTRLTV
-    if ([connectedTo boolValue]) {
-        [self.UIConnection setTitle:@"Disconnect" forState:UIControlStateNormal];
-    } else {
-        [self.UIConnection setTitle:@"Connect" forState:UIControlStateNormal];
     }
-#endif
-}
-
-- (void)changeUIForKiosk:(NSNumber *)kiosk {
-#ifndef CTRLTV
-    if ([kiosk boolValue]) {
-        self.UIKiosk.tintColor = COLOR_ON;
-        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
-    } else {
-        self.UIKiosk.tintColor = COLOR_NEUTRAL;
-        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-    }
-#endif
 }
 
 - (void)getTrack:(Vehicle *)vehicle {
-    if (self.downloadTask) {
-        [self.downloadTask cancel];
-    }
-    self.vehicleToGet = vehicle;
+    __block Vehicle *vehicleToGet = vehicle;
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSArray <NSString *> *topicComponents = [vehicle.topic componentsSeparatedByString:@"/"];
     NSString *post = [NSString stringWithFormat:@"user=%@&device=%@",
@@ -593,7 +442,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [request setURL:[NSURL URLWithString:delegate.broker.trackurl]];
     [request setHTTPMethod:@"POST"];
     
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", delegate.confD.user, delegate.confD.passwd];
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@",
+                         [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrluser"],
+                         [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrlpass"]];
     NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
     NSString *authValue = [NSString stringWithFormat: @"Basic %@",[authData base64EncodedStringWithOptions:0]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
@@ -601,67 +452,27 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
-    self.urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    self.downloadTask =
-    [self.urlSession downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+    NSURLSessionDownloadTask *downloadTask =
+    [urlSession downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
         
         DDLogVerbose(@"downloadTaskWithRequest completionhandler %@ %@ %@", location, response, error);
-#ifndef CTRLTV
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = false;
-#endif
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode != 200) {
-            NSString *message = [NSString stringWithFormat:@"%ld %@\n%@",
-                                 (long)httpResponse.statusCode,
-                                 [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode],
-                                 httpResponse.URL];
-
-            self.alertController = [UIAlertController alertControllerWithTitle:@"HTTP Response"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                                   style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * action) {
-                                                                     [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
-                                                                 }];
-            
-            [self.alertController addAction:cancelAction];
-            [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
-            self.vehicleToGet.track = nil;
-            self.vehicleToGet = nil;
+            vehicleToGet.track = nil;
         }
-        
         if (error) {
-            self.alertController = [UIAlertController alertControllerWithTitle:@"Loading failed"
-                                                                       message:[error localizedDescription]
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                                   style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * action) {
-                                                                     [self.alertController dismissViewControllerAnimated:TRUE completion:nil];
-                                                                 }];
-            
-            [self.alertController addAction:cancelAction];
-            [self performSelectorOnMainThread:@selector(showAlertController) withObject:nil waitUntilDone:NO];
-            self.vehicleToGet.track = nil;
-            self.vehicleToGet = nil;
-
+            vehicleToGet.track = nil;
         } else {
             if (location) {
-                self.vehicleToGet.track = [NSData dataWithContentsOfURL:location];
+                vehicleToGet.track = [NSData dataWithContentsOfURL:location];
             }
         }
-        
-        self.downloadTask = nil;
-        self.urlSession = nil;
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate saveContext];
     }];
     
-    [self.downloadTask resume];
-#ifndef CTRLTV
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = true;
-#endif
+    [downloadTask resume];
 }
 
 - (void)showAlertController {

@@ -7,8 +7,10 @@
 //
 
 #import "VehicleVC.h"
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
+#ifndef CTRLTV
 #import <AddressBookUI/AddressBookUI.h>
+#endif
 
 @interface VehicleVC ()
 @property (weak, nonatomic) IBOutlet UILabel *UIInfo;
@@ -164,7 +166,17 @@
          ^(NSArray *placemarks, NSError *error) {
              if ([placemarks count] > 0) {
                  CLPlacemark *placemark = placemarks[0];
+#ifndef CTRLTV
                  self.UILocation.text = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+#else
+                 self.UILocation.text = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",
+                                         placemark.subThoroughfare,
+                                         placemark.thoroughfare,
+                                         placemark.postalCode,
+                                         placemark.administrativeArea,
+                                         placemark.country];
+#endif
+
                  [self.UILocation setNeedsDisplay];
              }
          }];

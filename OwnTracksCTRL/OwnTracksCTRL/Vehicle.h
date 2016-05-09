@@ -2,46 +2,32 @@
 //  Vehicle.h
 //  OwnTracksCTRL
 //
-//  Created by Christoph Krey on 20.01.15.
-//  Copyright © 2014-2016  OwnTracks. All rights reserved.
+//  Created by Christoph Krey on 09.05.16.
+//  Copyright © 2016 OwnTracks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <MapKit/MapKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
-@interface Vehicle : NSManagedObject
+@interface Vehicle : NSManagedObject <MKAnnotation, MKOverlay>
 
-@property (nonatomic, retain) NSNumber * acc;
-@property (nonatomic, retain) NSString * alarm;
-@property (nonatomic, retain) NSNumber * alt;
-@property (nonatomic, retain) NSNumber * cog;
-@property (nonatomic, retain) NSNumber * dist;
-@property (nonatomic, retain) NSString * event;
-@property (nonatomic, retain) NSNumber * gpio1;
-@property (nonatomic, retain) NSNumber * gpio2;
-@property (nonatomic, retain) NSNumber * gpio3;
-@property (nonatomic, retain) NSNumber * gpio5;
-@property (nonatomic, retain) NSNumber * gpio7;
-@property (nonatomic, retain) NSString * imei;
-@property (nonatomic, retain) NSString * info;
-@property (nonatomic, retain) NSNumber * lat;
-@property (nonatomic, retain) NSNumber * lon;
-@property (nonatomic, retain) NSNumber * showtrack;
-@property (nonatomic, retain) NSDate * start;
-@property (nonatomic, retain) NSNumber * status;
-@property (nonatomic, retain) NSString * tid;
-@property (nonatomic, retain) NSString * topic;
-@property (nonatomic, retain) NSData * track;
-@property (nonatomic, retain) NSString * trigger;
-@property (nonatomic, retain) NSNumber * trip;
-@property (nonatomic, retain) NSDate * tst;
-@property (nonatomic, retain) NSNumber * vacc;
-@property (nonatomic, retain) NSNumber * vbatt;
-@property (nonatomic, retain) NSNumber * vel;
-@property (nonatomic, retain) NSString * version;
-@property (nonatomic, retain) NSNumber * vext;
-@property (nonatomic, retain) NSNumber * temp0;
-@property (nonatomic, retain) NSNumber * temp1;
+@property (nonatomic) CLLocationCoordinate2D coordinate;
+@property (nonatomic) MKMapRect boundingMapRect;
+
++ (Vehicle *)vehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
++ (Vehicle *)existsVehicleWithTid:(NSString *)tid inManagedObjectContext:(NSManagedObjectContext *)context;
++ (Vehicle *)existsVehicleNamed:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)allVehiclesInManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)trash;
+- (NSUInteger)trackCount;
+- (MKPolyline *)polyLine;
+- (NSString *)subtitle;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Vehicle+CoreDataProperties.h"

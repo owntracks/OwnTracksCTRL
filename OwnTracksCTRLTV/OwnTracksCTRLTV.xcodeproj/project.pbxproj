@@ -14,25 +14,19 @@
 		840717701BBFC14A00FBB3CB /* Triggers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8407176D1BBFC14900FBB3CB /* Triggers.plist */; };
 		8407177F1BBFC17800FBB3CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717711BBFC17800FBB3CB /* AppDelegate.m */; };
 		840717801BBFC17800FBB3CB /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717721BBFC17800FBB3CB /* Broker.m */; };
-		840717811BBFC17800FBB3CB /* Broker+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717731BBFC17800FBB3CB /* Broker+Create.m */; };
-		840717821BBFC17800FBB3CB /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717741BBFC17800FBB3CB /* ConfD.m */; };
-		840717831BBFC17800FBB3CB /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717751BBFC17800FBB3CB /* ConfD+Create.m */; };
 		840717841BBFC17800FBB3CB /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717761BBFC17800FBB3CB /* LoginVC.m */; };
 		840717861BBFC17800FBB3CB /* StatefullThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717781BBFC17800FBB3CB /* StatefullThread.m */; };
 		840717871BBFC17800FBB3CB /* StatelessThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717791BBFC17800FBB3CB /* StatelessThread.m */; };
-		840717881BBFC17800FBB3CB /* TrackTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407177A1BBFC17800FBB3CB /* TrackTVC.m */; };
 		840717891BBFC17800FBB3CB /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407177B1BBFC17800FBB3CB /* Vehicle.m */; };
-		8407178A1BBFC17800FBB3CB /* Vehicle+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407177C1BBFC17800FBB3CB /* Vehicle+Create.m */; };
-		8407178B1BBFC17800FBB3CB /* VehiclesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407177D1BBFC17800FBB3CB /* VehiclesVC.m */; };
-		8407178C1BBFC17800FBB3CB /* VehicleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407177E1BBFC17800FBB3CB /* VehicleVC.m */; };
 		8407179D1BBFFDB000FBB3CB /* AnnotationV.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407179C1BBFFDB000FBB3CB /* AnnotationV.m */; };
 		8407179F1BC00C8C00FBB3CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407179E1BC00C8C00FBB3CB /* main.m */; };
-		840717A01BC01A4A00FBB3CB /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717771BBFC17800FBB3CB /* SettingsVC.m */; };
 		840717A41BC01A8500FBB3CB /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 840717A21BC01A8500FBB3CB /* MapVC.m */; };
-		842095FE1BC3CAEE00C9CBFF /* TVMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842095FD1BC3CAEE00C9CBFF /* TVMapView.m */; };
 		842096001BC3D48400C9CBFF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842095FF1BC3D48400C9CBFF /* CoreLocation.framework */; };
 		842096021BC3D48A00C9CBFF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842096011BC3D48A00C9CBFF /* CFNetwork.framework */; };
 		842096041BC3D48F00C9CBFF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842096031BC3D48F00C9CBFF /* CoreData.framework */; };
+		846FF0091CE0BF4900291A9A /* Broker+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FF0061CE0BF4900291A9A /* Broker+CoreDataProperties.m */; };
+		846FF00A1CE0BF4900291A9A /* Vehicle+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FF0081CE0BF4900291A9A /* Vehicle+CoreDataProperties.m */; };
+		84FD2C851C9B2EF400F318BF /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD2C831C9B2EF400F318BF /* MapPopOverSegue.m */; };
 		FC1DF9C4EFAAE33CB80BA68A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 295E135C42A25A24EBA3F9E8 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -57,42 +51,31 @@
 		8407176D1BBFC14900FBB3CB /* Triggers.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Triggers.plist; path = ../../OwnTracksCTRL/Triggers.plist; sourceTree = "<group>"; };
 		840717711BBFC17800FBB3CB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/AppDelegate.m; sourceTree = "<group>"; };
 		840717721BBFC17800FBB3CB /* Broker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Broker.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/Broker.m; sourceTree = "<group>"; };
-		840717731BBFC17800FBB3CB /* Broker+Create.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Broker+Create.m"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Broker+Create.m"; sourceTree = "<group>"; };
-		840717741BBFC17800FBB3CB /* ConfD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ConfD.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/ConfD.m; sourceTree = "<group>"; };
-		840717751BBFC17800FBB3CB /* ConfD+Create.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "ConfD+Create.m"; path = "../../OwnTracksCTRL/OwnTracksCTRL/ConfD+Create.m"; sourceTree = "<group>"; };
 		840717761BBFC17800FBB3CB /* LoginVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LoginVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/LoginVC.m; sourceTree = "<group>"; };
-		840717771BBFC17800FBB3CB /* SettingsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SettingsVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/SettingsVC.m; sourceTree = "<group>"; };
 		840717781BBFC17800FBB3CB /* StatefullThread.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = StatefullThread.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/StatefullThread.m; sourceTree = "<group>"; };
 		840717791BBFC17800FBB3CB /* StatelessThread.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = StatelessThread.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/StatelessThread.m; sourceTree = "<group>"; };
-		8407177A1BBFC17800FBB3CB /* TrackTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrackTVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/TrackTVC.m; sourceTree = "<group>"; };
 		8407177B1BBFC17800FBB3CB /* Vehicle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Vehicle.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/Vehicle.m; sourceTree = "<group>"; };
-		8407177C1BBFC17800FBB3CB /* Vehicle+Create.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Vehicle+Create.m"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Vehicle+Create.m"; sourceTree = "<group>"; };
-		8407177D1BBFC17800FBB3CB /* VehiclesVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = VehiclesVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/VehiclesVC.m; sourceTree = "<group>"; };
-		8407177E1BBFC17800FBB3CB /* VehicleVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = VehicleVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/VehicleVC.m; sourceTree = "<group>"; };
 		8407178D1BBFFD9000FBB3CB /* AnnotationV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnnotationV.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/AnnotationV.h; sourceTree = "<group>"; };
 		8407178E1BBFFD9000FBB3CB /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/AppDelegate.h; sourceTree = "<group>"; };
 		8407178F1BBFFD9000FBB3CB /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Broker.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/Broker.h; sourceTree = "<group>"; };
-		840717901BBFFD9000FBB3CB /* Broker+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Broker+Create.h"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Broker+Create.h"; sourceTree = "<group>"; };
-		840717911BBFFD9000FBB3CB /* ConfD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConfD.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/ConfD.h; sourceTree = "<group>"; };
-		840717921BBFFD9000FBB3CB /* ConfD+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ConfD+Create.h"; path = "../../OwnTracksCTRL/OwnTracksCTRL/ConfD+Create.h"; sourceTree = "<group>"; };
 		840717931BBFFD9000FBB3CB /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/LoginVC.h; sourceTree = "<group>"; };
-		840717941BBFFD9000FBB3CB /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/SettingsVC.h; sourceTree = "<group>"; };
 		840717951BBFFD9000FBB3CB /* StatefullThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatefullThread.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/StatefullThread.h; sourceTree = "<group>"; };
 		840717961BBFFD9000FBB3CB /* StatelessThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatelessThread.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/StatelessThread.h; sourceTree = "<group>"; };
-		840717971BBFFD9000FBB3CB /* TrackTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackTVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/TrackTVC.h; sourceTree = "<group>"; };
 		840717981BBFFD9000FBB3CB /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vehicle.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/Vehicle.h; sourceTree = "<group>"; };
-		840717991BBFFD9000FBB3CB /* Vehicle+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Vehicle+Create.h"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Vehicle+Create.h"; sourceTree = "<group>"; };
-		8407179A1BBFFD9000FBB3CB /* VehiclesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VehiclesVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/VehiclesVC.h; sourceTree = "<group>"; };
-		8407179B1BBFFD9000FBB3CB /* VehicleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VehicleVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/VehicleVC.h; sourceTree = "<group>"; };
 		8407179C1BBFFDB000FBB3CB /* AnnotationV.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AnnotationV.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/AnnotationV.m; sourceTree = "<group>"; };
 		8407179E1BC00C8C00FBB3CB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/main.m; sourceTree = "<group>"; };
 		840717A21BC01A8500FBB3CB /* MapVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MapVC.m; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.m; sourceTree = "<group>"; };
 		840717A61BC01B8E00FBB3CB /* MapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapVC.h; path = ../../OwnTracksCTRL/OwnTracksCTRL/MapVC.h; sourceTree = "<group>"; };
-		842095FC1BC3CAEE00C9CBFF /* TVMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVMapView.h; sourceTree = "<group>"; };
-		842095FD1BC3CAEE00C9CBFF /* TVMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVMapView.m; sourceTree = "<group>"; };
 		842095FF1BC3D48400C9CBFF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		842096011BC3D48A00C9CBFF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		842096031BC3D48F00C9CBFF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		846FEFE51CE0B71E00291A9A /* Model 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.0.xcdatamodel"; sourceTree = "<group>"; };
+		846FF0051CE0BF4900291A9A /* Broker+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Broker+CoreDataProperties.h"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Broker+CoreDataProperties.h"; sourceTree = "<group>"; };
+		846FF0061CE0BF4900291A9A /* Broker+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Broker+CoreDataProperties.m"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Broker+CoreDataProperties.m"; sourceTree = "<group>"; };
+		846FF0071CE0BF4900291A9A /* Vehicle+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Vehicle+CoreDataProperties.h"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Vehicle+CoreDataProperties.h"; sourceTree = "<group>"; };
+		846FF0081CE0BF4900291A9A /* Vehicle+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Vehicle+CoreDataProperties.m"; path = "../../OwnTracksCTRL/OwnTracksCTRL/Vehicle+CoreDataProperties.m"; sourceTree = "<group>"; };
+		84FD2C821C9B2EF400F318BF /* MapPopOverSegue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MapPopOverSegue.h; path = ../OwnTracksCTRL/OwnTracksCTRL/MapPopOverSegue.h; sourceTree = "<group>"; };
+		84FD2C831C9B2EF400F318BF /* MapPopOverSegue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MapPopOverSegue.m; path = ../OwnTracksCTRL/OwnTracksCTRL/MapPopOverSegue.m; sourceTree = "<group>"; };
 		B300049816D21E1E8B4808C5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +108,8 @@
 		840716F21BBFBC9400FBB3CB = {
 			isa = PBXGroup;
 			children = (
+				84FD2C821C9B2EF400F318BF /* MapPopOverSegue.h */,
+				84FD2C831C9B2EF400F318BF /* MapPopOverSegue.m */,
 				840716FD1BBFBC9400FBB3CB /* OwnTracksCTRLTV */,
 				840716FC1BBFBC9400FBB3CB /* Products */,
 				A61BF47840214F208728E552 /* Pods */,
@@ -143,41 +128,27 @@
 		840716FD1BBFBC9400FBB3CB /* OwnTracksCTRLTV */ = {
 			isa = PBXGroup;
 			children = (
+				846FF0051CE0BF4900291A9A /* Broker+CoreDataProperties.h */,
+				846FF0061CE0BF4900291A9A /* Broker+CoreDataProperties.m */,
+				846FF0071CE0BF4900291A9A /* Vehicle+CoreDataProperties.h */,
+				846FF0081CE0BF4900291A9A /* Vehicle+CoreDataProperties.m */,
 				8407179E1BC00C8C00FBB3CB /* main.m */,
-				8407179C1BBFFDB000FBB3CB /* AnnotationV.m */,
-				8407178D1BBFFD9000FBB3CB /* AnnotationV.h */,
-				842095FC1BC3CAEE00C9CBFF /* TVMapView.h */,
-				842095FD1BC3CAEE00C9CBFF /* TVMapView.m */,
-				8407178F1BBFFD9000FBB3CB /* Broker.h */,
-				840717901BBFFD9000FBB3CB /* Broker+Create.h */,
-				840717911BBFFD9000FBB3CB /* ConfD.h */,
-				840717921BBFFD9000FBB3CB /* ConfD+Create.h */,
-				840717941BBFFD9000FBB3CB /* SettingsVC.h */,
-				840717971BBFFD9000FBB3CB /* TrackTVC.h */,
-				840717981BBFFD9000FBB3CB /* Vehicle.h */,
-				840717991BBFFD9000FBB3CB /* Vehicle+Create.h */,
-				8407179A1BBFFD9000FBB3CB /* VehiclesVC.h */,
-				8407179B1BBFFD9000FBB3CB /* VehicleVC.h */,
 				8407178E1BBFFD9000FBB3CB /* AppDelegate.h */,
 				840717711BBFC17800FBB3CB /* AppDelegate.m */,
-				840717721BBFC17800FBB3CB /* Broker.m */,
-				840717731BBFC17800FBB3CB /* Broker+Create.m */,
-				840717741BBFC17800FBB3CB /* ConfD.m */,
-				840717751BBFC17800FBB3CB /* ConfD+Create.m */,
 				840717931BBFFD9000FBB3CB /* LoginVC.h */,
 				840717761BBFC17800FBB3CB /* LoginVC.m */,
-				840717771BBFC17800FBB3CB /* SettingsVC.m */,
+				8407178D1BBFFD9000FBB3CB /* AnnotationV.h */,
+				8407179C1BBFFDB000FBB3CB /* AnnotationV.m */,
+				840717A61BC01B8E00FBB3CB /* MapVC.h */,
+				840717A21BC01A8500FBB3CB /* MapVC.m */,
+				8407178F1BBFFD9000FBB3CB /* Broker.h */,
+				840717721BBFC17800FBB3CB /* Broker.m */,
+				840717981BBFFD9000FBB3CB /* Vehicle.h */,
+				8407177B1BBFC17800FBB3CB /* Vehicle.m */,
 				840717951BBFFD9000FBB3CB /* StatefullThread.h */,
 				840717781BBFC17800FBB3CB /* StatefullThread.m */,
 				840717961BBFFD9000FBB3CB /* StatelessThread.h */,
 				840717791BBFC17800FBB3CB /* StatelessThread.m */,
-				8407177A1BBFC17800FBB3CB /* TrackTVC.m */,
-				840717A61BC01B8E00FBB3CB /* MapVC.h */,
-				840717A21BC01A8500FBB3CB /* MapVC.m */,
-				8407177B1BBFC17800FBB3CB /* Vehicle.m */,
-				8407177C1BBFC17800FBB3CB /* Vehicle+Create.m */,
-				8407177D1BBFC17800FBB3CB /* VehiclesVC.m */,
-				8407177E1BBFC17800FBB3CB /* VehicleVC.m */,
 				840717611BBFC14900FBB3CB /* Model.xcdatamodeld */,
 				8407176C1BBFC14900FBB3CB /* Settings.bundle */,
 				8407176D1BBFC14900FBB3CB /* Triggers.plist */,
@@ -329,24 +300,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84FD2C851C9B2EF400F318BF /* MapPopOverSegue.m in Sources */,
 				840717A41BC01A8500FBB3CB /* MapVC.m in Sources */,
-				840717A01BC01A4A00FBB3CB /* SettingsVC.m in Sources */,
+				846FF00A1CE0BF4900291A9A /* Vehicle+CoreDataProperties.m in Sources */,
 				8407179F1BC00C8C00FBB3CB /* main.m in Sources */,
 				8407179D1BBFFDB000FBB3CB /* AnnotationV.m in Sources */,
 				8407177F1BBFC17800FBB3CB /* AppDelegate.m in Sources */,
 				840717801BBFC17800FBB3CB /* Broker.m in Sources */,
-				840717811BBFC17800FBB3CB /* Broker+Create.m in Sources */,
-				840717821BBFC17800FBB3CB /* ConfD.m in Sources */,
-				840717831BBFC17800FBB3CB /* ConfD+Create.m in Sources */,
 				840717841BBFC17800FBB3CB /* LoginVC.m in Sources */,
+				846FF0091CE0BF4900291A9A /* Broker+CoreDataProperties.m in Sources */,
 				840717861BBFC17800FBB3CB /* StatefullThread.m in Sources */,
 				840717871BBFC17800FBB3CB /* StatelessThread.m in Sources */,
-				840717881BBFC17800FBB3CB /* TrackTVC.m in Sources */,
 				840717891BBFC17800FBB3CB /* Vehicle.m in Sources */,
-				8407178A1BBFC17800FBB3CB /* Vehicle+Create.m in Sources */,
-				8407178B1BBFC17800FBB3CB /* VehiclesVC.m in Sources */,
-				8407178C1BBFC17800FBB3CB /* VehicleVC.m in Sources */,
-				842095FE1BC3CAEE00C9CBFF /* TVMapView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +486,7 @@
 		840717611BBFC14900FBB3CB /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				846FEFE51CE0B71E00291A9A /* Model 2.0.xcdatamodel */,
 				840717621BBFC14900FBB3CB /* Model 1.1.xcdatamodel */,
 				840717631BBFC14900FBB3CB /* Model 2.xcdatamodel */,
 				840717641BBFC14900FBB3CB /* Model 3.xcdatamodel */,
@@ -532,7 +498,7 @@
 				8407176A1BBFC14900FBB3CB /* Model 9.xcdatamodel */,
 				8407176B1BBFC14900FBB3CB /* Model.xcdatamodel */,
 			);
-			currentVersion = 840717621BBFC14900FBB3CB /* Model 1.1.xcdatamodel */;
+			currentVersion = 846FEFE51CE0B71E00291A9A /* Model 2.0.xcdatamodel */;
 			name = Model.xcdatamodeld;
 			path = ../../OwnTracksCTRL/OwnTracksCTRL/Model.xcdatamodeld;
 			sourceTree = "<group>";

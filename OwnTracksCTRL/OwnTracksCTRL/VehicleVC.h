@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
 
 @interface VehicleVC : UITableViewController
 @property (strong, nonatomic) Vehicle *vehicle;

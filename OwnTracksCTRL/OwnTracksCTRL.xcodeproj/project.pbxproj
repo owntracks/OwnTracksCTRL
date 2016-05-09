@@ -14,7 +14,6 @@
 		843CF9C519CC0BD40045AC81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */; };
 		843CF9DB19CC0C7D0045AC81 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DA19CC0C7D0045AC81 /* CoreData.framework */; };
 		843CF9DD19CC0C8B0045AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CF9DC19CC0C8B0045AC81 /* MapKit.framework */; };
-		843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */; };
 		843CFA7219CC11620045AC81 /* StatelessThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7019CC11620045AC81 /* StatelessThread.m */; };
 		843CFA7519CC11A50045AC81 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7319CC11A50045AC81 /* SettingsVC.m */; };
 		843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7619CC11BC0045AC81 /* StatefullThread.m */; };
@@ -23,19 +22,18 @@
 		843CFA8519CC11BC0045AC81 /* VehicleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7C19CC11BC0045AC81 /* VehicleVC.m */; };
 		843CFA8619CC11BC0045AC81 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA7E19CC11BC0045AC81 /* AppDelegate.m */; };
 		843CFA8719CC11BC0045AC81 /* AnnotationV.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA8019CC11BC0045AC81 /* AnnotationV.m */; };
-		843CFA8A19CC11C60045AC81 /* Vehicle+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA8819CC11C60045AC81 /* Vehicle+Create.m */; };
-		843CFA8D19CC11D20045AC81 /* Broker+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CFA8B19CC11D20045AC81 /* Broker+Create.m */; };
 		843CFA8F19CC11E10045AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843CFA8E19CC11E10045AC81 /* Main.storyboard */; };
 		843CFA9119CC12990045AC81 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFA9019CC12990045AC81 /* UIKit.framework */; };
 		8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458EAF919F0274000D9C848 /* MapPopOverSegue.m */; };
+		846FEFF81CE0B85C00291A9A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 846FEFEC1CE0B85C00291A9A /* Model.xcdatamodeld */; };
+		846FF0011CE0B8C100291A9A /* Broker+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FEFFA1CE0B8C100291A9A /* Broker+CoreDataProperties.m */; };
+		846FF0021CE0B8C100291A9A /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FEFFC1CE0B8C100291A9A /* Broker.m */; };
+		846FF0031CE0B8C100291A9A /* Vehicle+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FEFFE1CE0B8C100291A9A /* Vehicle+CoreDataProperties.m */; };
+		846FF0041CE0B8C100291A9A /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FF0001CE0B8C100291A9A /* Vehicle.m */; };
 		847791571C85B86C00A43D53 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847791561C85B86C00A43D53 /* AddressBookUI.framework */; };
 		84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A7DBC61A3C8F5E00DD12C4 /* TrackTVC.m */; };
-		84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E591A02ECBB00AA51A4 /* ConfD.m */; };
-		84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */; };
 		84B36E5F1A02F71400AA51A4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84B36E5E1A02F71400AA51A4 /* Settings.bundle */; };
-		84E199F31A6EB52100AC5DDB /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E199F21A6EB52100AC5DDB /* Vehicle.m */; };
 		84E335B119FA752D009093E9 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E335B019FA752D009093E9 /* LoginVC.m */; };
-		84FD42E619FFAF8200EFB946 /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD42E519FFAF8200EFB946 /* Broker.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +45,6 @@
 		843CF9C419CC0BD40045AC81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		843CF9DA19CC0C7D0045AC81 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		843CF9DC19CC0C8B0045AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		843CFA6419CC0D390045AC81 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		843CFA7019CC11620045AC81 /* StatelessThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatelessThread.m; sourceTree = "<group>"; };
 		843CFA7119CC11620045AC81 /* StatelessThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatelessThread.h; sourceTree = "<group>"; };
 		843CFA7319CC11A50045AC81 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
@@ -64,37 +61,35 @@
 		843CFA7F19CC11BC0045AC81 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		843CFA8019CC11BC0045AC81 /* AnnotationV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnnotationV.m; sourceTree = "<group>"; };
 		843CFA8119CC11BC0045AC81 /* AnnotationV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnnotationV.h; sourceTree = "<group>"; };
-		843CFA8819CC11C60045AC81 /* Vehicle+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Vehicle+Create.m"; sourceTree = "<group>"; };
-		843CFA8919CC11C60045AC81 /* Vehicle+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Vehicle+Create.h"; sourceTree = "<group>"; };
-		843CFA8B19CC11D20045AC81 /* Broker+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Broker+Create.m"; sourceTree = "<group>"; };
-		843CFA8C19CC11D20045AC81 /* Broker+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Broker+Create.h"; sourceTree = "<group>"; };
 		843CFA8E19CC11E10045AC81 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		843CFA9019CC12990045AC81 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8458EAF819F0274000D9C848 /* MapPopOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPopOverSegue.h; sourceTree = "<group>"; };
 		8458EAF919F0274000D9C848 /* MapPopOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPopOverSegue.m; sourceTree = "<group>"; };
+		846FEFED1CE0B85C00291A9A /* Model 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 1.1.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFEE1CE0B85C00291A9A /* Model 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.0.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFEF1CE0B85C00291A9A /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF01CE0B85C00291A9A /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF11CE0B85C00291A9A /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF21CE0B85C00291A9A /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF31CE0B85C00291A9A /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF41CE0B85C00291A9A /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF51CE0B85C00291A9A /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF61CE0B85C00291A9A /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
+		846FEFF71CE0B85C00291A9A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		846FEFF91CE0B8C100291A9A /* Broker+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Broker+CoreDataProperties.h"; sourceTree = "<group>"; };
+		846FEFFA1CE0B8C100291A9A /* Broker+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Broker+CoreDataProperties.m"; sourceTree = "<group>"; };
+		846FEFFB1CE0B8C100291A9A /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Broker.h; sourceTree = "<group>"; };
+		846FEFFC1CE0B8C100291A9A /* Broker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Broker.m; sourceTree = "<group>"; };
+		846FEFFD1CE0B8C100291A9A /* Vehicle+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Vehicle+CoreDataProperties.h"; sourceTree = "<group>"; };
+		846FEFFE1CE0B8C100291A9A /* Vehicle+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Vehicle+CoreDataProperties.m"; sourceTree = "<group>"; };
+		846FEFFF1CE0B8C100291A9A /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
+		846FF0001CE0B8C100291A9A /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		847791561C85B86C00A43D53 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
-		848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
-		848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
-		848FBE4119F191200048E3CF /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		84A7DBC51A3C8F5E00DD12C4 /* TrackTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackTVC.h; sourceTree = "<group>"; };
 		84A7DBC61A3C8F5E00DD12C4 /* TrackTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackTVC.m; sourceTree = "<group>"; };
-		84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
-		84B36E581A02ECBB00AA51A4 /* ConfD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfD.h; sourceTree = "<group>"; };
-		84B36E591A02ECBB00AA51A4 /* ConfD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfD.m; sourceTree = "<group>"; };
-		84B36E5B1A02EEDE00AA51A4 /* ConfD+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConfD+Create.h"; sourceTree = "<group>"; };
-		84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ConfD+Create.m"; sourceTree = "<group>"; };
 		84B36E5E1A02F71400AA51A4 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
-		84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 1.1.xcdatamodel"; sourceTree = "<group>"; };
-		84E199F11A6EB52100AC5DDB /* Vehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
-		84E199F21A6EB52100AC5DDB /* Vehicle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
 		84E335AF19FA752D009093E9 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		84E335B019FA752D009093E9 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
-		84E335B219FC0968009093E9 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
-		84FD42E319FFAF4A00EFB946 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
-		84FD42E419FFAF8200EFB946 /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Broker.h; sourceTree = "<group>"; };
-		84FD42E519FFAF8200EFB946 /* Broker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Broker.m; sourceTree = "<group>"; };
 		A2F709EFFC2CA5F7CFED78FB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A8C9935AABD4F62FB17C485E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B42DB93961ECBD6406F1E231 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +144,15 @@
 		843CF9B019CC0BD00045AC81 /* OwnTracksCTRL */ = {
 			isa = PBXGroup;
 			children = (
+				846FEFF91CE0B8C100291A9A /* Broker+CoreDataProperties.h */,
+				846FEFFA1CE0B8C100291A9A /* Broker+CoreDataProperties.m */,
+				846FEFFB1CE0B8C100291A9A /* Broker.h */,
+				846FEFFC1CE0B8C100291A9A /* Broker.m */,
+				846FEFFD1CE0B8C100291A9A /* Vehicle+CoreDataProperties.h */,
+				846FEFFE1CE0B8C100291A9A /* Vehicle+CoreDataProperties.m */,
+				846FEFFF1CE0B8C100291A9A /* Vehicle.h */,
+				846FF0001CE0B8C100291A9A /* Vehicle.m */,
+				846FEFEC1CE0B85C00291A9A /* Model.xcdatamodeld */,
 				8458EAF819F0274000D9C848 /* MapPopOverSegue.h */,
 				8458EAF919F0274000D9C848 /* MapPopOverSegue.m */,
 				843CFA7F19CC11BC0045AC81 /* AppDelegate.h */,
@@ -157,14 +161,8 @@
 				84E335B019FA752D009093E9 /* LoginVC.m */,
 				843CFA8119CC11BC0045AC81 /* AnnotationV.h */,
 				843CFA8019CC11BC0045AC81 /* AnnotationV.m */,
-				843CFA8C19CC11D20045AC81 /* Broker+Create.h */,
-				843CFA8B19CC11D20045AC81 /* Broker+Create.m */,
-				84B36E5B1A02EEDE00AA51A4 /* ConfD+Create.h */,
-				84B36E5C1A02EEDE00AA51A4 /* ConfD+Create.m */,
 				843CFA7B19CC11BC0045AC81 /* MapVC.h */,
 				843CFA7A19CC11BC0045AC81 /* MapVC.m */,
-				843CFA8919CC11C60045AC81 /* Vehicle+Create.h */,
-				843CFA8819CC11C60045AC81 /* Vehicle+Create.m */,
 				843CFA7D19CC11BC0045AC81 /* VehicleVC.h */,
 				843CFA7C19CC11BC0045AC81 /* VehicleVC.m */,
 				841CE30819D1968A00096F37 /* Triggers.plist */,
@@ -182,13 +180,6 @@
 				843CF9C119CC0BD40045AC81 /* Images.xcassets */,
 				843CF9C319CC0BD40045AC81 /* LaunchScreen.xib */,
 				843CF9B119CC0BD00045AC81 /* Supporting Files */,
-				843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */,
-				84E199F11A6EB52100AC5DDB /* Vehicle.h */,
-				84E199F21A6EB52100AC5DDB /* Vehicle.m */,
-				84B36E581A02ECBB00AA51A4 /* ConfD.h */,
-				84B36E591A02ECBB00AA51A4 /* ConfD.m */,
-				84FD42E419FFAF8200EFB946 /* Broker.h */,
-				84FD42E519FFAF8200EFB946 /* Broker.m */,
 			);
 			path = OwnTracksCTRL;
 			sourceTree = "<group>";
@@ -340,24 +331,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				843CFA8D19CC11D20045AC81 /* Broker+Create.m in Sources */,
 				843CFA8219CC11BC0045AC81 /* StatefullThread.m in Sources */,
-				843CFA6519CC0D390045AC81 /* Model.xcdatamodeld in Sources */,
 				843CFA8419CC11BC0045AC81 /* MapVC.m in Sources */,
+				846FF0031CE0B8C100291A9A /* Vehicle+CoreDataProperties.m in Sources */,
+				846FF0041CE0B8C100291A9A /* Vehicle.m in Sources */,
+				846FF0011CE0B8C100291A9A /* Broker+CoreDataProperties.m in Sources */,
 				843CFA8519CC11BC0045AC81 /* VehicleVC.m in Sources */,
-				84E199F31A6EB52100AC5DDB /* Vehicle.m in Sources */,
 				843CFA8619CC11BC0045AC81 /* AppDelegate.m in Sources */,
 				84A7DBC71A3C8F5E00DD12C4 /* TrackTVC.m in Sources */,
-				84B36E5A1A02ECBB00AA51A4 /* ConfD.m in Sources */,
 				843CFA8319CC11BC0045AC81 /* VehiclesVC.m in Sources */,
-				84FD42E619FFAF8200EFB946 /* Broker.m in Sources */,
 				843CFA8719CC11BC0045AC81 /* AnnotationV.m in Sources */,
 				84E335B119FA752D009093E9 /* LoginVC.m in Sources */,
-				84B36E5D1A02EEDE00AA51A4 /* ConfD+Create.m in Sources */,
-				843CFA8A19CC11C60045AC81 /* Vehicle+Create.m in Sources */,
 				843CFA7519CC11A50045AC81 /* SettingsVC.m in Sources */,
 				843CFA7219CC11620045AC81 /* StatelessThread.m in Sources */,
 				8458EAFA19F0274000D9C848 /* MapPopOverSegue.m in Sources */,
+				846FEFF81CE0B85C00291A9A /* Model.xcdatamodeld in Sources */,
+				846FF0021CE0B8C100291A9A /* Broker.m in Sources */,
 				843CF9B419CC0BD00045AC81 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -517,21 +506,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		843CFA6319CC0D390045AC81 /* Model.xcdatamodeld */ = {
+		846FEFEC1CE0B85C00291A9A /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */,
-				84BF77391A12A8E100841D20 /* Model 9.xcdatamodel */,
-				84B36E571A02EC9000AA51A4 /* Model 8.xcdatamodel */,
-				84FD42E319FFAF4A00EFB946 /* Model 7.xcdatamodel */,
-				848E0FE719FE8AD30058DA5D /* Model 5.xcdatamodel */,
-				848E0FEB19FEA0DB0058DA5D /* Model 6.xcdatamodel */,
-				848E0FE319FE402F0058DA5D /* Model 4.xcdatamodel */,
-				84E335B219FC0968009093E9 /* Model 3.xcdatamodel */,
-				848FBE4119F191200048E3CF /* Model 2.xcdatamodel */,
-				843CFA6419CC0D390045AC81 /* Model.xcdatamodel */,
+				846FEFED1CE0B85C00291A9A /* Model 1.1.xcdatamodel */,
+				846FEFEE1CE0B85C00291A9A /* Model 2.0.xcdatamodel */,
+				846FEFEF1CE0B85C00291A9A /* Model 2.xcdatamodel */,
+				846FEFF01CE0B85C00291A9A /* Model 3.xcdatamodel */,
+				846FEFF11CE0B85C00291A9A /* Model 4.xcdatamodel */,
+				846FEFF21CE0B85C00291A9A /* Model 5.xcdatamodel */,
+				846FEFF31CE0B85C00291A9A /* Model 6.xcdatamodel */,
+				846FEFF41CE0B85C00291A9A /* Model 7.xcdatamodel */,
+				846FEFF51CE0B85C00291A9A /* Model 8.xcdatamodel */,
+				846FEFF61CE0B85C00291A9A /* Model 9.xcdatamodel */,
+				846FEFF71CE0B85C00291A9A /* Model.xcdatamodel */,
 			);
-			currentVersion = 84E199ED1A6EB45200AC5DDB /* Model 1.1.xcdatamodel */;
+			currentVersion = 846FEFEE1CE0B85C00291A9A /* Model 2.0.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15A279b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -18,12 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OwnTracksCTRL" translatesAutoresizingMaskIntoConstraints="NO" id="4aK-SB-AT8">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="und-lI-2eA" appends="YES" id="vFn-ZB-gBl"/>
-                                </connections>
-                            </imageView>
                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rYN-ju-1bJ">
                                 <rect key="frame" x="131" y="269" width="59" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -43,6 +37,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="jKq-0S-9a8"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                             </textField>
@@ -62,6 +57,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="vgf-Ad-9ao"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
@@ -77,28 +73,32 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OwnTracksCTRL" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-Dr-C0D">
+                                <rect key="frame" x="20" y="28" width="280" height="157"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.2470588235" green="0.44705882349999998" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="rYN-ju-1bJ" firstAttribute="top" secondItem="fTk-bn-HUK" secondAttribute="bottom" constant="8" id="385-Yr-a66"/>
+                            <constraint firstItem="ZQy-00-ved" firstAttribute="top" secondItem="IgW-Dr-C0D" secondAttribute="bottom" constant="8" symbolic="YES" id="3sW-q6-wpl"/>
                             <constraint firstItem="ZQy-00-ved" firstAttribute="trailing" secondItem="M7k-np-hHa" secondAttribute="trailingMargin" id="5zE-sP-HEc"/>
                             <constraint firstItem="ZQy-00-ved" firstAttribute="leading" secondItem="rYN-ju-1bJ" secondAttribute="leading" id="A5b-th-zCa"/>
-                            <constraint firstItem="4aK-SB-AT8" firstAttribute="leading" secondItem="M7k-np-hHa" secondAttribute="leading" id="B7y-5l-irj"/>
-                            <constraint firstAttribute="bottom" secondItem="4aK-SB-AT8" secondAttribute="bottom" id="GqO-Jw-EQE"/>
                             <constraint firstAttribute="centerX" secondItem="rYN-ju-1bJ" secondAttribute="centerX" id="M91-Fa-exc"/>
                             <constraint firstItem="rYN-ju-1bJ" firstAttribute="leading" secondItem="fTk-bn-HUK" secondAttribute="leading" id="QpI-Xj-esZ"/>
+                            <constraint firstAttribute="trailing" secondItem="IgW-Dr-C0D" secondAttribute="trailing" constant="20" symbolic="YES" id="YFi-ia-tTD"/>
                             <constraint firstItem="fTk-bn-HUK" firstAttribute="top" secondItem="ZQy-00-ved" secondAttribute="bottom" constant="8" id="Zc3-BI-SYS"/>
                             <constraint firstItem="fTk-bn-HUK" firstAttribute="leading" secondItem="H0N-IQ-S2Y" secondAttribute="trailing" constant="8" symbolic="YES" id="aTg-1H-uOf"/>
-                            <constraint firstItem="4aK-SB-AT8" firstAttribute="top" secondItem="M7k-np-hHa" secondAttribute="topMargin" id="bqc-Ye-1lG"/>
-                            <constraint firstAttribute="trailing" secondItem="4aK-SB-AT8" secondAttribute="trailing" id="flM-6T-1gB"/>
                             <constraint firstItem="ZQy-00-ved" firstAttribute="centerY" secondItem="oDZ-bp-NDO" secondAttribute="centerY" id="j8X-TP-uRc"/>
                             <constraint firstItem="H0N-IQ-S2Y" firstAttribute="centerY" secondItem="fTk-bn-HUK" secondAttribute="centerY" id="jpw-Wr-ZSq"/>
+                            <constraint firstItem="IgW-Dr-C0D" firstAttribute="top" secondItem="JjF-90-KYI" secondAttribute="bottom" constant="8" symbolic="YES" id="rH9-BR-dwf"/>
                             <constraint firstItem="ZQy-00-ved" firstAttribute="leading" secondItem="oDZ-bp-NDO" secondAttribute="trailing" constant="8" symbolic="YES" id="uGE-5e-Atc"/>
+                            <constraint firstItem="IgW-Dr-C0D" firstAttribute="leading" secondItem="M7k-np-hHa" secondAttribute="leading" constant="20" symbolic="YES" id="wCe-W8-ALm"/>
                             <constraint firstItem="fTk-bn-HUK" firstAttribute="trailing" secondItem="M7k-np-hHa" secondAttribute="trailingMargin" id="wJu-4z-LIc"/>
                             <constraint firstAttribute="centerY" secondItem="rYN-ju-1bJ" secondAttribute="centerY" id="xkh-ns-zid"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="OwnTracksCTRL - Login" id="9uy-dm-K5y"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="UILookup" destination="rYN-ju-1bJ" id="sbf-jA-uBt"/>
                         <outlet property="UIpassword" destination="fTk-bn-HUK" id="rQv-g8-zOc"/>
@@ -119,7 +119,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-1182" y="-166"/>
+            <point key="canvasLocation" x="-1084" y="-155"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="R5c-q1-8Vh">
@@ -200,7 +200,7 @@
                             <tableViewSection id="stg-uE-jkM">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mML-TK-F65">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mML-TK-F65" id="KhH-Pd-cnq">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -255,7 +255,7 @@
                             <tableViewSection id="FSZ-Ho-d8L">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="X1B-pd-rFM">
-                                        <rect key="frame" x="0.0" y="108" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X1B-pd-rFM" id="tgJ-hk-mJb">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -289,7 +289,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="LeA-q3-Tc8">
-                                        <rect key="frame" x="0.0" y="152" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="88" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LeA-q3-Tc8" id="4Ff-3F-V2s">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -335,7 +335,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="EGK-MG-KsT">
-                                        <rect key="frame" x="0.0" y="196" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="132" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EGK-MG-KsT" id="LKv-uO-Sw2">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -373,7 +373,7 @@
                             <tableViewSection id="csS-Te-3rz">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="100" id="wHU-RC-Ko9">
-                                        <rect key="frame" x="0.0" y="240" width="320" height="100"/>
+                                        <rect key="frame" x="0.0" y="176" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wHU-RC-Ko9" id="JuV-Wz-jA6">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
@@ -401,7 +401,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="WYy-K5-ZWT">
-                                        <rect key="frame" x="0.0" y="340" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="276" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WYy-K5-ZWT" id="eJB-RR-bCE">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -423,7 +423,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="YRp-BW-2mK">
-                                        <rect key="frame" x="0.0" y="384" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="320" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YRp-BW-2mK" id="0Q0-Az-YlS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -445,7 +445,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Etd-0I-pXm">
-                                        <rect key="frame" x="0.0" y="428" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="364" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Etd-0I-pXm" id="DeQ-o1-nVX">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -467,7 +467,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dBA-o8-hdt">
-                                        <rect key="frame" x="0.0" y="472" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="408" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dBA-o8-hdt" id="qLe-sS-zbK">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -501,7 +501,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell tag="1" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="hbB-76-TFq">
-                                        <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="452" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" tableViewCell="hbB-76-TFq" id="bbo-kL-rdY">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -523,7 +523,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell tag="2" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="4oI-QK-OpJ">
-                                        <rect key="frame" x="0.0" y="560" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="496" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" tableViewCell="4oI-QK-OpJ" id="Ecp-lW-bG8">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -545,7 +545,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Hqp-fM-vkr">
-                                        <rect key="frame" x="0.0" y="604" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="540" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" tableViewCell="Hqp-fM-vkr" id="SpG-Fy-1B1">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -567,7 +567,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="lXi-vc-adD">
-                                        <rect key="frame" x="0.0" y="648" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="584" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lXi-vc-adD" id="qvM-B1-OhN">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -682,12 +682,6 @@
                                             <segue destination="pGg-6v-bdr" kind="push" id="pm7-Ug-nfm"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="B2y-ew-ML8"/>
-                                    <barButtonItem image="Kiosk" id="Mcd-8r-Cxc">
-                                        <connections>
-                                            <action selector="KioskPressed:" destination="Asq-I3-XLI" id="lPI-yK-qza"/>
-                                        </connections>
-                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="trX-kT-q5z"/>
                                     <barButtonItem image="Connection" id="XNf-qh-9hf">
                                         <connections>
@@ -696,47 +690,15 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3k-P9-WMO">
-                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="zUj-QT-VTG"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem title="TID" id="KED-uY-BIa">
-                                        <connections>
-                                            <action selector="TidPressed:" destination="Asq-I3-XLI" id="RXB-T9-jiU"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem image="Track" id="hUc-Jd-Pc9">
-                                        <connections>
-                                            <action selector="TrackPressed:" destination="Asq-I3-XLI" id="wfc-Sr-C5O"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem systemItem="organize" id="2F2-yC-CAb">
-                                        <connections>
-                                            <action selector="organizePressed:" destination="Asq-I3-XLI" id="N40-Ba-kBx"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem image="Info" id="we3-c9-Mn5">
-                                        <connections>
-                                            <action selector="InfoPressed:" destination="Asq-I3-XLI" id="4ak-Q0-fXH"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem enabled="NO" title="Info" id="5D5-W7-q5m"/>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="DKV-UP-hQI" firstAttribute="top" secondItem="wd1-Ez-gEd" secondAttribute="bottom" id="ByM-ng-g28"/>
-                            <constraint firstItem="k3k-P9-WMO" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="HJ4-CM-SEs"/>
                             <constraint firstItem="jRS-Ea-b3R" firstAttribute="top" secondItem="iXH-M9-Ndg" secondAttribute="top" id="SW8-4Q-ChZ"/>
                             <constraint firstAttribute="bottom" secondItem="jRS-Ea-b3R" secondAttribute="bottom" id="SYl-QU-eCQ"/>
                             <constraint firstAttribute="trailing" secondItem="wd1-Ez-gEd" secondAttribute="trailing" id="T9z-B6-gcJ"/>
-                            <constraint firstAttribute="trailing" secondItem="k3k-P9-WMO" secondAttribute="trailing" id="Utd-Sx-POm"/>
                             <constraint firstAttribute="trailing" secondItem="jRS-Ea-b3R" secondAttribute="trailing" id="dH5-6b-Pof"/>
                             <constraint firstItem="jRS-Ea-b3R" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="hiD-aE-SHK"/>
-                            <constraint firstItem="k3k-P9-WMO" firstAttribute="top" secondItem="4L8-0V-gYG" secondAttribute="bottom" id="hx3-hI-Kwn"/>
                             <constraint firstItem="wd1-Ez-gEd" firstAttribute="leading" secondItem="iXH-M9-Ndg" secondAttribute="leading" id="z1J-gt-Drs"/>
                         </constraints>
                     </view>
@@ -744,13 +706,6 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="UIConnection" destination="XNf-qh-9hf" id="gJG-sF-nJm"/>
-                        <outlet property="UIDetailView" destination="k3k-P9-WMO" id="tjj-qu-j5Z"/>
-                        <outlet property="UIInfo" destination="we3-c9-Mn5" id="S9e-TP-D1t"/>
-                        <outlet property="UIKiosk" destination="Mcd-8r-Cxc" id="amx-ar-6t6"/>
-                        <outlet property="UILabel" destination="5D5-W7-q5m" id="Ekq-Ja-bSt"/>
-                        <outlet property="UIOrganize" destination="2F2-yC-CAb" id="cvt-P2-AWj"/>
-                        <outlet property="UITid" destination="KED-uY-BIa" id="F3K-nY-jzk"/>
-                        <outlet property="UITrack" destination="hUc-Jd-Pc9" id="hp7-R5-3tU"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>
                         <segue destination="paQ-xc-KlE" kind="custom" identifier="showDetail:" customClass="MapPopOverSegue" id="daK-RE-GLj"/>
@@ -1204,17 +1159,14 @@
     </scenes>
     <resources>
         <image name="Connection" width="22" height="22"/>
-        <image name="Info" width="22" height="22"/>
-        <image name="Kiosk" width="22" height="22"/>
         <image name="Logout" width="22" height="22"/>
         <image name="Map" width="22" height="22"/>
         <image name="OwnTracksCTRL" width="512" height="512"/>
-        <image name="Track" width="22" height="22"/>
         <image name="Vehicles" width="22" height="22"/>
         <image name="Zoom" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="u8P-V1-OEO"/>
         <segue reference="biV-Nf-ryJ"/>
+        <segue reference="jkL-3U-NMX"/>
     </inferredMetricsTieBreakers>
 </document>

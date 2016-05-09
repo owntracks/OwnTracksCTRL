@@ -14,7 +14,7 @@
 #ifndef CTRLTV
 #define CIRCLE_SIZE 40.0
 #else
-#define CIRCLE_SIZE 88.0
+#define CIRCLE_SIZE 80.0
 #endif
 
 #define CIRCLE_COLOR [UIColor yellowColor]
@@ -29,7 +29,7 @@
 #define ID_INSET 3.0
 
 #define COURSE_COLOR [UIColor blueColor]
-#define COURSE_WIDTH 10.0
+#define COURSE_WIDTH (CIRCLE_SIZE / 4.0)
 
 #define TACHO_COLOR [UIColor redColor]
 #define TACHO_SCALE 30.0

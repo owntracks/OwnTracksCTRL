@@ -8,7 +8,7 @@
 
 #import "LoginVC.h"
 #import "AppDelegate.h"
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
@@ -58,16 +58,18 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)updateValues {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    if (self.UIuser) delegate.confD.user = self.UIuser.text;
-    if (self.UIpassword) delegate.confD.passwd = self.UIpassword.text;
+    if (self.UIuser) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.UIuser.text forKey:@"ctrluser"];
+    }
+    if (self.UIpassword) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.UIpassword.text forKey:@"ctrlpass"];
+    }
     [delegate saveContext];
 }
 
-- (void)updated {
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    self.UIuser.text = delegate.confD.user;
-    self.UIpassword.text = delegate.confD.passwd;
+- (void)updated {    
+    self.UIuser.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrluser"];
+    self.UIpassword.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrlpass"];
 }
 
 - (IBAction)touchedOutsideText:(UITapGestureRecognizer *)sender {
@@ -111,7 +113,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"GET"];
     
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", delegate.confD.user, delegate.confD.passwd];
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@",
+                         [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrluser"],
+                         [[NSUserDefaults standardUserDefaults] valueForKey:@"ctrlpass"]];
     NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
     NSString *authValue = [NSString stringWithFormat: @"Basic %@",[authData base64EncodedStringWithOptions:0]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];

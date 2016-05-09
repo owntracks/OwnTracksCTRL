@@ -8,13 +8,9 @@
 
 #import "StatelessThread.h"
 #import "AppDelegate.h"
-#import "Vehicle+Create.h"
+#import "Vehicle.h"
 
-#ifndef CTRLTV
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#else 
-#define DDLogVerbose NSLog
-#endif
 
 @interface StatelessThread()
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -25,9 +21,7 @@
 
 @implementation StatelessThread
 
-#ifndef CTRLTV
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#endif
 
 - (void)main {
     DDLogVerbose(@"StatelessThread");

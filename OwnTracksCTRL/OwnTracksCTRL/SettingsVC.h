@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Broker+Create.h"
+#import "Broker.h"
 
 @interface SettingsVC : UITableViewController <NSURLConnectionDelegate>
 @end
