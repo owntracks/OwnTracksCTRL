@@ -190,7 +190,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                             [self stringFromJSON:dictionary key:@"clientid"],
                                             uuidString
                                             ];
-                [self updated];
+                [self performSelectorOnMainThread:@selector(updated) withObject:nil waitUntilDone:YES];
                 [delegate saveContext];
                 [self performSelectorOnMainThread:@selector(login) withObject:nil waitUntilDone:NO];
             } else {
