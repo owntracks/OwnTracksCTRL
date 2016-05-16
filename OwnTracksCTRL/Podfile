@@ -2,6 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '8.1'
 
-pod 'CocoaLumberjack'
-pod 'MQTTClient'
-
+target 'OwnTracksCTRL' do
+  pod 'CocoaLumberjack'
+  pod 'MQTTClient'
+end

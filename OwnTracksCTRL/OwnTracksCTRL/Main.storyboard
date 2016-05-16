@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15A279b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5wY-Y3-AyK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -708,7 +708,6 @@
                         <outlet property="UIConnection" destination="XNf-qh-9hf" id="gJG-sF-nJm"/>
                         <outlet property="mapView" destination="jRS-Ea-b3R" id="xXb-vM-I4E"/>
                         <segue destination="paQ-xc-KlE" kind="push" identifier="showDetailPush:" id="jkL-3U-NMX"/>
-                        <segue destination="paQ-xc-KlE" kind="custom" identifier="showDetail:" customClass="MapPopOverSegue" id="daK-RE-GLj"/>
                         <segue destination="YY6-iD-sI7" kind="push" identifier="showTrackPush:" id="xzF-i0-RTQ"/>
                         <segue destination="YY6-iD-sI7" kind="custom" identifier="showTrack:" customClass="MapPopOverSegue" id="biV-Nf-ryJ"/>
                     </connections>

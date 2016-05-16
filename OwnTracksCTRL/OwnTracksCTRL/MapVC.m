@@ -13,8 +13,6 @@
 #import "VehicleVC.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
-#import "MapPopOverSegue.h"
-
 @interface MapVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) UIAlertController *alertController;
@@ -127,11 +125,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
     Vehicle *vehicle = (Vehicle *)view.annotation;
     if (control == view.rightCalloutAccessoryView) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            [self performSegueWithIdentifier:@"showDetail:" sender:vehicle];
-        } else {
-            [self performSegueWithIdentifier:@"showDetailPush:" sender:vehicle];
-        }
+        [self performSegueWithIdentifier:@"showDetailPush:" sender:vehicle];
 
     } else if (control == view.leftCalloutAccessoryView) {
         [self toggleTrack:vehicle];
@@ -304,14 +298,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 - (IBAction)longPress:(UILongPressGestureRecognizer *)sender {
-    [self zoomPressed:nil];
+    if (sender.state == UIGestureRecognizerStateEnded) {
+#ifdef CTRLTV
+        if ([self.mapView.selectedAnnotations count] > 0) {
+            Vehicle *vehicle = (Vehicle *)self.mapView.selectedAnnotations[0];
+            [self toggleTrack:vehicle];
+        }
+#else
+        [self zoomPressed:nil];
+#endif
+    }
 }
 
 - (IBAction)zoomPressed:(UIBarButtonItem *)sender {
     if (MKMapRectEqualToRect(self.lastMapRect, MKMapRectMake(0, 0, 0, 0))) {
         MKMapRect rect = self.mapView.visibleMapRect;
         BOOL first = TRUE;
-        
+
         for (Vehicle *vehicle in [self.mapView annotations])
         {
             CLLocationCoordinate2D coordinate = vehicle.coordinate;
@@ -323,7 +326,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                     rect.size.width = 0;
                     first = false;
                 }
-                
+
                 if (point.x < rect.origin.x) {
                     rect.size.width += rect.origin.x - point.x;
                     rect.origin.x = point.x;
@@ -381,21 +384,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showDetail:"] || [segue.identifier isEqualToString:@"showTrack:"]) {
-        if ([segue isKindOfClass:[MapPopOverSegue class]]) {
-            MapPopOverSegue *mapPopOverSegue = (MapPopOverSegue *)segue;
-            mapPopOverSegue.view = self.mapView;
-            if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
-                [segue.destinationViewController performSelector:@selector(setVehicle:)
-                                                      withObject:sender];
-            }
-            if ([segue.identifier isEqualToString:@"showDetail:"]) {
-                mapPopOverSegue.item = sender;
-            } else {
-                mapPopOverSegue.item = self.UIOrganize;
-            }
-        }
-    }
     if ([segue.identifier isEqualToString:@"showDetailPush:"] || [segue.identifier isEqualToString:@"showTrackPush:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setVehicle:)]) {
             [segue.destinationViewController performSelector:@selector(setVehicle:)
